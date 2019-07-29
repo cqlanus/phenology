@@ -51,13 +51,21 @@ class API {
 
     reverseGeocode = async (position: Coordinates | Coords): Promise<any> => {
         const { latitude, longitude } = position
-        // const url = `${this.BASE_URL}/reversegeocode?latitude=${latitude}&longitude=${longitude}`
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_API_KEY}`
         const response = await request(url)
-        console.log({response})
         return response
     }
 
+    getNearbyStations = async (countyId: string) => {
+        const params = { headers: { token: this.token } }
+        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&datasetid=NORMAL_DLY&datacategoryid=TEMP&datacategoryid=PRCP&datacategoryid=DD`
+
+        const response = await request(url, params)
+
+        console.log({response})
+        return response.results
+    }
+    
 }
 
 export default new API()

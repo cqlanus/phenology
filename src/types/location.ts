@@ -23,3 +23,9 @@ export interface Place {
 export interface ReverseGeocodeResponse {
     features: Array<Place>
 }
+
+export interface County {
+    countyId: string,
+    name: string,
+    state: string
+}

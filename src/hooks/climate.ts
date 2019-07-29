@@ -1,5 +1,5 @@
-import api from '../api'
-import { ClimateNorms } from '../types/climate'
+import API from '../api'
+import { ClimateNorms, Station } from '../types/climate'
 
 const CLIMATE_DATA_TYPES = {
     dailyMaxTemp: 'DLY-TMAX-NORMAL',
@@ -11,7 +11,7 @@ export const getClimateNorms = async (stationId: string): Promise<ClimateNorms> 
     const normsKeys = Object.keys(CLIMATE_DATA_TYPES)
     
     const processingNorms = Object.values(CLIMATE_DATA_TYPES).map(datatypeId => {
-        return api.getClimateNorms(stationId, datatypeId)
+        return API.getClimateNorms(stationId, datatypeId)
     })
 
     const norms = await Promise.all(processingNorms)
@@ -34,4 +34,8 @@ export const getClimateNorms = async (stationId: string): Promise<ClimateNorms> 
         return acc
     }, {})
     return Object.values(object)
+}
+
+export const getNearbyStations = async (countyId: string): Promise<Station[]> => {
+    return await API.getNearbyStations(countyId)
 }

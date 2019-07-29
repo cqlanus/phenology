@@ -14,3 +14,12 @@ interface ClimateNormDay {
 }
 
 export type ClimateNorms = ClimateNormDay[]
+
+export interface Station {
+    id: string,
+    longitude: number,
+    latitude: number,
+    name: string
+    elevation: number
+    elevationUnit: string
+}

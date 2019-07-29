@@ -12,6 +12,7 @@ interface Props {
 const Container = styled.div`
     height: 100%;
     padding: 0 0.5em;
+    min-height: 30vh;
 `
 
 const ClimateNorms = ({ norms }: Props) => {
