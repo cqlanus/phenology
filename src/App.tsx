@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
+import 'semantic-ui-css/semantic.min.css'
+import { Loader } from 'semantic-ui-react'
 
-import { getClimateNorms, getNearbyStations } from './hooks/climate'
+import { getNearbyStations, getClimateNorms, getHistoricalWeather } from './hooks/climate'
 import { getCountyCode } from './hooks/location'
 import { ClimateNorms as ClimateNormsType, Station } from './types/climate'
 import { County } from './types/location'
 
 import ClimateNorms from './components/ClimateNorms'
+import HistoricalWeather from './components/HistoricalWeather'
 import StationsList from './components/StationsList'
 
 const Container = styled.div`
@@ -26,16 +29,15 @@ const App: React.FC = () => {
   const initialStations: Station[] = []
   let initialStation: string | undefined
   const [ norms, setNorms ] = useState(initialNorms)
+  const [ ytdWeather, setWeather ] = useState(initialNorms)
   const [ county, setCounty ] = useState(initialCounty)
   const [ stations, setStations ] = useState(initialStations)
   const [ selectedStation, selectStation ] = useState(initialStation)
+  const [ loading, setLoading ] = useState(false)
 
   const getData = async () => {
-    // const stationId = 'GHCND:USW00014819' // ord
-    // // const stationId = 'GHCND:USW00023174' // lax
-    // // const stationId = 'GHCND:USW00024234' // seattle
-    // // const stationId = 'GHCND:USW00012859' // miami
     try {
+        setLoading(true)
       const countyData = await getCountyCode()
       setCounty(countyData)
 
@@ -46,12 +48,31 @@ const App: React.FC = () => {
     } catch (error) {
       console.log({ error })
     }
-
+    setLoading(false)
   }
-console.log({county})
+  
   useEffect(() => {
     getData()
   }, [])
+
+  const handleNorms = async () => {
+    setLoading(true)
+    if (selectedStation) {
+        const norms = await getClimateNorms(selectedStation)
+        setNorms(norms)
+    }
+    setLoading(false)
+}
+
+const handleYtdWeather = async () => {
+    setLoading(true)
+    if (selectedStation) {
+        const ytd = await getHistoricalWeather(selectedStation)
+        console.log({ytd})
+        setWeather(ytd)
+    }
+    setLoading(false)
+}
 
   return (
     <Container>
@@ -60,12 +81,17 @@ console.log({county})
           county={county}
           selectedStation={selectedStation}
           selectStation={selectStation}
-          setNorms={setNorms} />
+          handleYtdWeather={handleYtdWeather}
+          handleNorms={handleNorms} />
         <Item>
           {
             norms.length > 0 && <ClimateNorms norms={norms} />
           }
+          {
+            ytdWeather.length > 0 && <HistoricalWeather ytdWeather={ytdWeather} />
+          }
         </Item>
+        { <Loader active={loading}/> }
     </Container>
   );
 }

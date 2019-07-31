@@ -38,7 +38,7 @@ class API {
         return await this.queryNoaa(query)
     }
 
-    getHistoricalWeahter = async (stationId: string, datatypeId: string) => {
+    getHistoricalWeather = async (stationId: string, datatypeId: string) => {
         const query = {
             datasetId: 'GHCND',
             stationId,
@@ -58,7 +58,7 @@ class API {
 
     getNearbyStations = async (countyId: string) => {
         const params = { headers: { token: this.token } }
-        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&datasetid=NORMAL_DLY&datacategoryid=TEMP&datacategoryid=PRCP&datacategoryid=DD`
+        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&datasetid=GHCND&datacategoryid=TEMP&startdate=2019-01-01&enddate=2019-12-31&datatypeid=TAVG`
 
         const response = await request(url, params)
 

@@ -16,7 +16,6 @@ const Container = styled.div`
 `
 
 const ClimateNorms = ({ norms }: Props) => {
-    console.log({norms})
     const convertToTemp = (key: string) => (d: any) => d[key].value / 10
 
     const convertGdd = (key: string) => (d: any) => d[key].value > 0 ? d[key].value : 0

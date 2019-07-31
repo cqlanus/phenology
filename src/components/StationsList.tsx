@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Button, ButtonGroup } from 'semantic-ui-react'
 
-import { getClimateNorms, getNearbyStations } from '../hooks/climate'
+import { getClimateNorms, getHistoricalWeather } from '../hooks/climate'
 import { Station, ClimateNorms } from '../types/climate'
 import { County } from '../types/location';
 
@@ -57,7 +58,8 @@ const ItemTitle = styled.span`
 
 interface Props {
     stations: Station[]
-    setNorms: (norms: ClimateNorms) => void
+    handleNorms: () => void
+    handleYtdWeather: () => void
     selectStation: (stationId: string) => void
     selectedStation: string | undefined
     county: County | undefined
@@ -77,16 +79,22 @@ const StationItem = ({ title, value}: ItemProps) => (
 
 const StationsList = ({ 
     stations, 
-    setNorms, 
     selectStation, 
     selectedStation, 
+    handleNorms,
+    handleYtdWeather,
     county }: Props) => {
 
     const handleClick = (id: string) => async () => {
         selectStation(id)
-        const norms = await getClimateNorms(id)
-        setNorms(norms)
     }
+
+    const renderButtons = () => (
+        <ButtonGroup fluid>
+            <Button onClick={handleNorms} >Get Climate Normals</Button>
+            <Button onClick={handleYtdWeather} >Get YTD Weather</Button>
+        </ButtonGroup>
+    )
     
     return (
         <Container>
@@ -104,6 +112,7 @@ const StationsList = ({
                     ))
                 }
             </List>
+            { selectedStation && renderButtons() }
         </Container>
     )
 }
