@@ -62,7 +62,7 @@ interface Props {
     handleYtdWeather: () => void
     selectStation: (stationId: string) => void
     selectedStation: string | undefined
-    county: County | undefined
+    county?: County | undefined
 }
 
 interface ItemProps {
@@ -85,7 +85,7 @@ const StationsList = ({
     handleYtdWeather,
     county }: Props) => {
 
-    const handleClick = (id: string) => async () => {
+    const handleClick = (id: string) => () => {
         selectStation(id)
     }
 

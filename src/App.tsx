@@ -2,15 +2,21 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import 'semantic-ui-css/semantic.min.css'
 import { Loader } from 'semantic-ui-react'
+import { Provider } from 'react-redux'
 
-import { getNearbyStations, getClimateNorms, getHistoricalWeather } from './hooks/climate'
-import { getCountyCode } from './hooks/location'
+import configureStore from './redux'
+import { getNearbyStations } from './redux/station'
+
+// import { getNearbyStations, getClimateNorms, getHistoricalWeather } from './hooks/climate'
+// import { getCountyCode } from './hooks/location'
 import { ClimateNorms as ClimateNormsType, Station } from './types/climate'
 import { County } from './types/location'
 
-import ClimateNorms from './components/ClimateNorms'
-import HistoricalWeather from './components/HistoricalWeather'
-import StationsList from './components/StationsList'
+import ClimateNorms from './containers/ClimateNorms'
+import HistoricalWeather from './containers/HistoricalWeather'
+import StationsList from './containers/StationsList'
+import { YtdWeather } from './types/weather';
+import { selectIsAppLoading } from './redux/app';
 
 const Container = styled.div`
     height: 100vh;
@@ -24,75 +30,52 @@ const Item = styled.div`
 `
 
 const App: React.FC = () => {
-  const initialNorms: ClimateNormsType = []
-  let initialCounty: County | undefined
-  const initialStations: Station[] = []
-  let initialStation: string | undefined
-  const [ norms, setNorms ] = useState(initialNorms)
-  const [ ytdWeather, setWeather ] = useState(initialNorms)
-  const [ county, setCounty ] = useState(initialCounty)
-  const [ stations, setStations ] = useState(initialStations)
-  const [ selectedStation, selectStation ] = useState(initialStation)
-  const [ loading, setLoading ] = useState(false)
+//   const initialNorms: ClimateNormsType = []
+//   const initialYtdWeather: YtdWeather = []
+//   let initialCounty: County | undefined
+//   const initialStations: Station[] = []
+//   let initialStation: string | undefined
+//   const [ norms, setNorms ] = useState(initialNorms)
+//   const [ ytdWeather, setWeather ] = useState(initialYtdWeather)
+//   const [ county, setCounty ] = useState(initialCounty)
+//   const [ stations, setStations ] = useState(initialStations)
+//   const [ selectedStation, selectStation ] = useState(initialStation)
+//   const [ loading, setLoading ] = useState(false)
 
-  const getData = async () => {
-    try {
-        setLoading(true)
-      const countyData = await getCountyCode()
-      setCounty(countyData)
+//   const getData = async () => {
+//     try {
+//         setLoading(true)
+//       const countyData = await getCountyCode()
+//       setCounty(countyData)
 
-      if (countyData) {
-        const nearbyStations = await getNearbyStations(countyData.countyId)
-        setStations(nearbyStations)
-      }
-    } catch (error) {
-      console.log({ error })
-    }
-    setLoading(false)
-  }
+//       if (countyData) {
+//         const nearbyStations = await getNearbyStations(countyData.countyId)
+//         setStations(nearbyStations)
+//       }
+//     } catch (error) {
+//       console.log({ error })
+//     }
+//     setLoading(false)
+//   }
   
+    const store = configureStore()
+    const loading = selectIsAppLoading(store.getState())
   useEffect(() => {
-    getData()
+    store.dispatch<any>(getNearbyStations())
   }, [])
 
-  const handleNorms = async () => {
-    setLoading(true)
-    if (selectedStation) {
-        const norms = await getClimateNorms(selectedStation)
-        setNorms(norms)
-    }
-    setLoading(false)
-}
-
-const handleYtdWeather = async () => {
-    setLoading(true)
-    if (selectedStation) {
-        const ytd = await getHistoricalWeather(selectedStation)
-        console.log({ytd})
-        setWeather(ytd)
-    }
-    setLoading(false)
-}
 
   return (
-    <Container>
-        <StationsList 
-          stations={stations} 
-          county={county}
-          selectedStation={selectedStation}
-          selectStation={selectStation}
-          handleYtdWeather={handleYtdWeather}
-          handleNorms={handleNorms} />
-        <Item>
-          {
-            norms.length > 0 && <ClimateNorms norms={norms} />
-          }
-          {
-            ytdWeather.length > 0 && <HistoricalWeather ytdWeather={ytdWeather} />
-          }
-        </Item>
-        { <Loader active={loading}/> }
-    </Container>
+      <Provider store={store} >
+        <Container>
+            <StationsList />
+            <Item>
+                <ClimateNorms />
+                <HistoricalWeather/>
+            </Item>
+            { <Loader active={loading}/> }
+        </Container>
+      </Provider>
   );
 }
 

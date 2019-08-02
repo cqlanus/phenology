@@ -4,8 +4,10 @@ import { ResponsiveContainer, ComposedChart, Bar, Tooltip, XAxis, YAxis } from '
 import { format } from 'date-fns'
 import { ButtonGroup, Button } from 'semantic-ui-react'
 
+import { YtdWeather } from '../types/weather'
+
 interface Props {
-    ytdWeather: any
+    ytdWeather: YtdWeather
 }
 
 const Container = styled.div`
@@ -16,6 +18,9 @@ const Container = styled.div`
 
 const HistoricalWeather = ({ ytdWeather}: Props) => {
     const [ base, setBase ] = useState(40)
+    
+    if (ytdWeather.length === 0) { return <div/> }
+    
 
     const cToF = (c: number) => (c + 32) * 1.8
     const fToC = (f: number) => (f - 32) / (1.8)
