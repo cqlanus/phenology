@@ -1,4 +1,4 @@
-import { Coords, ReverseGeocodeResponse } from '../types/location'
+import { Coords } from '../types/location'
 
 const request = async (url: string, params?: any) => {
     const response = await fetch(url, params)

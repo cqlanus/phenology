@@ -22,10 +22,7 @@ const HistoricalWeather = ({ ytdWeather}: Props) => {
     if (ytdWeather.length === 0) { return <div/> }
     
 
-    const cToF = (c: number) => (c + 32) * 1.8
     const fToC = (f: number) => (f - 32) / (1.8)
-
-    const numToObj = (num: number) => ({ value: num })
 
     const calculateGdd = (baseTemp: number = base) => (d: any) => {
         const { value } = d.avgTemp

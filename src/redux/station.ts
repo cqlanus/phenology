@@ -32,7 +32,7 @@ const getStationsFailed = (error: Error) => {
 export const selectStation = (station: string) => {
     return {
         type: SELECT_STATION,
-        payload: station
+        station: station
     }
 }
 
@@ -70,7 +70,7 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
     
     try {
         dispatch(getStationStart())
-        await getCounty()
+        await dispatch(getCounty())
         const county = selectCounty(getState())
         if (county) {
             const stations = await API.getNearbyStations(county.countyId)
@@ -80,12 +80,13 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
         }
         
     } catch (error) {
+        console.log({error})
         dispatch(getStationsFailed(error))        
     }
     // return {
     //     types: [ GET_STATIONS_START, GET_STATIONS_COMPLETE, GET_STATIONS_FAILED ],
     //     callAPI: () => API.getNearbyStations(countyId),
-    //     payload: { countyId }
+    //     station: { countyId }
     // }
 }
 

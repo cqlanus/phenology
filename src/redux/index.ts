@@ -6,12 +6,14 @@ import climate from './climate'
 import station from './station'
 import weather from './weather'
 import county from './county'
+import ui from './ui'
 
 const rootReducer = combineReducers({
     climate,
     station,
     weather,
-    county
+    county,
+    ui
 })
 
 export type AppState = ReturnType<typeof rootReducer>

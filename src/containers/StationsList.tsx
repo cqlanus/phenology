@@ -5,12 +5,15 @@ import { connect } from 'react-redux'
 import { selectStation } from '../redux/station'
 import { getHistoricalWeather } from '../redux/weather'
 import { getClimateNorms } from '../redux/climate'
+import { CLIMATE_NORMS, HISTORICAL_WEATHER } from '../redux/ui';
 
 const mapState = (state: AppState) => {
     return {
         stations: state.station.stations,
         county: state.county.county,
-        selectedStation: state.station.selectedStation
+        selectedStation: state.station.selectedStation,
+        isClimateActive: state.ui.dataDisplay === CLIMATE_NORMS,
+        isHistoricalWeatherActive: state.ui.dataDisplay === HISTORICAL_WEATHER
     }
 }
 

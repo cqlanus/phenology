@@ -12,7 +12,7 @@ const HISTORICAL_DATA_TYPES = {
     avgTemp: 'TAVG'
 }
 
-const normalizeData = <T>(data: any[], keys: any[]): T[] => {
+const arrayifyData = <T>(data: any[], keys: any[]): T[] => {
     console.log({data})
     const object = data.map(n => n.results).filter(Boolean).reduce((acc: any, results: any, idx: number) => {
         const key = keys[idx]
@@ -43,7 +43,7 @@ export const getClimateNorms = async (stationId: string): Promise<ClimateNorms> 
 
     const norms = await Promise.all(processingNorms)
 
-    return normalizeData(norms, normsKeys)
+    return arrayifyData(norms, normsKeys)
 }
 
 export const getHistoricalWeather = async (stationId: string): Promise<any> => {
@@ -56,7 +56,7 @@ export const getHistoricalWeather = async (stationId: string): Promise<any> => {
     const weather = await Promise.all(processingWeather)
     console.log({weather})
 
-    return normalizeData(weather, weatherKeys)
+    return arrayifyData(weather, weatherKeys)
 }
 
 export const getNearbyStations = async (countyId: string): Promise<Station[]> => {
