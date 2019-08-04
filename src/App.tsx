@@ -2,29 +2,17 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import 'semantic-ui-css/semantic.min.css'
 import { Provider } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import configureStore from './redux'
 import { getNearbyStations } from './redux/station'
 
-import DataDisplay from './containers/DataDisplay'
-import StationsList from './containers/StationsList'
-import { selectIsAppLoading } from './redux/ui';
-
-const Container = styled.div`
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-`
-
-const Item = styled.div`
-  flex: 1;
-`
+import LocationPage from './pages/Location'
+import MainPage from './pages/Main';
+import DashboardPage from './pages/Dashboard';
 
 const App: React.FC = () => {
     const store = configureStore()
-    const loading = selectIsAppLoading(store.getState())
-    console.log({loading})
   useEffect(() => {
     store.dispatch<any>(getNearbyStations())
   }, [store])
@@ -32,10 +20,12 @@ const App: React.FC = () => {
 
   return (
       <Provider store={store} >
-        <Container>
-            <StationsList />
-                <DataDisplay />
-        </Container>
+          <Router>
+            <Route path="/" exact component={MainPage} />
+            <Route path="/location" component={LocationPage} />
+            <Route path="/home" component={DashboardPage} />
+          </Router>
+          
       </Provider>
   );
 }

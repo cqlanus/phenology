@@ -6,7 +6,7 @@ import { getCounty, selectCounty } from './county';
 const GET_STATIONS_START: 'GET_STATIONS_START' = 'GET_STATIONS_START'
 const GET_STATIONS_COMPLETE: 'GET_STATIONS_COMPLETE' = 'GET_STATIONS_COMPLETE'
 const GET_STATIONS_FAILED: 'GET_STATIONS_FAILED' = 'GET_STATIONS_FAILED'
-const SELECT_STATION: 'SELECT_STATION' = 'SELECT_STATION'
+export const SELECT_STATION: 'SELECT_STATION' = 'SELECT_STATION'
 
 /* Action Creators */
 const getStationStart = () => {
@@ -48,7 +48,7 @@ interface GetStationFailedAction {
     type: typeof GET_STATIONS_FAILED,
     error: Error
 }
-interface SelectStationAction {
+export interface SelectStationAction {
     type: typeof SELECT_STATION,
     station: string
 }

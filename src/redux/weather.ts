@@ -1,6 +1,7 @@
 import { getHistoricalWeather as getWeather } from '../hooks/climate'
 import { YtdWeather } from '../types/weather'
 import { AppState } from '.';
+import { SELECT_STATION, SelectStationAction } from './station';
 
 /* Action Types */
 const GET_HISTORICAL_WEATHER_START: 'GET_HISTORICAL_WEATHER_START' = 'GET_HISTORICAL_WEATHER_START'
@@ -23,7 +24,7 @@ interface GetWeatherFailedAction {
     error: Error
 }
 
-export type HistoricalWeatherAction = GetWeatherStartAction | GetWeatherCompleteAction | GetWeatherFailedAction
+export type HistoricalWeatherAction = GetWeatherStartAction | GetWeatherCompleteAction | GetWeatherFailedAction | SelectStationAction
 
 export interface HistoricalWeatherState {
     loading: boolean
@@ -82,6 +83,10 @@ export default (state = initialState, action: HistoricalWeatherAction): Historic
                 loading: false,
                 error: action.error
             }
+        }
+
+        case SELECT_STATION: {
+            return initialState
         }
         
         default:

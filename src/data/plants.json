@@ -1,0 +1,86 @@
+[
+    {
+        "commonName": "Snow drops",
+        "latinName": "Galanthus nivalis",
+        "type": "bulb",
+        "isNative": false
+    },
+    {
+        "commonName": "Northern sea oats",
+        "latinName": "Chasmanthium latifolium",
+        "type": "grass",
+        "isNative": true
+    },
+    {
+        "commonName": "Hakone grass",
+        "latinName": "Hakonechloa macra",
+        "type": "grass",
+        "isNative": false
+    },
+    {
+        "commonName": "Virginia bluebells",
+        "latinName": "Mertensia virginica",
+        "type": "herb",
+        "isNative": true
+    },
+    {
+        "commonName": "Sweet woodruff",
+        "latinName": "Galium odoratum",
+        "type": "herb",
+        "isNative": false
+    },
+    {
+        "commonName": "Yarrow",
+        "latinName": "Achillea millefolium",
+        "type": "herb",
+        "isNative": true
+    },
+    {
+        "commonName": "Hellebore",
+        "latinName": "Helleborus ballardiae",
+        "type": "herb",
+        "isNative": true
+    },
+    {
+        "commonName": "Missouri evening primrose",
+        "latinName": "Oenothera macrocarpa",
+        "type": "herb",
+        "isNative": true
+    },
+    {
+        "commonName": "Oak leaf hydrangea",
+        "latinName": "Hydrangea quercifolia",
+        "type": "shrub",
+        "isNative": true
+    },
+    {
+        "commonName": "Red twig dogwood",
+        "latinName": "Cornus alba",
+        "type": "shrub",
+        "isNative": true
+    },
+    {
+        "commonName": "Winterberry",
+        "latinName": "Ilex verticillata",
+        "type": "shrub",
+        "isNative": true
+    },
+    {
+        "commonName": "Black birch",
+        "latinName": "Betula nigra",
+        "type": "tree",
+        "isNative": true
+    },
+    {
+        "commonName": "Pagoda dogwood",
+        "latinName": "Cornus alternifolia",
+        "type": "tree",
+        "isNative": false
+    },
+    {
+        "commonName": "Japanese maple",
+        "latinName": "Acer palmatum",
+        "type": "tree",
+        "isNative": false
+    }
+]

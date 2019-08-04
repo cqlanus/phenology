@@ -1,6 +1,7 @@
 import { getClimateNorms as getNorms } from '../hooks/climate'
 import { ClimateNorms } from '../types/climate'
 import { AppState } from '.';
+import { SELECT_STATION, SelectStationAction } from './station';
 
 /* Action Types */
 const GET_CLIMATE_NORMS_START: 'GET_CLIMATE_NORMS_START' = 'GET_CLIMATE_NORMS_START'
@@ -29,7 +30,7 @@ interface NormsFailedAction {
     error: Error
 }
 
-export type NormsAction = NormsStartAction | NormsCompleteAction | NormsFailedAction
+export type NormsAction = NormsStartAction | NormsCompleteAction | NormsFailedAction | SelectStationAction
 
 /* Async */
 export const getClimateNorms = (stationId: string) => async (dispatch: any) => {
@@ -83,6 +84,10 @@ export default (state = initialState, action: NormsAction): ClimateState => {
                 loading: false,
                 error: action.error
             }
+        }
+
+        case SELECT_STATION: {
+            return initialState
         }
 
         default: 
