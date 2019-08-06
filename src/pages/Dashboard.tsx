@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import CreateGarden from '../components/CreateGarden'
+import CreateGarden from '../containers/CreateGarden'
 import { PopLink } from '../components/Link'
+
+import { getPlants } from '../redux/plants'
 
 const Container = styled.div`
     height: 100vh;
@@ -17,11 +19,12 @@ const FormContainer = styled.div`
 
 const DashboardPage = () => {
 
+    const memoGetPlants = useCallback(getPlants, [])
     return (
         <Container>
             <FormContainer>
                 <PopLink />
-                <CreateGarden/>
+                <CreateGarden getPlants={memoGetPlants} />
             </FormContainer>
         </Container>
     )

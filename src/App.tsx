@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components'
 import 'semantic-ui-css/semantic.min.css'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
