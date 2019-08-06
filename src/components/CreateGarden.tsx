@@ -35,15 +35,19 @@ const CreateGarden = ({
     handleChange, 
     plants, 
     getPlants,
+    addPlant,
+    justAdded,
     loading
 }: FormProps & FormikProps<FormValues>) => {
+
+    
+    
+    const initialChecked: { [key: string]: QtyPlant } = {}
+    const [checked, setChecked] = useState(initialChecked)
 
     useEffect(() => {
         getPlants()
     }, [getPlants])
-    
-    const initialChecked: { [key: string]: QtyPlant } = {}
-    const [checked, setChecked] = useState(initialChecked)
 
     const handleCheck = (plant: QtyPlant) => () => {
         const { commonName } = plant
@@ -74,18 +78,20 @@ const CreateGarden = ({
         <PlantContainer>
             {plants.map((plant: QtyPlant, idx: number) => {
                 const label = `${plant.commonName} / ${plant.latinName}`
-                const checkedPlant = checked[plant.commonName]
+                const justAddedPlant = justAdded && justAdded.commonName === plant.commonName
+                const checkedPlant = justAddedPlant ? plant : checked[plant.commonName]
                 const hasChecked = !!checkedPlant
                 return (
                     <Row key={idx}>
                         <CheckboxContainer>
                             <Form.Checkbox
+                                defaultChecked={hasChecked}
                                 onChange={handleCheck(plant)}
                                 label={label}
                             />
                         </CheckboxContainer>
                         {hasChecked ? (
-                            <Input size="mini" type="number" defaultValue={1} min={1} onChange={updateQty(plant)} />
+                            <Input size="mini" type="number" defaultValue={1} min={0} onChange={updateQty(plant)} />
                         ) : "0"}
                     </Row>
                 )
@@ -99,13 +105,16 @@ const CreateGarden = ({
             <Form onSubmit={handleSubmit}>
                 <Form.Input label="Garden Name" onChange={handleChange} name='gardenName' />
 
-                <Header>Add Some Plants</Header>
+                <Row>
+                    <Header>Add Some Plants</Header>
+                    <NewPlantModal addPlant={addPlant} />
+                </Row>
                 <Row>
                     <span>Plant</span>
                     <span>Qty</span>
                 </Row>
                 {renderPlants()}
-                <NewPlantModal/>
+                
                 <Form.Button fluid type="submit">
                     Create Garden
                 </Form.Button>
@@ -129,13 +138,15 @@ const initialValues: FormValues = {
 
 interface FormProps {
     getPlants: () => void,
+    addPlant: (plant: QtyPlant) => void,
     plants: QtyPlant[],
-    loading: boolean
+    loading: boolean,
+    justAdded?: QtyPlant
 }
 
 export default withFormik<FormProps, FormValues>({
-    handleSubmit: (values: FormikValues, formikBag: FormikBag<FormProps, any>) => {
-        console.log({values})
+    handleSubmit: (values: FormikValues, { props }: FormikBag<FormProps, any>) => {
+        console.log({values}, {props})
     },
     mapPropsToValues: () => initialValues
 })(CreateGarden)

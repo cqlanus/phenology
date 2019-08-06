@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal, Button, Form } from 'semantic-ui-react'
-import { withFormik, FormikValues, FormikBag } from 'formik'
+import { withFormik, FormikValues, FormikBag, FormikProps } from 'formik'
+import { QtyPlant } from '../redux/plants'
 
 interface FormValues {
     commonName: string
@@ -10,10 +11,12 @@ interface FormValues {
 }
 
 interface FormProps {
-    
+    addPlant: (plant: QtyPlant) => void
 }
 
-const NewPlantModal = ({handleSubmit}: any) => {
+const NewPlantModal = ({handleSubmit, handleChange, setFieldValue, addPlant}: FormProps & FormikProps<FormValues>) => {
+
+    const [ isOpen, setOpen ] = useState(false)
     
     const options = [
         { key: 'tree', text: 'tree', value: 'tree'},
@@ -23,19 +26,32 @@ const NewPlantModal = ({handleSubmit}: any) => {
         { key: 'bulb', text: 'bulb', value: 'bulb'},
     ]
 
+    const close = () => setOpen(false)
+
+    const open = () => setOpen(true)
     
+    const submit = () => {
+        handleSubmit()
+        close()
+    }
+    
+    const handleSelect = (thing: any, { name, value, toggle, checked }: any) => {
+        const finalValue = toggle ? checked : value
+        setFieldValue(name, finalValue)
+    }
+
     return (
-        <Modal trigger={<Button size="mini">New Plant</Button>}>
+        <Modal onClose={close} open={isOpen} trigger={<Button type="button" onClick={open} size="mini">New Plant</Button>}>
             <Modal.Header>New Plant</Modal.Header>
             <Modal.Content>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={submit}>
                     <Form.Group widths="equal">
-                        <Form.Input label="Common Name" />
-                        <Form.Input label="Latin Name" />
-                        <Form.Select options={options} label="Type" />
+                        <Form.Input label="Common Name" name="commonName" onChange={handleChange} />
+                        <Form.Input label="Latin Name" name="latinName" onChange={handleChange} />
+                        <Form.Select options={options} label="Type" name="type" onChange={handleSelect} />
                         <Form.Field>
                             <label>Native?</label>
-                            <Form.Checkbox toggle/>
+                            <Form.Checkbox toggle name="isNative" onChange={handleSelect} />
                         </Form.Field>
                     </Form.Group>
                     <Form.Group widths="equal">
@@ -48,8 +64,21 @@ const NewPlantModal = ({handleSubmit}: any) => {
     )
 }
 
+const initialValues: FormValues = {
+    commonName: '',
+    latinName: '',
+    isNative: false,
+    type: ''
+}
+
 export default withFormik({
     handleSubmit: (values: FormikValues, formikBag: FormikBag<FormProps, FormValues>) => {
-        console.log({values, formikBag})
-    }
+        const { resetForm, props } = formikBag
+        const { addPlant } = props
+        const { commonName, latinName, isNative, type } = values
+        const plant = { commonName, latinName, isNative, type, qty: 1 }
+        addPlant(plant)
+        resetForm()
+    },
+    mapPropsToValues: () => initialValues
 })(NewPlantModal)
