@@ -1,4 +1,7 @@
+import { normalize, schema } from 'normalizr'
 import { Coords } from '../types/location'
+import entities from '../data/entities.json'
+import { Entities } from '../redux/entities';
 
 const request = async (url: string, params?: any) => {
     const response = await fetch(url, params)
@@ -64,6 +67,28 @@ class API {
 
         console.log({response})
         return response.results
+    }
+
+    getEntities = (): Promise<{ entities: Entities }> => {
+
+        const entry = new schema.Entity('entries')
+        const planting = new schema.Entity('plantings', {
+            entries: [entry]
+        })
+        const garden = new schema.Entity('gardens', {
+            plantings: [planting]
+        })
+        const user = new schema.Entity('users', {
+            gardens: [garden]
+        })
+
+        const entitiesSchema = new schema.Array(user)
+
+        const normalizedEntities: { entities: Entities } = normalize(entities, entitiesSchema)
+
+        return new Promise((res) => {
+            setTimeout(() => res(normalizedEntities), 500)
+        })
     }
     
 }

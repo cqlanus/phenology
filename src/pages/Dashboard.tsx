@@ -14,7 +14,11 @@ const Container = styled.div`
 `
 
 const FormContainer = styled.div`
-    flex-basis: 50%;
+    flex-basis: 55%;
+
+    @media (max-width: 700px) {
+        flex-basis: 90%;
+    }
 `
 
 const DashboardPage = () => {

@@ -1,0 +1,39 @@
+[
+    {
+        "id": "u1",
+        "firstName": "Chris",
+        "lastName": "Lanus",
+        "gardens": [
+            {
+                "id": "g1",
+                "name": "Backyard",
+                "plantings": [
+                    {
+                        "id": "pl1",
+                        "plant": {
+                            "id": "p3",
+                            "commonName": "Hakone grass",
+                            "latinName": "Hakonechloa macra",
+                            "type": "grass",
+                            "isNative": false
+                        },
+                        "qty": 4,
+                        "entries": []
+                    },
+                    {
+                        "id": "pl2",
+                        "plant": {
+                            "id": "p10",
+                            "commonName": "Red twig dogwood",
+                            "latinName": "Cornus alba",
+                            "type": "shrub",
+                            "isNative": true
+                        },
+                        "qty": 3,
+                        "entries": []
+                    }
+                ]
+            }
+        ]
+    }
+]
