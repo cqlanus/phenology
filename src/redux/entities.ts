@@ -1,5 +1,6 @@
 import { User, Garden, Planting, Entry } from '../types/entities'
 import api from '../api';
+import { AppState } from '.';
 
 /* Action Constants */
 const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
@@ -113,3 +114,4 @@ export default (state = initialState, action: EntityAction): EntitiesState => {
 }
 
 /* Selectors */
+export const selectUser = (state: AppState, userName: string) => state.entities.users[userName]

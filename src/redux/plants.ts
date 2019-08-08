@@ -1,5 +1,7 @@
-import plants from '../data/plants.json'
 import { AppState } from './index.js';
+import api from '../api';
+
+import { QtyPlant, PlantEntity } from '../types/entities'
 
 /* Action Types */
 const PLANTS_LOADING: 'PLANTS_LOADING' = 'PLANTS_LOADING'
@@ -14,12 +16,12 @@ interface GetPlantStartAction {
 
 interface GetPlantCompleteAction {
     type: typeof GET_PLANTS_COMPLETE
-    plants: QtyPlant[]
+    plants: PlantEntity
 }
 
 interface AddPlantCompleteAction {
     type: typeof ADD_PLANTS_COMPLETE
-    plants: QtyPlant[],
+    plants: PlantEntity,
     plant: QtyPlant
 }
 
@@ -30,18 +32,9 @@ interface GetPlantFailedAction {
 
 type GetPlantAction = GetPlantStartAction | GetPlantCompleteAction | GetPlantFailedAction | AddPlantCompleteAction
 
-export interface Plant {
-    commonName: string
-    latinName: string
-    isNative: boolean
-    type: string,
-}
-
-export type QtyPlant = Plant & { qty: number }
-
 export interface PlantState {
     loading: boolean
-    plants: QtyPlant[]
+    plants: PlantEntity
     justAdded?: QtyPlant
     error?: Error
 }
@@ -50,8 +43,8 @@ export interface PlantState {
 export const getPlants = () => async (dispatch: any) => {
     try {
         dispatch({ type: PLANTS_LOADING })
-        const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
-        setTimeout(() => dispatch({ type: GET_PLANTS_COMPLETE, plants: qtyPlants }), 500)
+        const plants = await api.getPlants()
+        dispatch({ type: GET_PLANTS_COMPLETE, plants })
     } catch (error) {
         dispatch({ type: PLANTS_FAILED, error })
     }
@@ -60,11 +53,11 @@ export const getPlants = () => async (dispatch: any) => {
 export const addPlant = (plant: QtyPlant) => async (dispatch: any) => {
     try {
         dispatch({ type: PLANTS_LOADING })
-        const qtyPlants = [ ...plants, plant ]
-        setTimeout(() => dispatch({ 
+        const plants = await api.addPlant(plant)
+        dispatch({ 
             type: ADD_PLANTS_COMPLETE, 
-            plants: qtyPlants, 
-            plant }), 500)
+            plants, 
+            plant })
     } catch (error) {
         dispatch({ type: PLANTS_FAILED, error })
     }
@@ -73,7 +66,7 @@ export const addPlant = (plant: QtyPlant) => async (dispatch: any) => {
 /* Initial State */
 const initialState: PlantState = {
     loading: false,
-    plants: [],
+    plants: {},
     error: undefined
 }
 
@@ -123,6 +116,6 @@ export default (state = initialState, action: GetPlantAction): PlantState => {
 }
 
 /* Selectors */
-export const selectPlants = (state: AppState) => state.plants.plants
+export const selectPlants = (state: AppState) => Object.values(state.plants.plants)
 export const selectIsPlantsLoading = (state: AppState) => state.plants.loading
 export const selectJustAdded = (state: AppState) => state.plants.justAdded

@@ -5,17 +5,15 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import configureStore from './redux'
 import { getNearbyStations } from './redux/station'
-import { getEntities } from './redux/entities'
 
 import LocationPage from './pages/Location'
 import MainPage from './pages/Main';
-import DashboardPage from './pages/Dashboard';
+import UserHome from './pages/UserHome';
 
 const App: React.FC = () => {
     const store = configureStore()
   useEffect(() => {
     store.dispatch<any>(getNearbyStations())
-    store.dispatch<any>(getEntities())
   }, [store])
 
 
@@ -24,7 +22,7 @@ const App: React.FC = () => {
           <Router>
             <Route path="/" exact component={MainPage} />
             <Route path="/location" component={LocationPage} />
-            <Route path="/home" component={DashboardPage} />
+            <Route path="/home" component={UserHome} />
           </Router>
           
       </Provider>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form } from 'semantic-ui-react'
 import { withFormik, FormikValues, FormikBag, FormikProps } from 'formik'
-import { QtyPlant } from '../redux/plants'
+import { QtyPlant } from '../types/entities'
 
 interface FormValues {
     commonName: string
@@ -76,7 +76,7 @@ export default withFormik({
         const { resetForm, props } = formikBag
         const { addPlant } = props
         const { commonName, latinName, isNative, type } = values
-        const plant = { commonName, latinName, isNative, type, qty: 1 }
+        const plant = { commonName, latinName, isNative, type, qty: 1, id: 'newplant' }
         addPlant(plant)
         resetForm()
     },

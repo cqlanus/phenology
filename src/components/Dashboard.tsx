@@ -1,0 +1,39 @@
+import React, { useEffect } from 'react'
+import styled from 'styled-components'
+
+const Container = styled.div`
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const InnerContainer = styled.div`
+    flex-basis: 75%;
+
+    @media (max-width: 700px) {
+        flex-basis: 90%;
+    }
+`
+
+interface Props {
+    getEntities: () => void
+}
+
+const Dashboard = ({ getEntities }: Props) => {
+
+    useEffect(() => {
+        getEntities()
+    }, []) 
+
+    return (
+        <Container>
+            <InnerContainer>
+                <h2>Welcome Chris</h2>
+                
+            </InnerContainer>
+        </Container>
+    )
+}
+
+export default Dashboard

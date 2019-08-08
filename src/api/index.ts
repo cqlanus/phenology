@@ -1,7 +1,11 @@
 import { normalize, schema } from 'normalizr'
+import plants from '../data/plants.json'
 import { Coords } from '../types/location'
 import entities from '../data/entities.json'
 import { Entities } from '../redux/entities';
+import { Plant, QtyPlant, PlantEntity } from '../types/entities';
+
+const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
 
 const request = async (url: string, params?: any) => {
     const response = await fetch(url, params)
@@ -69,6 +73,25 @@ class API {
         return response.results
     }
 
+    getPlants = (): Promise<PlantEntity> => {
+        const plant = new schema.Entity('plants')
+        const plantSchema = new schema.Array(plant)
+
+        const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(qtyPlants, plantSchema)
+        console.log({normalizedPlants})
+        return new Promise((res) => {
+            setTimeout(() => res(normalizedPlants.entities.plants), 500)
+        })
+    }
+
+    addPlant = (plant: QtyPlant): Promise<QtyPlant[]> => {
+        
+        return new Promise((res) => {
+            const plants = [ ...qtyPlants, plant]
+            setTimeout(() => res(plants), 500)
+        })
+    }
+    
     getEntities = (): Promise<{ entities: Entities }> => {
 
         const entry = new schema.Entity('entries')
