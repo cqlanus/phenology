@@ -1,0 +1,21 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "phenology-dev-20190808082609-authRole",
+            "UnauthRoleArn": "arn:aws:iam::400081491947:role/phenology-dev-20190808082609-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::400081491947:role/phenology-dev-20190808082609-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "phenology-dev-20190808082609-deployment",
+            "UnauthRoleName": "phenology-dev-20190808082609-unauthRole",
+            "StackName": "phenology-dev-20190808082609",
+            "StackId": "arn:aws:cloudformation:us-east-2:400081491947:stack/phenology-dev-20190808082609/155f22c0-b9e0-11e9-9bcd-02e473ddfb1a"
+        },
+        "categories": {
+            "auth": {
+                "phenology880cb348": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"876582222718414\",\"client_secret\":\"e38f1be9220c250b6ba86c5e54d7474b\"},{\"ProviderName\":\"Google\",\"client_id\":\"158446340339-21d6o20r35mmtlm2pn42ir67q5mh3i7j.apps.googleusercontent.com \",\"client_secret\":\"qSVSwMQE8xTyzgXo9Tl0gy5S \"}]"
+                }
+            }
+        }
+    }
+}

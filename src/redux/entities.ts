@@ -1,6 +1,13 @@
+import Amplify, { API, graphqlOperation } from 'aws-amplify';
+
 import { User, Garden, Planting, Entry } from '../types/entities'
-import api from '../api';
-import { AppState } from '.';
+
+import api from '../api/index'
+import { AppState } from '.'
+import { createUser } from '../graphql/mutations'
+
+import {entities} from '../data/entities.js'
+import { getUserByUserName } from '../graphql/queries';
 
 /* Action Constants */
 const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
@@ -57,6 +64,30 @@ export const getEntities = () => async (dispatch: any) => {
 
     } catch (error) {
         dispatch({ type: ENTITY_FAILED, error })
+    }
+}
+
+export const addUser = async () => {
+    try {
+        const [ input ] = entities
+        const response = await API.graphql(graphqlOperation(createUser, {input}))
+        console.log({response})
+        
+    } catch (error) {
+        console.log({error})
+    }
+}
+
+export const getUser = async (userName = "cqlanus") => {
+    try {
+        const input = userName 
+        console.log({input}, {getUserByUserName})
+        const response = await API.graphql(graphqlOperation(getUserByUserName, { userName }))
+
+        console.log({response })
+
+    } catch (error) {
+        console.log({error})
     }
 }
 

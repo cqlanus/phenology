@@ -1,32 +1,42 @@
-[
+import uuid from 'uuid'
+export const entities = [
     {
         "id": "cqlanus",
+        "userName": "cqlanus",
         "firstName": "Chris",
         "lastName": "Lanus",
         "gardens": [
             {
-                "id": "g1",
+                gardenId: uuid(),
                 "name": "Backyard",
                 "plantings": [
                     {
-                        "id": "pl1",
+                        plantingId: uuid(),
                         "plant": {
-                            "id": "p3",
+                            plantId: 'p3',
                             "commonName": "Hakone grass",
                             "latinName": "Hakonechloa macra",
-                            "type": "grass",
+                            "type": "GRASS",
                             "isNative": false
                         },
                         "qty": 4,
-                        "entries": []
+                        "entries": [
+                            {
+                                entryId: uuid(),
+                                "created": "2019-08-08T18:12:14.588Z",
+                                "category": "VEGETATIVE",
+                                "phenophase": "INITIAL_GROWTH",
+                                "note": "sunny day"
+                            }
+                        ]
                     },
                     {
-                        "id": "pl2",
+                        plantingId: uuid(),
                         "plant": {
-                            "id": "p10",
+                            plantId: 'p12',
                             "commonName": "Red twig dogwood",
                             "latinName": "Cornus alba",
-                            "type": "shrub",
+                            "type": "SHRUB",
                             "isNative": true
                         },
                         "qty": 3,

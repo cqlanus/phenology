@@ -1,9 +1,10 @@
 import { normalize, schema } from 'normalizr'
+import { API as A, graphqlOperation } from 'aws-amplify'
 import plants from '../data/plants.json'
 import { Coords } from '../types/location'
-import entities from '../data/entities.json'
-import { Entities } from '../redux/entities';
-import { Plant, QtyPlant, PlantEntity } from '../types/entities';
+import { Entities } from '../redux/entities'
+import { QtyPlant, PlantEntity } from '../types/entities'
+import { getUserByUserName } from '../gql/queries'
 
 const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
 
@@ -92,22 +93,28 @@ class API {
         })
     }
     
-    getEntities = (): Promise<{ entities: Entities }> => {
+    getEntities = async (userName = "cqlanus"): Promise<{ entities: Entities }> => {
 
-        const entry = new schema.Entity('entries')
+        const { data } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
+
+        console.log({data})
+        const entry = new schema.Entity('entries', {}, {idAttribute: 'entryId'})
+        const plant = new schema.Entity('plant', {}, {idAttribute: 'plantId'})
         const planting = new schema.Entity('plantings', {
-            entries: [entry]
-        })
+            entries: [entry],
+            plant,
+        }, {idAttribute: 'plantingId'})
         const garden = new schema.Entity('gardens', {
             plantings: [planting]
-        })
+        }, {idAttribute: 'gardenId'})
         const user = new schema.Entity('users', {
             gardens: [garden]
         })
 
         const entitiesSchema = new schema.Array(user)
 
-        const normalizedEntities: { entities: Entities } = normalize(entities, entitiesSchema)
+        const normalizedEntities: { entities: Entities } = normalize(data.getUserByUserName.items, entitiesSchema)
+        console.log({normalizedEntities})
 
         return new Promise((res) => {
             setTimeout(() => res(normalizedEntities), 500)

@@ -1,0 +1,59 @@
+enum PlantType {
+    SHRUB
+    GRASS
+    HERB
+    TREE
+    BULB
+    VINE
+}
+
+type PlantModel @model @key(name: "ByLatinName", fields: ["latinName"]) {
+    id: ID!
+    commonName: String!
+    latinName: String!
+    type: PlantType
+    isNative: Boolean
+}
+
+type Plant {
+    plantId: String
+    commonName: String!
+    latinName: String!
+    type: PlantType
+    isNative: Boolean
+}
+
+type User @model @key(name: "ByUserName", fields: ["userName"], queryField: "getUserByUserName") {
+    id: ID!
+    userName: String!,
+    firstName: String!
+    lastName: String!
+    gardens: [Garden]
+}
+
+type Garden {
+	gardenId: String!
+	name: String!
+    plantings: [Planting]
+}
+
+type Planting {
+    plantingId: String!
+    qty: Int!
+    plant: Plant!
+    entries: [Entry]
+}
+
+enum PhenophaseCategory {
+    VEGETATIVE
+    REPRODUCTIVE
+    FRUIT_SEED
+}
+
+type Entry {
+    entryId: String!
+    created: String!
+    category: PhenophaseCategory
+    phenophase: String!
+    note: String
+}

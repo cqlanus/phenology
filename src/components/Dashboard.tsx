@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import { addUser, getUser } from '../redux/entities';
 
 const Container = styled.div`
     height: 100vh;
@@ -24,13 +25,14 @@ const Dashboard = ({ getEntities }: Props) => {
 
     useEffect(() => {
         getEntities()
-    }, []) 
+    }, [getEntities]) 
 
     return (
         <Container>
             <InnerContainer>
                 <h2>Welcome Chris</h2>
-                
+                <button onClick={() => addUser()} >Add User</button>
+                <button onClick={() => getUser('cqlanus')} >Get User</button>
             </InnerContainer>
         </Container>
     )

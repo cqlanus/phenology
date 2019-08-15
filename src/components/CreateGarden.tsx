@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import CreateGardenForm from '../containers/CreateGardenForm'
@@ -26,10 +26,6 @@ interface Props {
 }
 
 const CreateGarden = ({ getEntities }: Props) => {
-
-    useEffect(() => {
-        getEntities()
-    }, []) 
 
     const memoGetPlants = useCallback(getPlants, [])
     return (
