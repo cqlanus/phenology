@@ -1,8 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Link from '../components/Link'
-import { Button } from 'semantic-ui-react'
-import { Auth, Hub } from 'aws-amplify'
+import { Button, Loader } from 'semantic-ui-react'
+import { Hub } from 'aws-amplify'
+import { signIn, signOut, getUser, AuthUser } from '../redux/auth'
+import { AppState } from '../redux';
+
+interface Props {
+    signIn: () => void
+    signOut: () => void
+    getUser: () => void
+    user?: AuthUser
+    loading: boolean
+}
 
 const Container = styled.div`
     height: 100vh;
@@ -21,15 +32,14 @@ const Row = styled.div`
     display: flex;
 `
 
-const MainPage = () => {
-    const initialUser: any = undefined
+const AuthRow = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1em;
+`
 
-    const [user, setUser] = useState(initialUser)
-
-    const getUser = async () => {
-        const currentUser = await Auth.currentAuthenticatedUser()
-        console.log({currentUser})
-    }
+const MainPage = ({ signIn, signOut, getUser, user, loading }: Props) => {
     
     useEffect(() => {
         Hub.listen('auth', data => {
@@ -37,52 +47,56 @@ const MainPage = () => {
             console.log({ data })
             console.log({ payload })
             if (payload.event === 'signIn') {
-                const { username } = payload.data
-                setUser(username)
                 getUser()
                 console.log('a user has signed in!')
             }
-            if (payload.event === 'signOut') {
-                setUser(undefined)
-                console.log('a user has signed out!')
-            }
         })
-    }, [])
-
-    // useEffect(() => {
-    //     getUser()
-    // }, [])
+    }, [getUser])
 
     console.log({ user })
 
-    const renderStuff = () => {
+    const renderAuth = () => {
+        return user
+            ? <Button size="mini" onClick={signOut}>Sign Out</Button>
+            : <Button size="mini" onClick={signIn}>
+                Sign In
+            </Button>
+    }
+    
+    const renderNav = () => {
         if (user) {
             return (
-                <div>
-                    <Row>
-                        <Link to="/home">Dashboard</Link>
-                        <Link to="/location">My Location</Link>
-                    </Row>
-                    <Button onClick={() => Auth.signOut()}>Sign Out</Button>
-                </div>
-            )
-        } else {
-            return (
-                <Button onClick={() => Auth.federatedSignIn()}>
-                    Sign In
-                </Button>
+                <Row>
+                    <Link to="/home">Dashboard</Link>
+                    <Link to="/location">My Location</Link>
+                </Row>
             )
         }
     }
     
     return (
         <Container>
+            <AuthRow>{renderAuth()}</AuthRow>
             <TextContainer>
                 <h2>Phenology</h2>
-                { renderStuff() }
+                {renderNav()}
             </TextContainer>
+            <Loader active={loading} />
         </Container>
     )
 }
 
-export default MainPage
+const mapState = (state: AppState) => {
+    return {
+        loading: state.auth.loading,
+        user: state.auth.user
+    }
+}
+
+const mapDispatch = {
+    signIn,
+    signOut,
+    getUser
+}
+
+export default connect(mapState, mapDispatch)(MainPage)

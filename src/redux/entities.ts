@@ -1,4 +1,4 @@
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 
 import { User, Garden, Planting, Entry } from '../types/entities'
 
