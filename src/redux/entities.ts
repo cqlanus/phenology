@@ -7,7 +7,7 @@ import { AppState } from '.'
 import { createUser } from '../graphql/mutations'
 
 import {entities} from '../data/entities.js'
-import { getUserByUserName } from '../graphql/queries';
+import { AuthUser } from './auth'
 
 /* Action Constants */
 const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
@@ -78,14 +78,20 @@ export const addUser = async () => {
     }
 }
 
-export const getUser = async (userName = "cqlanus") => {
+const createApiUser = async ({username: userName, attributes}: AuthUser) => {
+    const { given_name: firstName, family_name: lastName, email } = attributes
+    const apiUserInput = { firstName, lastName, userName, id: userName, gardens: [] }
+    const { data: { createUser: user }} = await API.graphql(graphqlOperation(createUser, {input: apiUserInput}))
+    return user
+}
+
+export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
+    const { username: userName } = authUser
+    console.log({userName}, {authUser})
     try {
-        const input = userName 
-        console.log({input}, {getUserByUserName})
-        const response = await API.graphql(graphqlOperation(getUserByUserName, { userName }))
-
-        console.log({response })
-
+        const { entities, result } = await api.getApiUser(authUser)
+        console.log({result})
+        dispatch({ type: ADD_ENTITY, entities })
     } catch (error) {
         console.log({error})
     }

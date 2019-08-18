@@ -5,6 +5,8 @@ import { Coords } from '../types/location'
 import { Entities } from '../redux/entities'
 import { QtyPlant, PlantEntity } from '../types/entities'
 import { getUserByUserName } from '../gql/queries'
+import { createUser } from '../graphql/mutations'
+import { AuthUser } from '../redux/auth'
 
 const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
 
@@ -119,6 +121,46 @@ class API {
         return new Promise((res) => {
             setTimeout(() => res(normalizedEntities), 500)
         })
+    }
+
+    normalizeUser = (apiUser: any) => {
+        const entry = new schema.Entity('entries', {}, {idAttribute: 'entryId'})
+        const plant = new schema.Entity('plant', {}, {idAttribute: 'plantId'})
+        const planting = new schema.Entity('plantings', {
+            entries: [entry],
+            plant,
+        }, {idAttribute: 'plantingId'})
+        const garden = new schema.Entity('gardens', {
+            plantings: [planting]
+        }, {idAttribute: 'gardenId'})
+        const user = new schema.Entity('users', {
+            gardens: [garden]
+        })
+
+        const normalizedEntities: { entities: Entities, result: any } = normalize(apiUser, user)
+        console.log({normalizedEntities})
+
+        return normalizedEntities
+    }
+    
+    createApiUser = async ({username: userName, attributes}: AuthUser) => {
+        const { given_name: firstName, family_name: lastName, email } = attributes
+        const apiUserInput = { firstName, lastName, userName, id: userName, gardens: [] }
+        const { data: { createUser: user }} = await A.graphql(graphqlOperation(createUser, {input: apiUserInput}))
+        return user
+    }
+    
+    getApiUser = async (authUser: AuthUser) => {
+        const { username: userName } = authUser
+        const { data: { getUserByUserName: { items } } } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
+
+        const [ user ] = items
+        if (user) {
+            return this.normalizeUser(user)
+        } else {
+            const apiUser = await this.createApiUser(authUser)
+            return this.normalizeUser(apiUser)
+        }
     }
     
 }

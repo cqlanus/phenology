@@ -12,8 +12,8 @@
         },
         "categories": {
             "auth": {
-                "phenology880cb348": {
-                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"876582222718414\",\"client_secret\":\"e38f1be9220c250b6ba86c5e54d7474b\"},{\"ProviderName\":\"Google\",\"client_id\":\"158446340339-21d6o20r35mmtlm2pn42ir67q5mh3i7j.apps.googleusercontent.com \",\"client_secret\":\"qSVSwMQE8xTyzgXo9Tl0gy5S \"}]"
+                "phenologybe83c267": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"2370971969625295\",\"client_secret\":\"58eb4bbe3e67c356464421a5e7c1223b\"}]"
                 }
             }
         }

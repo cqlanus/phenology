@@ -44,16 +44,15 @@ const MainPage = ({ signIn, signOut, getUser, user, loading }: Props) => {
     useEffect(() => {
         Hub.listen('auth', data => {
             const { payload } = data
-            console.log({ data })
-            console.log({ payload })
+
+            if (payload.event === 'signUp') {
+                console.log({data})
+            }
             if (payload.event === 'signIn') {
                 getUser()
-                console.log('a user has signed in!')
             }
         })
     }, [getUser])
-
-    console.log({ user })
 
     const renderAuth = () => {
         return user

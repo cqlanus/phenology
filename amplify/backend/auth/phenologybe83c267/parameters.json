@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "phenology880cb348_identitypool_880cb348",
+    "identityPoolName": "phenologybe83c267_identitypool_be83c267",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "phenol880cb348",
-    "userPoolName": "phenology880cb348_userpool_880cb348",
+    "resourceNameTruncated": "phenolbe83c267",
+    "userPoolName": "phenologybe83c267_userpool_be83c267",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -19,7 +19,8 @@
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
         "email",
-        "name"
+        "family_name",
+        "given_name"
     ],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
@@ -29,9 +30,9 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "phenol880cb348_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "phenolbe83c267_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "resourceName": "phenology880cb348",
+    "resourceName": "phenologybe83c267",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -48,12 +49,11 @@
     "useDefault": "defaultSocial",
     "hostedUI": true,
     "triggers": "{}",
-    "hostedUIDomainName": "phenology880cb348-880cb348",
+    "hostedUIDomainName": "phenologybe83c267-be83c267",
     "authProvidersUserPool": [
-        "Facebook",
-        "Google"
+        "Facebook"
     ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"family_name\":\"last_name\",\"given_name\":\"given_name\",\"username\":\"id\"}}]",
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:3000/\"],\"LogoutURLs\":[\"https://localhost:3000/\"]}",
     "parentStack": {
         "Ref": "AWS::StackId"

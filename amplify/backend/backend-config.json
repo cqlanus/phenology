@@ -9,7 +9,7 @@
 		}
 	},
 	"auth": {
-		"phenology880cb348": {
+		"phenologybe83c267": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []

@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify'
+import { getApiUser } from './entities'
 
 /* Action Types */
 const SIGN_IN_START: 'SIGN_IN_START' = 'SIGN_IN_START'
@@ -15,7 +16,8 @@ const GET_USER_FAILED: 'GET_USER_FAILED' = 'GET_USER_FAILED'
 interface AuthAttributes {
     email: string
     email_verified: boolean
-    name: string
+    given_name: string
+    family_name: string
     sub: string
 }
 export interface AuthUser {
@@ -74,6 +76,7 @@ export const getUser = () => async (dispatch: any) => {
     try {
         dispatch({ type: GET_USER_START })
         const user = await Auth.currentAuthenticatedUser()
+        await dispatch(getApiUser(user))
         dispatch({ type: GET_USER_COMPLETE, user })
     } catch (error) {
         dispatch({ type: GET_USER_FAILED, error })
