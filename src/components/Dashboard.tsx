@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { addUser } from '../redux/entities';
+import { User } from '../types/entities'
 
 const Container = styled.div`
     height: 100vh;
@@ -18,14 +19,13 @@ const InnerContainer = styled.div`
 `
 
 interface Props {
-    getEntities: () => void
+    getEntities: () => void,
+    user?: User
 }
 
-const Dashboard = ({ getEntities }: Props) => {
+const Dashboard = ({ getEntities, user }: Props) => {
 
-    useEffect(() => {
-        getEntities()
-    }, [getEntities]) 
+    console.log({user})
 
     return (
         <Container>

@@ -8,6 +8,7 @@ import awsconfig from './aws-exports'
 
 import configureStore from './redux'
 import { getNearbyStations } from './redux/station'
+import { getSignedInUser } from './redux/auth'
 
 import LocationPage from './pages/Location'
 import MainPage from './pages/Main';
@@ -19,6 +20,7 @@ const App: React.FC = () => {
     const store = configureStore()
   useEffect(() => {
     store.dispatch<any>(getNearbyStations())
+    store.dispatch<any>(getSignedInUser())
   }, [store])
 
 

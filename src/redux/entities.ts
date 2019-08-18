@@ -12,7 +12,7 @@ import { AuthUser } from './auth'
 /* Action Constants */
 const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
 const ENTITY_FAILED: 'ENTITY_FAILED' = 'ENTITY_FAILED'
-const ADD_ENTITY: 'ADD_ENTITY' = 'ADD_ENTITY'
+export const ADD_ENTITY: 'ADD_ENTITY' = 'ADD_ENTITY'
 const FLUSH_ENTITY: 'FLUSH_ENTITY' = 'FLUSH_ENTITY' 
 
 /* Interfaces */
@@ -37,9 +37,10 @@ interface EntityStartAction {
     type: typeof ENTITY_START
 }
 
-interface AddEntityAction {
+export interface AddEntityAction {
     type: typeof ADD_ENTITY
     entities: Entities
+    result: string
 }
 
 interface FlushEntityAction {
@@ -78,20 +79,10 @@ export const addUser = async () => {
     }
 }
 
-const createApiUser = async ({username: userName, attributes}: AuthUser) => {
-    const { given_name: firstName, family_name: lastName, email } = attributes
-    const apiUserInput = { firstName, lastName, userName, id: userName, gardens: [] }
-    const { data: { createUser: user }} = await API.graphql(graphqlOperation(createUser, {input: apiUserInput}))
-    return user
-}
-
 export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
-    const { username: userName } = authUser
-    console.log({userName}, {authUser})
     try {
         const { entities, result } = await api.getApiUser(authUser)
-        console.log({result})
-        dispatch({ type: ADD_ENTITY, entities })
+        dispatch({ type: ADD_ENTITY, entities, result })
     } catch (error) {
         console.log({error})
     }
@@ -151,4 +142,5 @@ export default (state = initialState, action: EntityAction): EntitiesState => {
 }
 
 /* Selectors */
+export const selectUserEntity = (state: AppState) => state.entities.users
 export const selectUser = (state: AppState, userName: string) => state.entities.users[userName]

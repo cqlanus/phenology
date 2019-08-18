@@ -83,6 +83,18 @@ export const getUser = () => async (dispatch: any) => {
     }
 }
 
+export const getSignedInUser = () => async (dispatch: any) => {
+    try {
+        const user = await Auth.currentAuthenticatedUser()
+        if (user) {
+            dispatch(getUser())
+        }
+    } catch (error) {
+        console.log({error})
+    }
+
+}
+
 /* Initial State */
 const initialState: AuthState = {
     loading: false,

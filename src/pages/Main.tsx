@@ -4,13 +4,14 @@ import styled from 'styled-components'
 import Link from '../components/Link'
 import { Button, Loader } from 'semantic-ui-react'
 import { Hub } from 'aws-amplify'
-import { signIn, signOut, getUser, AuthUser } from '../redux/auth'
+import { signIn, signOut, getUser, AuthUser, getSignedInUser } from '../redux/auth'
 import { AppState } from '../redux';
 
 interface Props {
     signIn: () => void
     signOut: () => void
     getUser: () => void
+    getSignedInUser: () => void
     user?: AuthUser
     loading: boolean
 }
@@ -40,7 +41,7 @@ const AuthRow = styled.div`
 `
 
 const MainPage = ({ signIn, signOut, getUser, user, loading }: Props) => {
-    
+
     useEffect(() => {
         Hub.listen('auth', data => {
             const { payload } = data
@@ -52,6 +53,7 @@ const MainPage = ({ signIn, signOut, getUser, user, loading }: Props) => {
                 getUser()
             }
         })
+
     }, [getUser])
 
     const renderAuth = () => {
@@ -95,7 +97,8 @@ const mapState = (state: AppState) => {
 const mapDispatch = {
     signIn,
     signOut,
-    getUser
+    getUser,
+    getSignedInUser
 }
 
 export default connect(mapState, mapDispatch)(MainPage)

@@ -138,13 +138,11 @@ class API {
         })
 
         const normalizedEntities: { entities: Entities, result: any } = normalize(apiUser, user)
-        console.log({normalizedEntities})
-
         return normalizedEntities
     }
     
     createApiUser = async ({username: userName, attributes}: AuthUser) => {
-        const { given_name: firstName, family_name: lastName, email } = attributes
+        const { given_name: firstName, family_name: lastName } = attributes
         const apiUserInput = { firstName, lastName, userName, id: userName, gardens: [] }
         const { data: { createUser: user }} = await A.graphql(graphqlOperation(createUser, {input: apiUserInput}))
         return user
