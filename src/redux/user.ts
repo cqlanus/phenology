@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { ADD_ENTITY, AddEntityAction, selectUserEntity } from './entities'
+import { ADD_ENTITY, AddEntityAction, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity } from './entities'
 import { AppState } from '.';
 
 /* Interfaces */
@@ -34,6 +34,24 @@ export default (state = initialState, action: UserAction): UserState => {
 /* Selectors */
 export const selectUserId = (state: AppState) => state.user.selected
 export const selectUser = createSelector(
-    [selectUserId, selectUserEntity],
-    (userId, users) => userId ? users[userId] : undefined
+    [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity],
+    (userId, users, allGardens, allPlantings, allEntries) => {
+        const user = userId ? users[userId] : undefined
+        const gardens = user ? user.gardens.map((id: string) => {
+            const garden = allGardens[id]
+            const { plantings: plantingIds } = garden
+            const plantings = plantingIds.map((pId: string) => {
+                const planting = allPlantings[pId]
+                const entries = planting.entries.map((eId: string) => allEntries[eId])
+
+                return { ...planting, entries }
+            })
+
+            return { ...garden, plantings }
+            
+        }) : []
+
+        return { ...user, gardens }
+        
+    }
 )

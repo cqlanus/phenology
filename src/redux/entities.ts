@@ -143,4 +143,7 @@ export default (state = initialState, action: EntityAction): EntitiesState => {
 
 /* Selectors */
 export const selectUserEntity = (state: AppState) => state.entities.users
+export const selectGardenEntity = (state: AppState) => state.entities.gardens
+export const selectPlantingEntity = (state: AppState) => state.entities.plantings
+export const selectEntryEntity = (state: AppState) => state.entities.entries
 export const selectUser = (state: AppState, userName: string) => state.entities.users[userName]

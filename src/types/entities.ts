@@ -2,18 +2,18 @@ export interface User {
     id: string
     firstName: string
     lastName: string
-    gardens: Garden[]
+    gardens: string[]
 }
 export interface Garden {
     id: string
     name: string
-    plantings: Planting[]
+    plantings: string[]
 }
 export interface Planting {
     id: string
     plant: Plant
     qty: number
-    entries: Entry[]
+    entries: string[]
 }
 export interface Plant {
     id: string,

@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { addUser } from '../redux/entities';
-import { User } from '../types/entities'
 
 const Container = styled.div`
     height: 100vh;
@@ -19,19 +17,43 @@ const InnerContainer = styled.div`
 `
 
 interface Props {
-    getEntities: () => void,
-    user?: User
+    user?: any
 }
 
-const Dashboard = ({ getEntities, user }: Props) => {
+const Dashboard = ({ user }: Props) => {
+    if (!user) { return <div/>}
 
     console.log({user})
 
+    const renderGardens = () => {
+        const { gardens } = user
+        const hasGardens = gardens.length > 0
+
+        if (hasGardens) {
+            return (
+                <div>
+                    {
+                        gardens.map((g: any) => {
+                            return (
+                                <div key={g.gardenId}>{g.name}</div>
+                            )
+                        })
+                    }
+                </div>
+            )
+        } else {
+            return (
+                <div>No gardens</div>
+            )
+        }
+        
+    }
+    
     return (
         <Container>
             <InnerContainer>
-                <h2>Welcome Chris</h2>
-                <button onClick={() => addUser()} >Add User</button>
+                <h2>Welcome {user.firstName}</h2>
+                {renderGardens()}
             </InnerContainer>
         </Container>
     )
