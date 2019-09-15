@@ -150,9 +150,11 @@ class API {
     
     getApiUser = async (authUser: AuthUser) => {
         const { username: userName } = authUser
+        console.log({userName})
         const { data: { getUserByUserName: { items } } } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 
         const [ user ] = items
+        console.log({user})
         if (user) {
             return this.normalizeUser(user)
         } else {

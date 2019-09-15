@@ -85,20 +85,6 @@ export const getUserByUserName = `query GetUserByUserName(
       gardens {
         gardenId
         name
-        plantings {
-            qty
-            plantingId
-            plant {
-                commonName
-                latinName
-                plantId
-                isNative
-            }
-            entries {
-                entryId
-                phenophase
-            }
-        }
       }
     }
     nextToken

@@ -30,6 +30,9 @@ export const getUserByUserName = `query GetUserByUserName(
               entries {
                   entryId
                   phenophase
+                  created
+                  note
+                  category
               }
           }
         }

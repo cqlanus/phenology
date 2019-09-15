@@ -16,10 +16,10 @@ export const ADD_ENTITY: 'ADD_ENTITY' = 'ADD_ENTITY'
 const FLUSH_ENTITY: 'FLUSH_ENTITY' = 'FLUSH_ENTITY' 
 
 /* Interfaces */
-interface UserEntity { [userId: string]: User }
-interface GardenEntity { [gardenId: string]: Garden }
-interface PlantingEntity { [plantingId: string]: Planting }
-interface EntryEntity { [entryId: string]: Entry }
+export interface UserEntity { [userId: string]: User }
+export interface GardenEntity { [gardenId: string]: Garden }
+export interface PlantingEntity { [plantingId: string]: Planting }
+export interface EntryEntity { [entryId: string]: Entry }
 
 export interface Entities {
     users: UserEntity
@@ -81,10 +81,11 @@ export const addUser = async () => {
 
 export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
     try {
+        console.log({authUser})
         const { entities, result } = await api.getApiUser(authUser)
         dispatch({ type: ADD_ENTITY, entities, result })
     } catch (error) {
-        console.log({error})
+        console.log({error1: error})
     }
 }
 

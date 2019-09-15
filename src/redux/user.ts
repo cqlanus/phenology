@@ -1,6 +1,8 @@
-import { createSelector } from 'reselect'
+import { createSelector, OutputSelector } from 'reselect'
 import { ADD_ENTITY, AddEntityAction, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity } from './entities'
 import { AppState } from '.';
+import { ApiUser } from '../types/user';
+import { UserEntity, GardenEntity, PlantingEntity, EntryEntity } from '../redux/entities';
 
 /* Interfaces */
 interface UserState {
@@ -32,8 +34,8 @@ export default (state = initialState, action: UserAction): UserState => {
 }
 
 /* Selectors */
-export const selectUserId = (state: AppState) => state.user.selected
-export const selectUser = createSelector(
+export const selectUserId = (state: AppState): string | undefined => state.user.selected
+export const selectUser = createSelector<AppState, string | undefined, any, GardenEntity, PlantingEntity, EntryEntity, ApiUser>(
     [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity],
     (userId, users, allGardens, allPlantings, allEntries) => {
         const user = userId ? users[userId] : undefined

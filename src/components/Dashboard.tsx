@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import GardenCard from './GardenCard'
+import { ApiUser } from '../types/user'
+
 const Container = styled.div`
     height: 100vh;
     display: flex;
@@ -16,14 +19,16 @@ const InnerContainer = styled.div`
     }
 `
 
+const GardenRow = styled.div`
+    display: flex;
+`
+
 interface Props {
-    user?: any
+    user?: ApiUser
 }
 
 const Dashboard = ({ user }: Props) => {
     if (!user) { return <div/>}
-
-    console.log({user})
 
     const renderGardens = () => {
         const { gardens } = user
@@ -31,19 +36,15 @@ const Dashboard = ({ user }: Props) => {
 
         if (hasGardens) {
             return (
-                <div>
+                <GardenRow>
                     {
-                        gardens.map((g: any) => {
-                            return (
-                                <div key={g.gardenId}>{g.name}</div>
-                            )
-                        })
+                        gardens.map((g: any) => <GardenCard key={g.gardenId} garden={g} />)
                     }
-                </div>
+                </GardenRow>
             )
         } else {
             return (
-                <div>No gardens</div>
+                <GardenRow>No gardens</GardenRow>
             )
         }
         
