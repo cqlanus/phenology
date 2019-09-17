@@ -12,7 +12,9 @@ import { getSignedInUser } from './redux/auth'
 
 import LocationPage from './pages/Location'
 import MainPage from './pages/Main';
-import UserHome from './pages/UserHome';
+import Garden from './containers/Garden';
+import CreateGarden from './containers/CreateGarden';
+import Dashboard from './containers/Dashboard';
 
 Amplify.configure(awsconfig)
 
@@ -29,7 +31,9 @@ const App: React.FC = () => {
           <Router>
             <Route path="/" exact component={MainPage} />
             <Route path="/location" component={LocationPage} />
-            <Route path="/home" component={UserHome} />
+            <Route path="/home" component={Dashboard} />
+            <Route path="/create" component={CreateGarden} />
+            <Route path="/garden/:gardenId" component={Garden} />
           </Router>
           
       </Provider>

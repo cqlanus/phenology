@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Button } from 'semantic-ui-react'
 
 import GardenCard from './GardenCard'
+import Link from './Link'
 import { ApiUser } from '../types/user'
 
 const Container = styled.div`
@@ -19,8 +21,16 @@ const InnerContainer = styled.div`
     }
 `
 
-const GardenRow = styled.div`
+const Row = styled.div`
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+`
+
+const GardenTitle = styled.h3`
+    padding: 0;
+    margin: 0;
 `
 
 interface Props {
@@ -36,15 +46,15 @@ const Dashboard = ({ user }: Props) => {
 
         if (hasGardens) {
             return (
-                <GardenRow>
+                <div>
                     {
                         gardens.map((g: any) => <GardenCard key={g.gardenId} garden={g} />)
                     }
-                </GardenRow>
+                </div>
             )
         } else {
             return (
-                <GardenRow>No gardens</GardenRow>
+                <div>No gardens</div>
             )
         }
         
@@ -54,6 +64,13 @@ const Dashboard = ({ user }: Props) => {
         <Container>
             <InnerContainer>
                 <h2>Welcome {user.firstName}</h2>
+                <Row>
+                    <GardenTitle>My Gardens</GardenTitle>
+
+                    <Link to="/create">
+                        <Button primary size={'tiny'}>New Garden</Button>
+                    </Link>
+                </Row>
                 {renderGardens()}
             </InnerContainer>
         </Container>

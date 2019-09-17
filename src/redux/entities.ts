@@ -8,6 +8,7 @@ import { createUser } from '../graphql/mutations'
 
 import {entities} from '../data/entities.js'
 import { AuthUser } from './auth'
+import { getPlants } from './plants';
 
 /* Action Constants */
 const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
@@ -81,8 +82,8 @@ export const addUser = async () => {
 
 export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
     try {
-        console.log({authUser})
         const { entities, result } = await api.getApiUser(authUser)
+        await dispatch(getPlants())
         dispatch({ type: ADD_ENTITY, entities, result })
     } catch (error) {
         console.log({error1: error})

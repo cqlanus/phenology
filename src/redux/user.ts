@@ -1,8 +1,8 @@
-import { createSelector, OutputSelector } from 'reselect'
-import { ADD_ENTITY, AddEntityAction, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity } from './entities'
+import { createSelector } from 'reselect'
+import { ADD_ENTITY, AddEntityAction, selectUserEntity } from './entities'
 import { AppState } from '.';
 import { ApiUser } from '../types/user';
-import { UserEntity, GardenEntity, PlantingEntity, EntryEntity } from '../redux/entities';
+import { selectGarden } from './garden';
 
 /* Interfaces */
 interface UserState {
@@ -35,23 +35,11 @@ export default (state = initialState, action: UserAction): UserState => {
 
 /* Selectors */
 export const selectUserId = (state: AppState): string | undefined => state.user.selected
-export const selectUser = createSelector<AppState, string | undefined, any, GardenEntity, PlantingEntity, EntryEntity, ApiUser>(
-    [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity],
-    (userId, users, allGardens, allPlantings, allEntries) => {
+export const selectUser = createSelector<AppState, string | undefined, any, AppState, ApiUser>(
+    [selectUserId, selectUserEntity, state => state],
+    (userId: string | undefined, users: any, appState: AppState) => {
         const user = userId ? users[userId] : undefined
-        const gardens = user ? user.gardens.map((id: string) => {
-            const garden = allGardens[id]
-            const { plantings: plantingIds } = garden
-            const plantings = plantingIds.map((pId: string) => {
-                const planting = allPlantings[pId]
-                const entries = planting.entries.map((eId: string) => allEntries[eId])
-
-                return { ...planting, entries }
-            })
-
-            return { ...garden, plantings }
-            
-        }) : []
+        const gardens = user ? user.gardens.map((id: string) => selectGarden(appState, { gardenId: id })) : []
 
         return { ...user, gardens }
         

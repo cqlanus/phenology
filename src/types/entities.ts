@@ -11,7 +11,7 @@ export interface Garden {
 }
 export interface Planting {
     id: string
-    plant: Plant
+    plant: string
     qty: number
     entries: string[]
 }
