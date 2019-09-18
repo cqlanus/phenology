@@ -1,14 +1,19 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Card } from 'semantic-ui-react'
 import { format } from 'date-fns'
+
+import { ActionLink } from './Link'
+
 import { Garden, Planting, Entry } from '../types/user'
 
-interface Props {
+
+export interface Props {
     garden: Garden
+    history: any,
+    setGarden: (id: string) => void
 }
 
-const GardenCard = ({ garden }: Props) => {
+const GardenCard = ({ garden, history, setGarden }: Props) => {
     const { plantings } = garden
     
     const distinctPlants = plantings.length
@@ -25,9 +30,14 @@ const GardenCard = ({ garden }: Props) => {
 
     const meta1 = `${numPlantings} plantings of ${distinctPlants} plants`
     const meta2 = `Last updated: ${latestEntry}`
-    
+
+    const handleClick = () => {
+        setGarden(garden.gardenId)
+        history.push(`/garden/${garden.gardenId}`)
+    }
+
     return (
-        <Link to={`/garden/${garden.gardenId}`}>
+        <ActionLink onClick={handleClick}>
             <Card fluid >
                 <Card.Content>
                     <Card.Header>{garden.name}</Card.Header>
@@ -35,7 +45,7 @@ const GardenCard = ({ garden }: Props) => {
                     <Card.Meta>{meta2}</Card.Meta>
                 </Card.Content>
             </Card>
-        </Link>
+        </ActionLink>
     )
 }
 

@@ -23,6 +23,12 @@ export interface Plant {
     type: string
 }
 export type QtyPlant = Plant & { qty: number }
-export interface Entry {}
+export interface Entry {
+    entryId: string
+    category: string
+    created: string
+    note: string
+    phenophase: string
+}
 
 export type PlantEntity = { [plantId: string]: QtyPlant }

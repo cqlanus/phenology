@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect'
-import { ADD_ENTITY, AddEntityAction, selectUserEntity } from './entities'
+import { ADD_ENTITY, AddEntityAction, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity } from './entities'
 import { AppState } from '.';
-import { ApiUser } from '../types/user';
-import { selectGarden } from './garden';
+import { buildGarden } from './garden';
 
 /* Interfaces */
 interface UserState {
@@ -34,14 +33,22 @@ export default (state = initialState, action: UserAction): UserState => {
 }
 
 /* Selectors */
-export const selectUserId = (state: AppState): string | undefined => state.user.selected
-export const selectUser = createSelector<AppState, string | undefined, any, AppState, ApiUser>(
-    [selectUserId, selectUserEntity, state => state],
-    (userId: string | undefined, users: any, appState: AppState) => {
-        const user = userId ? users[userId] : undefined
-        const gardens = user ? user.gardens.map((id: string) => selectGarden(appState, { gardenId: id })) : []
-
-        return { ...user, gardens }
+export const selectUserId = (state: AppState) => state.user.selected
+export const selectUser = createSelector(
+    [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity, state => state.plants],
+    (userId, users, allGardens, allPlantings, allEntries, allPlants) => {
+        if (userId) { 
+            const user = users[userId]
+            const gardens = user.gardens.map((gardenId: string) => buildGarden({
+                gardenId,
+                allEntries,
+                allGardens,
+                allPlantings,
+                allPlants
+            }))
+    
+            return { ...user, gardens }
+         }
         
     }
 )

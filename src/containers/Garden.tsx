@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 import { AppState } from '../redux'
 import { selectGarden } from '../redux/garden'
 
-const mapState = (state: AppState, ownProps: any) => {
-    const { gardenId } = ownProps.match.params
+const mapState = (state: AppState) => {
     return {
-        garden: selectGarden(state, { gardenId })
+        garden: selectGarden(state)
     }
 }
 

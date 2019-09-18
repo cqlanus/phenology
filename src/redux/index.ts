@@ -11,6 +11,7 @@ import plants from './plants'
 import entities from './entities'
 import auth from './auth'
 import user from './user'
+import garden from './garden'
 
 const rootReducer = combineReducers({
     climate,
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     plants,
     entities,
     auth,
-    user
+    user,
+    garden,
 })
 
 export type AppState = ReturnType<typeof rootReducer>

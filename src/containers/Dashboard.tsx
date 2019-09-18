@@ -5,8 +5,9 @@ import { AppState } from '../redux';
 import { selectUser } from '../redux/user'
 
 const mapState = (state: AppState) => {
+    const user = selectUser(state)
     return {
-        user: selectUser(state),
+        user,
     }
 }
 

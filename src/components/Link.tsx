@@ -20,9 +20,9 @@ export default styled(Link)`
     }
 `
 
-const PopButton = styled.span`
+export const ActionLink = styled.span`
     color: indianred;
-    font-size: 1.2em;
+    /* font-size: 1.2em; */
     text-decoration: none;
     margin-right: 1em;
     cursor: pointer;
@@ -37,5 +37,5 @@ const PopButton = styled.span`
 `
 
 export const PopLink = withRouter(({ history, text = '<< Back' }: any) => (
-    <PopButton onClick={() => history.goBack()}>{text}</PopButton>
+    <ActionLink onClick={() => history.goBack()}>{text}</ActionLink>
 ))

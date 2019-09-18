@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { Button } from 'semantic-ui-react'
 
-import GardenCard from './GardenCard'
+import GardenCard from '../containers/GardenCard'
 import Link from './Link'
-import { ApiUser } from '../types/user'
+// import { ApiUser } from '../types/user'
 
 const Container = styled.div`
     height: 100vh;
@@ -34,11 +34,12 @@ const GardenTitle = styled.h3`
 `
 
 interface Props {
-    user?: ApiUser
+    user?: any
+    history: any
 }
 
-const Dashboard = ({ user }: Props) => {
-    if (!user) { return <div/>}
+const Dashboard = ({ user, history }: Props) => {
+    if (user === undefined) { return <div/>}
 
     const renderGardens = () => {
         const { gardens } = user
