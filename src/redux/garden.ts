@@ -57,7 +57,7 @@ export default (state = initialState, action: GardenAction): GardenState => {
 }
 
 /* Selectors */
-const selectGardenId = (state: AppState) => state.garden.selected
+export const selectGardenId = (state: AppState) => state.garden.selected
 const selectPlants = (state: AppState) => state.plants.plants
 export const selectGarden = createSelector(
     [selectGardenId, selectGardenEntity, selectPlantingEntity, selectEntryEntity, selectPlants],

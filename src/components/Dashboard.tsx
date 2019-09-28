@@ -4,22 +4,8 @@ import { Button } from 'semantic-ui-react'
 
 import GardenCard from '../containers/GardenCard'
 import Link from './Link'
+import CenterWrapper from './CenterWrapper'
 // import { ApiUser } from '../types/user'
-
-const Container = styled.div`
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
-
-const InnerContainer = styled.div`
-    flex-basis: 75%;
-
-    @media (max-width: 700px) {
-        flex-basis: 90%;
-    }
-`
 
 const Row = styled.div`
     display: flex;
@@ -62,19 +48,17 @@ const Dashboard = ({ user, history }: Props) => {
     }
     
     return (
-        <Container>
-            <InnerContainer>
-                <h2>Welcome {user.firstName}</h2>
-                <Row>
-                    <GardenTitle>My Gardens</GardenTitle>
+        <CenterWrapper>
+            <h2>Welcome {user.firstName}</h2>
+            <Row>
+                <GardenTitle>My Gardens</GardenTitle>
 
-                    <Link to="/create">
-                        <Button primary size={'tiny'}>New Garden</Button>
-                    </Link>
-                </Row>
-                {renderGardens()}
-            </InnerContainer>
-        </Container>
+                <Link to="/create">
+                    <Button primary size={'tiny'}>New Garden</Button>
+                </Link>
+            </Row>
+            {renderGardens()}
+        </CenterWrapper>
     )
 }
 

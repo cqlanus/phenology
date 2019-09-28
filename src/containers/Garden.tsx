@@ -2,12 +2,16 @@ import Garden from '../components/Garden'
 import { connect } from 'react-redux'
 
 import { AppState } from '../redux'
-import { selectGarden } from '../redux/garden'
+import { selectGarden, setGarden } from '../redux/garden'
 
 const mapState = (state: AppState) => {
     return {
-        garden: selectGarden(state)
+        garden: selectGarden(state),
     }
 }
 
-export default connect(mapState)(Garden)
+const mapDispatch = {
+    setGarden
+}
+
+export default connect(mapState, mapDispatch)(Garden)

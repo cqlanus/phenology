@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import Amplify from 'aws-amplify'
 
 import awsconfig from './aws-exports'
@@ -9,6 +9,7 @@ import awsconfig from './aws-exports'
 import configureStore from './redux'
 import { getNearbyStations } from './redux/station'
 import { getSignedInUser } from './redux/auth'
+import { selectGardenId } from './redux/garden'
 
 import LocationPage from './pages/Location'
 import MainPage from './pages/Main';
@@ -33,7 +34,10 @@ const App: React.FC = () => {
             <Route path="/location" component={LocationPage} />
             <Route path="/home" component={Dashboard} />
             <Route path="/create" component={CreateGarden} />
-            <Route path="/garden/:gardenId" component={Garden} />
+            <Route path="/garden/:gardenId" render={props => {
+                const selectedGarden = selectGardenId(store.getState())
+                return selectedGarden ? <Garden {...props} /> : <Redirect to="/home" />
+            } } />
           </Router>
           
       </Provider>
