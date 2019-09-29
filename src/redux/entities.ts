@@ -16,17 +16,39 @@ const ENTITY_FAILED: 'ENTITY_FAILED' = 'ENTITY_FAILED'
 export const ADD_ENTITY: 'ADD_ENTITY' = 'ADD_ENTITY'
 const FLUSH_ENTITY: 'FLUSH_ENTITY' = 'FLUSH_ENTITY' 
 
+/* Action Creators */
+export const setEntities = ({ entities, result}: NormalizedEntities): AddEntityAction => {
+    return {
+        type: ADD_ENTITY,
+        entities,
+        result
+    }
+}
+
 /* Interfaces */
+interface Phenophase {
+    key: string
+    value: string
+    text: string
+    description: string
+}
+
 export interface UserEntity { [userId: string]: User }
 export interface GardenEntity { [gardenId: string]: Garden }
 export interface PlantingEntity { [plantingId: string]: Planting }
 export interface EntryEntity { [entryId: string]: Entry }
+export interface PhenophaseEntity { [phenophaseId: string]: Phenophase }
 
 export interface Entities {
     users: UserEntity
     gardens: GardenEntity
     plantings: PlantingEntity
     entries: EntryEntity
+}
+
+interface NormalizedEntities {
+    entities: Entities
+    result: string
 }
 
 interface EntitiesState extends Entities {
@@ -82,9 +104,9 @@ export const addUser = async () => {
 
 export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
     try {
-        const { entities, result } = await api.getApiUser(authUser)
+        const normalizedEntities = await api.getApiUser(authUser)
         await dispatch(getPlants())
-        dispatch({ type: ADD_ENTITY, entities, result })
+        dispatch(setEntities(normalizedEntities))
     } catch (error) {
         console.log({error1: error})
     }

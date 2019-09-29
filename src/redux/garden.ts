@@ -1,7 +1,7 @@
-import { createSelector } from "reselect";
-import { selectGardenEntity, GardenEntity, PlantingEntity, selectPlantingEntity, EntryEntity, selectEntryEntity } from "./entities";
-import { AppState } from ".";
-import { Garden, Planting, Entry, Plant } from "../types/user";
+import { createSelector } from "reselect"
+import { selectGardenEntity, GardenEntity, PlantingEntity, selectPlantingEntity, EntryEntity, selectEntryEntity } from "./entities"
+import { AppState } from "."
+import { Garden, Planting, Entry, Plant } from "../types/user"
 
 /* Action Constants */
 const SET_GARDEN: 'SET_GARDEN' = 'SET_GARDEN'

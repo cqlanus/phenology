@@ -3,98 +3,98 @@
         "id": "p1",
         "commonName": "Snow drops",
         "latinName": "Galanthus nivalis",
-        "type": "bulb",
+        "type": "BULB",
         "isNative": false
     },
     {
         "id": "p2",
         "commonName": "Northern sea oats",
         "latinName": "Chasmanthium latifolium",
-        "type": "grass",
+        "type": "GRASS",
         "isNative": true
     },
     {
         "id": "p3",
         "commonName": "Hakone grass",
         "latinName": "Hakonechloa macra",
-        "type": "grass",
+        "type": "GRASS",
         "isNative": false
     },
     {
         "id": "p4",
         "commonName": "Virginia bluebells",
         "latinName": "Mertensia virginica",
-        "type": "herb",
+        "type": "HERB",
         "isNative": true
     },
     {
         "id": "p5",
         "commonName": "Sweet woodruff",
         "latinName": "Galium odoratum",
-        "type": "herb",
+        "type": "HERB",
         "isNative": false
     },
     {
         "id": "p6",
         "commonName": "Yarrow",
         "latinName": "Achillea millefolium",
-        "type": "herb",
+        "type": "HERB",
         "isNative": true
     },
     {
         "id": "p7",
         "commonName": "Hellebore",
         "latinName": "Helleborus ballardiae",
-        "type": "herb",
+        "type": "HERB",
         "isNative": true
     },
     {
         "id": "p8",
         "commonName": "Missouri evening primrose",
         "latinName": "Oenothera macrocarpa",
-        "type": "herb",
+        "type": "HERB",
         "isNative": true
     },
     {
         "id": "p9",
         "commonName": "Oak leaf hydrangea",
         "latinName": "Hydrangea quercifolia",
-        "type": "shrub",
+        "type": "SHRUB",
         "isNative": true
     },
     {
         "id": "p10",
         "commonName": "Red twig dogwood",
         "latinName": "Cornus alba",
-        "type": "shrub",
+        "type": "SHRUB",
         "isNative": true
     },
     {
         "id": "p11",
         "commonName": "Winterberry",
         "latinName": "Ilex verticillata",
-        "type": "shrub",
+        "type": "SHRUB",
         "isNative": true
     },
     {
         "id": "p12",
         "commonName": "Black birch",
         "latinName": "Betula nigra",
-        "type": "tree",
+        "type": "TREE",
         "isNative": true
     },
     {
         "id": "p13",
         "commonName": "Pagoda dogwood",
         "latinName": "Cornus alternifolia",
-        "type": "tree",
+        "type": "TREE",
         "isNative": false
     },
     {
         "id": "p14",
         "commonName": "Japanese maple",
         "latinName": "Acer palmatum",
-        "type": "tree",
+        "type": "TREE",
         "isNative": false
     }
 ]

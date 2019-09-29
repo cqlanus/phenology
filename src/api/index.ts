@@ -6,6 +6,7 @@ import { Entities } from '../redux/entities'
 import { QtyPlant, PlantEntity } from '../types/entities'
 import { getUserByUserName } from '../gql/queries'
 import { createUser } from '../graphql/mutations'
+import { updateUser } from '../gql/mutations'
 import { AuthUser } from '../redux/auth'
 
 const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
@@ -150,17 +151,24 @@ class API {
     
     getApiUser = async (authUser: AuthUser) => {
         const { username: userName } = authUser
-        console.log({userName})
         const { data: { getUserByUserName: { items } } } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 
         const [ user ] = items
-        console.log({user})
         if (user) {
             return this.normalizeUser(user)
         } else {
             const apiUser = await this.createApiUser(authUser)
             return this.normalizeUser(apiUser)
         }
+    }
+
+    updateUser = async (updatedUser: any) => {
+        console.log({updatedUser})
+        const { data }: { data: { updateUser: any }} = await A.graphql(graphqlOperation(updateUser, {input: updatedUser}))
+        console.log({data})
+        const { updateUser: user } = data
+        console.log({user})
+        return this.normalizeUser(user)
     }
     
 }

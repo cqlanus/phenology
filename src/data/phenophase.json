@@ -1,0 +1,147 @@
+{
+    "VEGETATIVE": [
+        {
+            "key": "IG",
+            "value": "INITIAL_GROWTH",
+            "text": "Initial growth",
+            "description": "New growth visible after no growth (winter or drought); either buds with green tips, or new shoots breaking through the soil. Growth is considered “initial” until the first leaf has fully unfolded."
+        },
+        {
+            "key": "BB",
+            "value": "BUD_BREAK",
+            "text": "Breaking leaf buds",
+            "description": "One or more breaking leaf buds are visible. A leaf bud is considered “breaking” once a green leaf tip is visible at the end of the bud, but before the first leaf from the bud has unfolded to expose the leaf stalk (petiole) or leaf base."
+        },
+        {
+            "key": "ABB",
+            "value": "ALL_BUDS_BREAK",
+            "text": "All leaf buds broken",
+            "description": "For the whole plant, the widest part of a new leaf has emerged from virtually all (95-100%) of the actively growing leaf buds."
+        },
+        {
+            "key": "L",
+            "value": "LEAVES",
+            "text": "Leaves visible",
+            "description": "One or more live, fully unfolded leaves are visible. For seedlings, consider only true leaves and do not count the one or two small, round or elongated leaves (cotyledons) that are found on the stem almost immediately after the seedling germinates. Do not include fully dried or dead leaves."
+        },
+        {
+            "key": "IL",
+            "value": "INCREASED_LEAVES",
+            "text": "Increasing leaf size",
+            "description": "A majority of leaves on the plant have not yet reached their full size and are still growing larger. Do not include new leaves that continue to emerge at the ends of elongating stems throughout the growing season."
+        },
+        {
+            "key": "CL",
+            "value": "COLORED_LEAVES",
+            "text": "Colored leaves",
+            "description": "One or more leaves (including any that have recently fallen from the plant) have turned to their late season colors. Do not include fully dried or dead leaves that remain."
+        },
+        {
+            "key": "FL",
+            "value": "FALLING_LEAVES",
+            "text": "Falling leaves",
+            "description": "One or more leaves are falling or have recently fallen from the plant."
+        },
+        {
+            "key": "EN",
+            "value": "EMERGING_NEEDLES",
+            "text": "Emerging needles (conifers)",
+            "description": "One or more emerging needles or needle bundles (fascicles) are visible. A needle or needle bundle is considered “emerging” once the green tip is visible along the newly developing stem (candle), but before the needles have begun to unfold and spread away at an angle from others in the bundle."
+        },
+        {
+            "key": "YN",
+            "value": "YOUNG_NEEDLES",
+            "text": "Young needles (conifers)",
+            "description": "One or more young, unfolded needles are visible. A needle is considered “young” and unfolded once it begins to spread away at an angle from other needles in the bundle (and is no longer pressed flat against them), but before it has reached full size or turned the darker green color or tougher texture of mature needles."
+        }
+        
+    ],
+    "REPRODUCTIVE": [
+        {
+            "key": "FH",
+            "value": "FLOWER_HEADS",
+            "text": "Flowers heads",
+            "description": "One or more fresh flower heads (inflorescences) are visible. Flower heads, which include many small flowers arranged in spikelets, emerge from inside the stem and gradually grow taller. Include flower heads with unopened or open flowers, but do not include heads whose flowers are wilted or dried."
+        },
+        {
+            "key": "FB",
+            "value": "FLOWERS",
+            "text": "Flowers or flower buds",
+            "description": "One or more fresh open or unopened flowers or flower buds are visible. Include flower buds that are still developing, but do not include wilted or dried flowers."
+        },
+        {
+            "key": "OF",
+            "value": "OPEN_FLOWERS",
+            "text": "Open flowers",
+            "description": "One or more open, fresh flowers are visible. Flowers are considered “open” when the reproductive parts (male stamens or female pistils) are visible between or within unfolded or open flower parts (petals, floral tubes or sepals), or can be seen protruding from the spikelet (grasses). Do not include wilted or dried flowers."
+        },
+        {
+            "key": "FF",
+            "value": "FULL_FLOWERING",
+            "text": "Full flowering",
+            "description": "For the whole plant, virtually all (95-100%) of the flower clusters no longer have any unopened flowers, but many of the flowers are still fresh and have not withered"
+        },
+        {
+            "key": "EF",
+            "value": "END_FLOWERING",
+            "text": "End flowering",
+            "description": "For the whole plant, virtually all (95-100%) of the flowers have withered or dried up and the floral display has ended."
+        },
+        {
+            "key": "PC",
+            "value": "POLLEN_CONES",
+            "text": "Pollen cones (conifers)",
+            "description": "One or more fresh, male pollen cones (strobili) are visible. Cones have small overlapping scales that are initially tightly closed, then spread apart to open the cone and release pollen. Include cones that are unopened or open, but do not include wilted or dried cones that have already released their pollen."
+        },
+        {
+            "key": "OPC",
+            "value": "OPEN_POLLEN_CONES",
+            "text": "Open pollen cones (conifers)",
+            "description": "One or more open, fresh, male pollen cones (strobili) are visible. Cones are considered open when the scales have spread apart to release pollen. Do not include wilted or dried cones that have already released their pollen."
+        },
+        {
+            "key": "PR",
+            "value": "POLLEN_RELEASE",
+            "text": "Pollen release (non-conifers)",
+            "description": "One or more flowers on the plant release visible pollen grains when gently shaken or blown into your palm or onto a dark surface."
+        },
+        {
+            "key": "PRC",
+            "value": "POLLEN_RELEASE_CONIFERS",
+            "text": "Pollen release (conifers)",
+            "description": "One or more male cones (strobili) on the plant release visible pollen grains when gently shaken or blown into your palm or onto a dark surface."
+        }
+    ],
+    "FRUIT_SEED": [
+        {
+            "key": "USC",
+            "value": "UNRIPE_SEED_CONES",
+            "text": "Unripe seed cones (conifers)",
+            "description": "One or more unripe, female seed cones are visible."
+        },
+        {
+            "key": "RSC",
+            "value": "RIPE_SEED_CONES",
+            "text": "Ripe seed cones (conifers)",
+            "description": "One or more ripe, female seed cones are visible."
+        },
+        {
+            "key": "RCD",
+            "value": "RECENT_CONE_DROP",
+            "text": "Recent cone or seed drop (conifers)",
+            "description": "One or more seed cones or seeds have dropped or been removed from the plant since your last visit. Do not include empty seed cones that had long ago dropped all of their seeds but remained."
+        },
+        {
+            "key": "RF",
+            "value": "RIPE_FRUITS",
+            "text": "Ripe fruits",
+            "description": "One or more ripe fruits are visible."
+        },
+        {
+            "key": "RFD",
+            "value": "FRUIT_DROP",
+            "text": "Recent fruit drop",
+            "description": "One or more mature fruits or seeds have dropped or been removed from the plant since your last visit. Do not include obviously immature fruits that have dropped before ripening, such as in a heavy rain or wind, or empty fruits that had long ago dropped all of their seeds but remained."
+        }
+    ]
+}

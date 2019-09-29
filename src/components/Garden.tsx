@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
-import AddEntryForm from './AddEntryForm'
-import EntryList from './EntryList'
+import AddEntryForm from '../containers/AddEntryForm'
+import EntryList from '../containers/EntryList'
 import { Card, Image, Icon, Button, Modal } from 'semantic-ui-react'
 
 interface Props {
     garden?: GardenType,
+    setPlanting: (plantingId: string) => void
 }
 
 const ListContainer = styled.div`
     padding-left: 1rem;
 `
 
-const Garden = ({ garden }: Props) => {
+const Garden = ({ garden, setPlanting }: Props) => {
     
     const [ isOpen, setModal ] = useState(false)
 
@@ -25,8 +26,13 @@ const Garden = ({ garden }: Props) => {
     const openModal = () => setModal(true)
     const closeModal = () => setModal(false)
 
-    const renderAddEntry = () => (
-        <Modal open={isOpen} onClose={closeModal} trigger={<Button onClick={openModal} floated="right" icon="plus" primary size="tiny" circular />} >
+    const handleOpen = (plantingId: string) => () => {
+        setPlanting(plantingId)
+        openModal()
+    }
+    
+    const renderAddEntry = (plantingId: string) => (
+        <Modal open={isOpen} onClose={closeModal} trigger={<Button onClick={handleOpen(plantingId)} floated="right" icon="plus" primary size="tiny" circular />} >
             <Modal.Content>
                 <AddEntryForm closeModal={closeModal} />
             </Modal.Content>
@@ -44,7 +50,7 @@ const Garden = ({ garden }: Props) => {
                                 size="tiny"
                                 src="http://lorempixel.com/200/200/food/"
                             />
-                            {renderAddEntry()}
+                            {renderAddEntry(p.plantingId)}
                             <Card.Header>{p.plant.commonName}</Card.Header>
                             <Card.Meta>{p.plant.latinName}</Card.Meta>
                             {p.plant.isNative && (

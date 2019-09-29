@@ -11,6 +11,7 @@
     "@types/react-router-dom": "^4.3.4",
     "@types/recharts": "^1.1.20",
     "@types/styled-components": "^4.1.18",
+    "@types/uuid": "^3.4.5",
     "aws-amplify": "^1.1.36",
     "aws-amplify-react": "^2.3.12",
     "date-fns": "^1.30.1",

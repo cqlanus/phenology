@@ -52,10 +52,11 @@ export class Planting {
 }
 
 export interface PlantArgs {
-    plantId: string
+    id: string
     commonName: string
     isNative: boolean
     latinName: string
+    type: string
 }
 
 export class Plant {
@@ -63,17 +64,26 @@ export class Plant {
     commonName: string
     isNative: boolean
     latinName: string
+    type: string
 
-    constructor({ plantId, commonName, isNative, latinName }: PlantArgs) {
-        this.plantId = plantId
+    constructor({ id, commonName, isNative, latinName, type }: PlantArgs) {
+        this.plantId = id
         this.commonName = commonName
         this.latinName = latinName
         this.isNative = isNative
+        this.type = type
     }
 
     static of(plantArgs: PlantArgs) {
         return new Plant(plantArgs)
     }
+}
+
+export interface AddEntryInput {
+    category: string
+    phenophase: string
+    created: string
+    note: string
 }
 
 export interface EntryArgs {
