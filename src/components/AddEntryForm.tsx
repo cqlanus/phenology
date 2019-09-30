@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form, Header } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
 import PHENOPHASE from '../data/phenophase.json'
-import { AddEntryInput } from '../types/user.js'
+import { AddEntryInput, EntryArgs, Entry } from '../types/user'
 
 const EntryCategories = [
     { key: 'V', value: 'VEGETATIVE', text: 'Vegetative' },
@@ -21,8 +21,12 @@ const AddEntryForm = ({
     handleSubmit,
     setFieldValue,
     handleChange,
+    entry,
+    values
 }: FormProps & FormikProps<FormValues>) => {
-    const [ category, setCategory ] = useState('')
+    const initialCategory = entry ? entry.category : ''
+    const [ category, setCategory ] = useState(initialCategory)
+
     const phenophase: { [key: string]: Phenophase[]} = PHENOPHASE
     const selectCategory = (e: any, {value}: any) => {
         setCategory(value)
@@ -35,9 +39,12 @@ const AddEntryForm = ({
         return rest
     })
     
+    const headerTexxt = entry ? 'Update Entry' : 'Add New Entry'
+    const buttonText = entry ? 'Update Entry' : 'Create Entry'
+    
     return (
         <div>
-            <Header>Add New Entry</Header>
+            <Header>{headerTexxt}</Header>
             <Form onSubmit={handleSubmit}>
                 <Form.Select
                     label="Category"
@@ -45,6 +52,7 @@ const AddEntryForm = ({
                     placeholder="Category"
                     name="category"
                     onChange={selectCategory}
+                    value={values.category}
                 />
                 <Form.Select
                     label="Phenophase"
@@ -52,19 +60,22 @@ const AddEntryForm = ({
                     name="phenophase"
                     options={options || []}
                     onChange={(e, {value}) => setFieldValue('phenophase', value)}
+                    value={values.phenophase}
                 />
                 <Form.Input 
                     label="Date"
                     name="created"
                     onChange={handleChange}
+                    value={values.created}
                     type="date" />
                 <Form.TextArea
                     label="Notes"
                     name="note"
+                    value={values.note}
                     onChange={handleChange}
                 />
                 <Form.Button fluid type="submit">
-                    Create Entry
+                    {buttonText}
                 </Form.Button>
             </Form>
         </div>
@@ -73,8 +84,9 @@ const AddEntryForm = ({
 
 interface FormProps {
     closeModal: () => void
-    addEntryToPlanting: (input: AddEntryInput, plantingId: string) => void
+    handleSubmitForm: (input: AddEntryInput, plantingId: string) => void
     plantingId: string | undefined
+    entry: Entry | undefined
 }
 
 interface FormValues {
@@ -97,9 +109,11 @@ export default withFormik<FormProps, FormValues>({
         { props }: FormikBag<FormProps, any>,
     ) => {
         // console.log({ values }, { props })
-        const { addEntryToPlanting, closeModal, plantingId } = props
-        plantingId && addEntryToPlanting(values, plantingId)
+        const { handleSubmitForm, closeModal, plantingId } = props
+        plantingId && handleSubmitForm(values, plantingId)
         closeModal()
     },
-    mapPropsToValues: () => initialValues,
+    mapPropsToValues: ({ entry }: FormProps) => {
+        return entry || initialValues
+    },
 })(AddEntryForm)

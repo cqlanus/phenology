@@ -14,6 +14,7 @@ import user from './user'
 import garden from './garden'
 import planting from './planting'
 import phenophase from './phenophase'
+import entry from './entry'
 
 const rootReducer = combineReducers({
     climate,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
     garden,
     planting,
     phenophase,
+    entry
 })
 
 export type AppState = ReturnType<typeof rootReducer>

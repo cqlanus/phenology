@@ -2,17 +2,18 @@ import AddEntryForm from '../components/AddEntryForm'
 import { connect } from 'react-redux'
 
 import { AppState } from '../redux'
-import { selectPlanting, addEntryToPlanting } from '../redux/planting'
+import { selectPlanting, editEntry } from '../redux/planting'
+import { selectEntry } from '../redux/entry'
 
 const mapState = (state: AppState) => {
     return {
         plantingId: selectPlanting(state),
-        entry: undefined
+        entry: selectEntry(state)
     }
 }
 
 const mapDispatch = {
-    handleSubmitForm: addEntryToPlanting
+    handleSubmitForm: editEntry
 }
 
 export default connect(mapState, mapDispatch)(AddEntryForm)

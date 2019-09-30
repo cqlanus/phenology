@@ -1,61 +1,83 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Entry } from '../types/user'
-import { Card, Icon, Feed, Accordion } from 'semantic-ui-react'
+import { Card, Icon, Feed, Accordion, Modal, Button } from 'semantic-ui-react'
 import { format } from 'date-fns'
 import { PhenophaseEntity } from '../redux/entities'
-
-
+// import AddEntryForm from '../containers/AddEntryForm'
+import EditEntryForm from '../containers/EditEntryForm'
 
 interface Props {
-    entries: Entry[],
+    entries: Entry[]
     phenophases: PhenophaseEntity
+    setEntry: (entryId?: string) => void
+    setPlanting: (plantingId?: string) => void
+    plantingId: string | undefined
 }
 
+const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: Props) => {
+    const [isOpen, setOpen] = useState(false)
+    const [isFormOpen, setFormOpen] = useState(false)
 
-const PHENOPHASE_MAP: { [key: string]: string } = {
-    INITIAL_GROWTH: 'Initial Growth',
-}
+    const toggleOpen = () => setOpen(!isOpen)
+    const closeModal = () => {
+        setEntry(undefined)
+        setFormOpen(false)
+    }
+    const handleOpen = (entryId: string) => () => {
+        plantingId && setPlanting(plantingId)
+        setEntry(entryId)
+        setFormOpen(true)
+    }
 
-const renderEntry = (phenophases: PhenophaseEntity) => (entry: Entry) => {
-    const phenophase = phenophases[entry.phenophase]
-    return (
-        <Feed.Event key={entry.entryId}>
-            <Feed.Label >
-                <Icon name={'circle'} />
-            </Feed.Label>
-            <Feed.Content 
-                date={format(entry.created, 'ddd, MMM do')}
-                summary={phenophase && phenophase.text}
-                extraText={`Notes: ${entry.note}`} />
-        </Feed.Event>
+    const renderEditEntry = (entryId: string) => (
+        <Modal open={isFormOpen} onClose={closeModal}  trigger={
+                <Icon name="edit" onClick={handleOpen(entryId)} />
+            }>
+            <Modal.Content>
+                <EditEntryForm closeModal={closeModal} />
+            </Modal.Content>
+        </Modal>
     )
-}
 
-const renderEntries = (entries: Entry[], phenophases: PhenophaseEntity) => {
-    if (entries.length > 0) {
+    const renderEntry = (phenophases: PhenophaseEntity) => (entry: Entry) => {
+        const phenophase = phenophases[entry.phenophase]
         return (
-            <Card.Content>
-                <Feed>
-                    {entries.map(renderEntry(phenophases))}
-                </Feed>
-            </Card.Content>
+            <Feed.Event key={entry.entryId}>
+                <Feed.Label>
+                    <Icon name={'circle'} />
+                </Feed.Label>
+                <Feed.Content
+                    date={format(entry.created, 'ddd, MMM do')}
+                    summary={phenophase && phenophase.text}
+                    extraText={`Notes: ${entry.note}`}
+                />
+                <Feed.Label>{renderEditEntry(entry.entryId)}</Feed.Label>
+            </Feed.Event>
         )
     }
-}
 
-const EntryList = ({entries, phenophases}: Props) => {
-    const [ isOpen, setOpen ] = useState(false)
-    
-    const toggleOpen = () => setOpen(!isOpen)
+    const renderEntries = (entries: Entry[], phenophases: PhenophaseEntity) => {
+        if (entries.length > 0) {
+            return (
+                <Card.Content>
+                    <Feed>{entries.map(renderEntry(phenophases))}</Feed>
+                </Card.Content>
+            )
+        }
+    }
 
     const title = isOpen ? 'Hide Entries' : 'See Entries'
+
     return (
-    <Accordion>
-        <Accordion.Title active={isOpen} onClick={toggleOpen} >{title}</Accordion.Title>
-        <Accordion.Content active={isOpen}>
-            {renderEntries(entries, phenophases)}
-        </Accordion.Content>
-    </Accordion>
-)}
+        <Accordion>
+            <Accordion.Title active={isOpen} onClick={toggleOpen}>
+                {title}
+            </Accordion.Title>
+            <Accordion.Content active={isOpen}>
+                {renderEntries(entries, phenophases)}
+            </Accordion.Content>
+        </Accordion>
+    )
+}
 
 export default EntryList

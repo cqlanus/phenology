@@ -62,7 +62,7 @@ const Garden = ({ garden, setPlanting }: Props) => {
                             )}
                         </Card.Content>
                         <ListContainer>
-                            <EntryList entries={p.entries}/>
+                            <EntryList entries={p.entries} plantingId={p.plantingId} />
                         </ListContainer>
                     </Card>
                 ))}
