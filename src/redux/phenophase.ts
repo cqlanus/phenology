@@ -11,7 +11,6 @@ const initialState = (): PhenophaseState => {
     const phenophaseSchema = new schema.Array(phenophase)
 
     const phenophases = Object.values(phenophaseCategories).reduce((acc, arr) => ([...acc, ...arr]), [])
-    console.log({phenophases})
 
     const normalizedPhenophase: { entities: { phenophase: PhenophaseEntity} } = normalize(phenophases, phenophaseSchema)
     return normalizedPhenophase.entities.phenophase

@@ -1,5 +1,5 @@
-export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
+export const updateUser = `mutation UpdateUser($onput: UpdateUserInput!) {
+    updateUser(input: $onput) {
       id
       userName
       firstName

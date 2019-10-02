@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form, Header } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
 import PHENOPHASE from '../data/phenophase.json'
-import { AddEntryInput, EntryArgs, Entry } from '../types/user'
+import { AddEntryInput, Entry } from '../types/user'
 
 const EntryCategories = [
     { key: 'V', value: 'VEGETATIVE', text: 'Vegetative' },
@@ -19,6 +19,7 @@ interface Phenophase {
 
 const AddEntryForm = ({
     handleSubmit,
+    handleRemove,
     setFieldValue,
     handleChange,
     entry,
@@ -33,7 +34,6 @@ const AddEntryForm = ({
         setFieldValue('category', value)
     }
     
-
     const options = (phenophase[category] || []).map(phase => {
         const { description, ...rest } = phase
         return rest
@@ -77,6 +77,9 @@ const AddEntryForm = ({
                 <Form.Button fluid type="submit">
                     {buttonText}
                 </Form.Button>
+                {entry && <Form.Button negative fluid onClick={handleRemove} >
+                    {'Remove'}
+                </Form.Button>}
             </Form>
         </div>
     )
@@ -87,6 +90,7 @@ interface FormProps {
     handleSubmitForm: (input: AddEntryInput, plantingId: string) => void
     plantingId: string | undefined
     entry: Entry | undefined
+    handleRemove: () => void
 }
 
 interface FormValues {

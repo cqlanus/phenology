@@ -12,7 +12,8 @@ const mapState = (state: AppState) => {
 }
 
 const mapDispatch = {
-    handleSubmitForm: addEntryToPlanting
+    handleSubmitForm: addEntryToPlanting,
+    handleRemove: () => {}
 }
 
 export default connect(mapState, mapDispatch)(AddEntryForm)

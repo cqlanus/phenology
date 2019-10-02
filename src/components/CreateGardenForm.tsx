@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Form, Header, Loader } from 'semantic-ui-react'
-import { withFormik, FormikProps, FormikValues, FormikBag } from 'formik'
+import { withFormik, FormikProps, FormikBag } from 'formik'
 
 import { QtyPlant } from '../types/entities'
 
 import NewPlantModal from './NewPlantModal'
+import { AddGardenInput } from '../redux/garden'
 
 const Row = styled.div`
     display: flex;
@@ -103,7 +104,7 @@ const CreateGardenForm = ({
         <div>
             <Header>Create A New Garden</Header>
             <Form onSubmit={handleSubmit}>
-                <Form.Input label="Garden Name" onChange={handleChange} name='gardenName' />
+                <Form.Input label="Garden Name" onChange={handleChange} name='name' />
 
                 <Row>
                     <Header>Add Some Plants</Header>
@@ -127,26 +128,28 @@ const CreateGardenForm = ({
 interface Plants { [key: string]: QtyPlant }
 
 interface FormValues {
-    gardenName: string
+    name: string
     plants: Plants
 }
 
 const initialValues: FormValues = {
-    gardenName: '',
+    name: '',
     plants: {}
 }
 
 interface FormProps {
     getPlants: () => void,
     addPlant: (plant: QtyPlant) => void,
+    addGardenToUser: (garden: AddGardenInput) => void,
     plants: QtyPlant[],
     loading: boolean,
     justAdded?: QtyPlant
 }
 
 export default withFormik<FormProps, FormValues>({
-    handleSubmit: (values: FormikValues, { props }: FormikBag<FormProps, any>) => {
-        console.log({values}, {props})
+    handleSubmit: (values: FormValues, { props }: FormikBag<FormProps, any>) => {
+        const { addGardenToUser } = props
+        addGardenToUser(values)
     },
     mapPropsToValues: () => initialValues
 })(CreateGardenForm)

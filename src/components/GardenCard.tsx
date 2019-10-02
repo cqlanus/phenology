@@ -24,7 +24,7 @@ const GardenCard = ({ garden, history, setGarden }: Props) => {
     }, [])
 
     const [ latestEntry ] = allEntries.map(e => new Date(e.created))
-        .sort((dateA, dateB) => dateA.getTime() - dateB.getTime())
+        .sort((dateA, dateB) => dateB.getTime() - dateA.getTime())
         .map(d => format(d, 'ddd MMM do'))
         .filter(Boolean)
 

@@ -1,7 +1,8 @@
 import { AppState } from "."
 import { createSelector } from "reselect"
 import { selectEntryEntity } from "./entities"
-import { Entry } from "../types/user"
+import { Entry, Planting, AddEntryInput } from "../types/user"
+import { selectPlanting, changeEntries } from "./planting"
 
 /* Action constants */
 const SET_ENTRY: 'SET_ENTRY' = 'SET_ENTRY'
@@ -25,6 +26,34 @@ export const setEntry = (entryId: string | undefined) => {
         entryId
     }
 }
+
+/* Thunks */
+const filterEntry = (planting: Planting, entry: Entry) => planting.entries.filter(e => entry.entryId !== e.entryId)
+export const removeEntry = () => async (dispatch: any, getState: any) => {
+    try {
+        const entry = selectEntry(getState())
+        const plantingId = selectPlanting(getState())
+        if (entry && plantingId) {
+            await dispatch(changeEntries(entry, plantingId, filterEntry))
+        }
+    } catch (error) {
+        console.log({error})
+    }
+}
+
+const replaceEntry = (planting: Planting, entry: Entry) => planting.entries.map(e => entry.entryId === e.entryId ? entry : e)
+export const editEntry = (editEntryInput: AddEntryInput, plantingId: string) => async (dispatch: any, getState: any) => {
+    try {
+        const entry = Entry.of({
+            ...editEntryInput,
+            entryId: getSelectedEntry(getState()) || ''
+        })
+        await dispatch(changeEntries(entry, plantingId, replaceEntry))
+    } catch (error) {
+        console.log({error})
+    }
+}
+
 
 /* Initial State */
 const initialState: EntryState = {

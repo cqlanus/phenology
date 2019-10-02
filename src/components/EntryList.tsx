@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Entry } from '../types/user'
-import { Card, Icon, Feed, Accordion, Modal, Button } from 'semantic-ui-react'
+import { Card, Icon, Feed, Accordion, Modal } from 'semantic-ui-react'
 import { format } from 'date-fns'
 import { PhenophaseEntity } from '../redux/entities'
 // import AddEntryForm from '../containers/AddEntryForm'
@@ -41,13 +41,15 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: 
 
     const renderEntry = (phenophases: PhenophaseEntity) => (entry: Entry) => {
         const phenophase = phenophases[entry.phenophase]
+        const formatted = format(new Date(entry.created), 'MM/d/yyyy')
         return (
             <Feed.Event key={entry.entryId}>
                 <Feed.Label>
                     <Icon name={'circle'} />
                 </Feed.Label>
                 <Feed.Content
-                    date={format(entry.created, 'ddd, MMM do')}
+                // format(d, 'ddd MMM do')
+                    date={formatted}
                     summary={phenophase && phenophase.text}
                     extraText={`Notes: ${entry.note}`}
                 />

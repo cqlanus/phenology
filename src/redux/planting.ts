@@ -1,11 +1,10 @@
 import { AppState } from "."
-import { AddEntryInput, Entry, EntryArgs, Planting, Garden } from "../types/user"
+import { AddEntryInput, Entry, Planting, Garden } from "../types/user"
 import uuid from "uuid"
-import { selectGarden } from "./garden"
+import { selectGarden, editUserGardens } from "./garden"
 import { selectUser } from "./user"
 import api from "../api"
 import { setEntities } from "./entities"
-import { getSelectedEntry } from "./entry"
 
 /* Action creators */
 const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
@@ -43,28 +42,10 @@ export const addEntryToPlanting = (addEntryInput: AddEntryInput, plantingId: str
     }
 }
 
-export const editEntry = (editEntryInput: AddEntryInput, plantingId: string) => async (dispatch: any, getState: any) => {
-    try {
-        const entry = Entry.of({
-            ...editEntryInput,
-            entryId: getSelectedEntry(getState()) || ''
-        })
-        await dispatch(changeEntries(entry, plantingId, replaceEntry))
-    } catch (error) {
-        console.log({error})
-    }
-}
-
 const appendEntry = (planting: Planting, entry: Entry) => ([ ...planting.entries, entry ])
-const replaceEntry = (planting: Planting, entry: Entry) => planting.entries.map(e => entry.entryId === e.entryId ? entry : e)
-const editUserGardens = (user: any, garden: Garden) => {
-    const updatedGardens = user.gardens.map((g: Garden) => 
-        g && g.gardenId === garden.gardenId ? garden : g)
-    return { ...user, gardens: updatedGardens}
-}
 
 type EntryCallback = (planting: Planting, entry: Entry) => Entry[]
-const changeEntries = (entry: Entry, plantingId: string, cb: EntryCallback) => async (dispatch: any, getState: any) => {
+export const changeEntries = (entry: Entry, plantingId: string, cb: EntryCallback) => async (dispatch: any, getState: any) => {
     const builtGarden = selectGarden(getState())
     const builtUser = selectUser(getState())
 

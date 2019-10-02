@@ -164,10 +164,8 @@ class API {
 
     updateUser = async (updatedUser: any) => {
         console.log({updatedUser})
-        const { data }: { data: { updateUser: any }} = await A.graphql(graphqlOperation(updateUser, {input: updatedUser}))
-        console.log({data})
+        const { data }: { data: { updateUser: any }} = await A.graphql(graphqlOperation(updateUser, {onput: updatedUser}))
         const { updateUser: user } = data
-        console.log({user})
         return this.normalizeUser(user)
     }
     

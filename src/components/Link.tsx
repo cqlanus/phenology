@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
+import { Button } from 'semantic-ui-react'
 
 export default styled(Link)`
     color: indianred;
@@ -37,5 +38,8 @@ export const ActionLink = styled.span`
 `
 
 export const PopLink = withRouter(({ history, text = '<< Back' }: any) => (
-    <ActionLink onClick={() => history.goBack()}>{text}</ActionLink>
+    <ActionLink onClick={() => history.goBack()}>
+        <Button icon="arrow left" />
+        {/* <Icon name="arrow circle left" /> */}
+    </ActionLink>
 ))

@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react'
 import GardenCard from '../containers/GardenCard'
 import Link from './Link'
 import CenterWrapper from './CenterWrapper'
-// import { ApiUser } from '../types/user'
+import { withNavBar } from './NavBar'
 
 const Row = styled.div`
     display: flex;
@@ -62,4 +62,4 @@ const Dashboard = ({ user, history }: Props) => {
     )
 }
 
-export default Dashboard
+export default withNavBar(Dashboard)

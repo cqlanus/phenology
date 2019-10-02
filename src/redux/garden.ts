@@ -1,7 +1,11 @@
 import { createSelector } from "reselect"
-import { selectGardenEntity, GardenEntity, PlantingEntity, selectPlantingEntity, EntryEntity, selectEntryEntity } from "./entities"
+import uuid from 'uuid'
+import { selectGardenEntity, GardenEntity, PlantingEntity, selectPlantingEntity, EntryEntity, selectEntryEntity, setEntities } from "./entities"
 import { AppState } from "."
 import { Garden, Planting, Entry, Plant } from "../types/user"
+import { QtyPlant } from "../types/entities"
+import { selectUser } from "./user"
+import api from "../api"
 
 /* Action Constants */
 const SET_GARDEN: 'SET_GARDEN' = 'SET_GARDEN'
@@ -26,11 +30,73 @@ interface BuildGardenArgs {
     allPlants: any
 }
 
+interface Plants { [key: string]: QtyPlant }
+export interface AddGardenInput {
+    name: string
+    plants: Plants
+}
+
 /* Action Creators */
 export const setGarden = (gardenId: string): SelectGardenAction => {
     return {
         type: SET_GARDEN,
         gardenId
+    }
+}
+
+/* Thunks */
+export const editUserGardens = (user: any, garden: Garden) => {
+    const updatedGardens = user.gardens.map((g: Garden) => 
+        g && g.gardenId === garden.gardenId ? garden : g)
+    return { ...user, gardens: updatedGardens}
+}
+
+const addUserGarden = (user: any, garden: Garden) => {
+    const updatedGardens = [ ...user.gardens, garden ]
+    return { ...user, gardens: updatedGardens}
+}
+
+export const addGardenToUser = ({ name, plants }: AddGardenInput) => async (dispatch: any, getState: any) => {
+    try {
+        const plantings = Object.values(plants).map(({ qty, ...plant}) => {
+            return {
+                plantingId: uuid(),
+                plant: Plant.of(plant),
+                entries: [],
+                qty,
+            }
+        })
+        const garden = {
+            name,
+            gardenId: uuid(),
+            plantings
+        }
+
+        const builtUser = selectUser(getState())
+
+        if (builtUser) {
+            const user = addUserGarden(builtUser, Garden.of(garden))
+            const response = await api.updateUser(user)
+            dispatch(setEntities(response))
+        }
+        
+    } catch (error) {
+        console.log({error})
+    }
+}
+
+export const removeGarden = (gardenId: string) => async (dispatch: any, getState: any) => {
+    try {
+        const builtUser = selectUser(getState())
+        if (builtUser) {
+            const updatedGardens = builtUser.gardens.filter(g => g && g.gardenId !== gardenId)
+            const updatedUser = { ...builtUser, gardens: updatedGardens }
+            const response = await api.updateUser(updatedUser)
+            dispatch(setEntities(response))
+    
+        }
+    } catch (error) {
+        console.log({error})
     }
 }
 

@@ -2,20 +2,28 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
+import {withNavBar} from './NavBar'
 import AddEntryForm from '../containers/AddEntryForm'
 import EntryList from '../containers/EntryList'
-import { Card, Image, Icon, Button, Modal } from 'semantic-ui-react'
+import { Card, Image, Icon, Button, Modal, Segment } from 'semantic-ui-react'
 
 interface Props {
     garden?: GardenType,
-    setPlanting: (plantingId: string) => void
+    setPlanting: (plantingId: string) => void,
+    removeGarden: (gardenId: string) => void
 }
 
 const ListContainer = styled.div`
     padding-left: 1rem;
 `
 
-const Garden = ({ garden, setPlanting }: Props) => {
+const Row = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`
+
+const Garden = ({ garden, setPlanting, removeGarden }: Props) => {
     
     const [ isOpen, setModal ] = useState(false)
 
@@ -29,6 +37,18 @@ const Garden = ({ garden, setPlanting }: Props) => {
     const handleOpen = (plantingId: string) => () => {
         setPlanting(plantingId)
         openModal()
+    }
+
+    const handleRemove = () => removeGarden(garden.gardenId)
+
+    const renderGardenSettings = () => {
+        return (
+            <Modal trigger={<Icon name="setting" />} >
+                <Segment>
+                    <Button fluid negative onClick={handleRemove} >Delete Garden</Button>
+                </Segment>
+            </Modal>
+        )
     }
     
     const renderAddEntry = (plantingId: string) => (
@@ -72,10 +92,14 @@ const Garden = ({ garden, setPlanting }: Props) => {
 
     return (
         <CenterWrapper>
-            <h2>{garden.name}</h2>
+            <Row>
+                <h2>{garden.name}</h2>
+                {renderGardenSettings()}
+            </Row>
             {renderPlantings()}
+            <Button primary fluid>Add New Plant</Button>
         </CenterWrapper>
     )
 }
 
-export default Garden
+export default withNavBar(Garden)

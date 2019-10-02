@@ -2,7 +2,7 @@ import Garden from '../components/Garden'
 import { connect } from 'react-redux'
 
 import { AppState } from '../redux'
-import { selectGarden, setGarden } from '../redux/garden'
+import { selectGarden, setGarden, removeGarden } from '../redux/garden'
 import { setPlanting } from '../redux/planting'
 
 const mapState = (state: AppState) => {
@@ -13,7 +13,8 @@ const mapState = (state: AppState) => {
 
 const mapDispatch = {
     setGarden,
-    setPlanting
+    setPlanting,
+    removeGarden
 }
 
 export default connect(mapState, mapDispatch)(Garden)
