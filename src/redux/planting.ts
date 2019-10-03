@@ -1,10 +1,11 @@
-import { AppState } from "."
-import { AddEntryInput, Entry, Planting, Garden } from "../types/user"
-import uuid from "uuid"
-import { selectGarden, editUserGardens } from "./garden"
-import { selectUser } from "./user"
-import api from "../api"
-import { setEntities } from "./entities"
+import { AppState } from '.'
+import { AddEntryInput, Entry, Planting, Garden, Plant } from '../types/user'
+import uuid from 'uuid'
+import { selectGarden, editUserGardens } from './garden'
+import { selectUser } from './user'
+import api from '../api'
+import { setEntities } from './entities'
+import { QtyPlant } from '../types/entities'
 
 /* Action creators */
 const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
@@ -22,30 +23,42 @@ interface SetPlantingAction {
 type PlantingAction = SetPlantingAction
 
 /* Action Creators */
-export const setPlanting = (plantingId: string | undefined): SetPlantingAction => {
+export const setPlanting = (
+    plantingId: string | undefined,
+): SetPlantingAction => {
     return {
         type: SET_PLANTING,
-        plantingId
+        plantingId,
     }
 }
 
 /* Thunks */
-export const addEntryToPlanting = (addEntryInput: AddEntryInput, plantingId: string) => async (dispatch: any) => {
+export const addEntryToPlanting = (
+    addEntryInput: AddEntryInput,
+    plantingId: string,
+) => async (dispatch: any) => {
     try {
         const entry = Entry.of({
             ...addEntryInput,
-            entryId: uuid()
+            entryId: uuid(),
         })
         await dispatch(changeEntries(entry, plantingId, appendEntry))
     } catch (error) {
-        console.log({error})
+        console.log({ error })
     }
 }
 
-const appendEntry = (planting: Planting, entry: Entry) => ([ ...planting.entries, entry ])
+const appendEntry = (planting: Planting, entry: Entry) => [
+    ...planting.entries,
+    entry,
+]
 
 type EntryCallback = (planting: Planting, entry: Entry) => Entry[]
-export const changeEntries = (entry: Entry, plantingId: string, cb: EntryCallback) => async (dispatch: any, getState: any) => {
+export const changeEntries = (
+    entry: Entry,
+    plantingId: string,
+    cb: EntryCallback,
+) => async (dispatch: any, getState: any) => {
     const builtGarden = selectGarden(getState())
     const builtUser = selectUser(getState())
 
@@ -59,29 +72,93 @@ export const changeEntries = (entry: Entry, plantingId: string, cb: EntryCallbac
                 return p
             }
         })
-        const updatedGarden = Garden.of({ ...builtGarden, plantings: updatedPlantings })
+        const updatedGarden = Garden.of({
+            ...builtGarden,
+            plantings: updatedPlantings,
+        })
         if (builtUser) {
             const updatedUser = editUserGardens(builtUser, updatedGarden)
             const response = await api.updateUser(updatedUser)
             dispatch(setEntities(response))
+        }
+    }
+}
 
+interface Structure {
+    [key: string]: Planting
+}
+const structurePlantings = (plantings: Planting[]): Structure => {
+    return plantings.reduce((acc: Structure, planting: Planting) => {
+        return {
+            ...acc,
+            [planting.plant.commonName]: planting,
+        }
+    }, {})
+}
+
+export interface PlantSelection {
+    [key: string]: QtyPlant
+}
+export const addPlantings = (selection: PlantSelection) => async (
+    dispatch: any,
+    getState: any,
+) => {
+    const builtGarden = selectGarden(getState())
+    const builtUser = selectUser(getState())
+    if (builtGarden) {
+        const { plantings } = builtGarden
+        const structuredPlantings = structurePlantings(plantings)
+        const updatedPlantings = Object.values(selection).reduce(
+            (acc: Structure, qtyPlant: QtyPlant) => {
+                const { qty, ...plant } = qtyPlant
+                const { commonName } = plant
+                let existingPlant = acc[commonName]
+                let planting
+                if (existingPlant) {
+                    const newQty = existingPlant.qty + qty
+                    planting = Planting.of({ ...existingPlant, qty: newQty })
+                } else {
+                    planting = Planting.of({
+                        plantingId: uuid(),
+                        plant: Plant.of(plant),
+                        qty,
+                        entries: [],
+                    })
+                }
+                return {
+                    ...acc,
+                    [commonName]: planting,
+                }
+            },
+            structuredPlantings,
+        )
+        const updatedGarden = Garden.of({
+            ...builtGarden,
+            plantings: Object.values(updatedPlantings),
+        })
+        if (builtUser) {
+            const updatedUser = editUserGardens(builtUser, updatedGarden)
+            const response = await api.updateUser(updatedUser)
+            dispatch(setEntities(response))
         }
     }
 }
 
 /* Initial State */
 const initialState: PlantingState = {
-    selected: undefined
+    selected: undefined,
 }
 
 /* Reducer */
-export default (state = initialState, action: PlantingAction): PlantingState => {
+export default (
+    state = initialState,
+    action: PlantingAction,
+): PlantingState => {
     switch (action.type) {
-
         case SET_PLANTING: {
             return {
                 ...state,
-                selected: action.plantingId
+                selected: action.plantingId,
             }
         }
 

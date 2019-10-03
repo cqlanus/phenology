@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Form, Header, Loader } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
@@ -7,6 +7,7 @@ import { QtyPlant } from '../types/entities'
 
 import NewPlantModal from './NewPlantModal'
 import { AddGardenInput } from '../redux/garden'
+import { usePlant } from '../hooks/plant'
 
 const Row = styled.div`
     display: flex;
@@ -41,28 +42,14 @@ const CreateGardenForm = ({
     loading
 }: FormProps & FormikProps<FormValues>) => {
 
-    
-    
-    const initialChecked: { [key: string]: QtyPlant } = {}
-    const [checked, setChecked] = useState(initialChecked)
+    const { checked, handleCheck } = usePlant()
 
     useEffect(() => {
         getPlants()
     }, [getPlants])
 
-    const handleCheck = (plant: QtyPlant) => () => {
-        const { commonName } = plant
-        let updatedChecked = {}
-
-        if (checked[commonName]) {
-            const { [commonName]: value, ...newChecked } = checked
-            updatedChecked = newChecked
-        } else {
-            const newChecked = { ...checked, [commonName]: plant }
-            updatedChecked = newChecked
-        }
-
-        setChecked(updatedChecked)
+    const _handleCheck = (plant: QtyPlant) => () => {
+        const updatedChecked = handleCheck(plant)
         setFieldValue('plants', updatedChecked)
     }
 
@@ -87,7 +74,7 @@ const CreateGardenForm = ({
                         <CheckboxContainer>
                             <Form.Checkbox
                                 defaultChecked={hasChecked}
-                                onChange={handleCheck(plant)}
+                                onChange={_handleCheck(plant)}
                                 label={label}
                             />
                         </CheckboxContainer>

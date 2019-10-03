@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
-import {withNavBar} from './NavBar'
+import AddPlantForm from '../containers/AddPlantForm'
+import { withNavBar } from './NavBar'
 import AddEntryForm from '../containers/AddEntryForm'
 import EntryList from '../containers/EntryList'
 import { Card, Image, Icon, Button, Modal, Segment } from 'semantic-ui-react'
 
 interface Props {
-    garden?: GardenType,
-    setPlanting: (plantingId: string) => void,
+    garden?: GardenType
+    setPlanting: (plantingId: string) => void
     removeGarden: (gardenId: string) => void
 }
 
@@ -24,8 +25,7 @@ const Row = styled.div`
 `
 
 const Garden = ({ garden, setPlanting, removeGarden }: Props) => {
-    
-    const [ isOpen, setModal ] = useState(false)
+    const [isOpen, setModal] = useState(false)
 
     if (!garden) {
         return <div />
@@ -43,16 +43,30 @@ const Garden = ({ garden, setPlanting, removeGarden }: Props) => {
 
     const renderGardenSettings = () => {
         return (
-            <Modal trigger={<Icon name="setting" />} >
+            <Modal trigger={<Icon name="setting" />}>
                 <Segment>
-                    <Button fluid negative onClick={handleRemove} >Delete Garden</Button>
+                    <Button fluid negative onClick={handleRemove}>
+                        Delete Garden
+                    </Button>
                 </Segment>
             </Modal>
         )
     }
-    
+
     const renderAddEntry = (plantingId: string) => (
-        <Modal open={isOpen} onClose={closeModal} trigger={<Button onClick={handleOpen(plantingId)} floated="right" icon="plus" primary size="tiny" circular />} >
+        <Modal
+            open={isOpen}
+            onClose={closeModal}
+            trigger={
+                <Button
+                    onClick={handleOpen(plantingId)}
+                    floated="right"
+                    icon="plus"
+                    primary
+                    size="tiny"
+                    circular
+                />
+            }>
             <Modal.Content>
                 <AddEntryForm closeModal={closeModal} />
             </Modal.Content>
@@ -82,13 +96,29 @@ const Garden = ({ garden, setPlanting, removeGarden }: Props) => {
                             )}
                         </Card.Content>
                         <ListContainer>
-                            <EntryList entries={p.entries} plantingId={p.plantingId} />
+                            <EntryList
+                                entries={p.entries}
+                                plantingId={p.plantingId}
+                            />
                         </ListContainer>
                     </Card>
                 ))}
             </div>
         )
     }
+
+    const renderAddPlantForm = () => (
+        <Modal
+            trigger={
+                <Button primary fluid>
+                    Add New Plant
+                </Button>
+            }>
+            <Modal.Content scrolling>
+                <AddPlantForm />
+            </Modal.Content>
+        </Modal>
+    )
 
     return (
         <CenterWrapper>
@@ -97,7 +127,7 @@ const Garden = ({ garden, setPlanting, removeGarden }: Props) => {
                 {renderGardenSettings()}
             </Row>
             {renderPlantings()}
-            <Button primary fluid>Add New Plant</Button>
+            {renderAddPlantForm()}
         </CenterWrapper>
     )
 }
