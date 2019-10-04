@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card, Checkbox, Button, Form } from 'semantic-ui-react'
+import { Card, Checkbox, Button, Form, Label, Icon } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
 import { QtyPlant } from '../types/entities'
 import { usePlant } from '../hooks/plant'
@@ -36,6 +36,20 @@ const Input = styled(Form.Input)`
     width: 60px;
 `
 
+const RED: "red" = "red"
+const BLUE: "blue" = "blue"
+const PURPLE: "purple" = "purple"
+const ORANGE: "orange" = "orange"
+const TEAL: "teal" = "teal"
+
+const PLANT_TYPE_COLOR_MAPPING: { [key: string]: "red" | "blue" | "purple" | "orange" | "teal" | undefined } = {
+    GRASS: RED,
+    SHRUB: BLUE,
+    TREE: PURPLE,
+    HERB: ORANGE,
+    BULB: TEAL
+}
+
 const AddPlantForm = ({
     plants,
     handleSubmit,
@@ -64,6 +78,10 @@ const AddPlantForm = ({
                 <Card.Content>
                     <Card.Header>{plant.commonName}</Card.Header>
                     <Card.Meta>{plant.latinName}</Card.Meta>
+                    {plant.isNative && <Label corner="right" color="green">
+                        <Icon name="check" />
+                    </Label>}
+                    <Label ribbon="right" color={PLANT_TYPE_COLOR_MAPPING[plant.type]} >{plant.type}</Label>
                 </Card.Content>
                 <Row>
                     <CheckboxContainer>
@@ -88,6 +106,8 @@ const AddPlantForm = ({
 
     return (
         <StyledForm onSubmit={handleSubmit}>
+            <Icon color="green" name="check circle" />
+            <span>= Native</span>
             {renderPlants()}
             <AddButtonContainer>
                 <Button type="submit" fluid>

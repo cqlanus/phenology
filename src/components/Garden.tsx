@@ -15,6 +15,7 @@ import {
     Segment,
     Input,
     Confirm,
+    Label
 } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 
@@ -24,6 +25,14 @@ interface Props {
     removeGarden: (gardenId: string) => void
     removePlanting: (plantingId: string) => void
 }
+
+const Container = styled.div`
+    padding-bottom: 1em;
+`
+
+const LabelContainer = styled.div`
+    padding-top: 1em;
+`
 
 const ListContainer = styled.div`
     padding-left: 1rem;
@@ -35,7 +44,7 @@ const Row = styled.div`
     align-items: center;
 `
 
-const AddPlantModal = ({disabled}: any) => {
+const AddPlantModal = ({ disabled }: any) => {
     const { isOpen, closeModal, openModal } = useModal()
     return (
         <Modal
@@ -67,12 +76,16 @@ const GardenSettingsModal = ({ handleRemove, setEditing }: any) => {
             onClose={closeModal}
             trigger={<Icon onClick={openModal} name="setting" />}>
             <Segment>
-                <Button fluid onClick={handleEdit}>
-                    Edit Garden
-                </Button>
-                <Button fluid negative onClick={handleRemove}>
-                    Delete Garden
-                </Button>
+                <Container>
+                    <Button fluid onClick={handleEdit}>
+                        Edit Garden
+                    </Button>
+                </Container>
+                <Container>
+                    <Button fluid negative onClick={handleRemove}>
+                        Delete Garden
+                    </Button>
+                </Container>
             </Segment>
         </Modal>
     )
@@ -109,6 +122,7 @@ const AddEntryModal = ({ setPlanting, plantingId }: any) => {
 
 const InputContainer = styled.div`
     flex: 1;
+    padding-bottom: 1em;
 `
 
 const StyledInput = styled(Input)`
@@ -171,13 +185,15 @@ const Garden = ({
                             />
                             <Card.Header>{p.plant.commonName}</Card.Header>
                             <Card.Meta>{p.plant.latinName}</Card.Meta>
-                            {p.plant.isNative && (
-                                <Icon
-                                    name={'check'}
-                                    color={'green'}
-                                    size={'large'}
-                                />
-                            )}
+                            <LabelContainer>
+                                <Label>
+                                    Qty
+                                    <Label.Detail>{p.qty}</Label.Detail>
+                                </Label>
+                                {p.plant.isNative && (
+                                    <Label color={"green"}>Native</Label>
+                                )}
+                            </LabelContainer>
                         </Card.Content>
                         {isEditing && (
                             <Card.Content>
@@ -189,11 +205,13 @@ const Garden = ({
                                     negative>
                                     Remove Plant
                                 </Button>
-                                <Confirm 
+                                <Confirm
                                     open={isOpen}
                                     onCancel={closeModal}
-                                    onConfirm={handleRemovePlanting(p.plantingId)}
-                                 />
+                                    onConfirm={handleRemovePlanting(
+                                        p.plantingId,
+                                    )}
+                                />
                             </Card.Content>
                         )}
                         <Card.Content>
@@ -228,7 +246,9 @@ const Garden = ({
                     />
                 )}
             </Row>
-            <AddPlantModal disabled={isEditing} />
+            <Container>
+                <AddPlantModal disabled={isEditing} />
+            </Container>
             {renderPlantings()}
         </CenterWrapper>
     )
