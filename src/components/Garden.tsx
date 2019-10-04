@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
 import AddPlantForm from '../containers/AddPlantForm'
-import { withNavBar } from './NavBar'
+import { withNavBar } from '../containers/NavBar'
 import AddEntryForm from '../containers/AddEntryForm'
 import EntryList from '../containers/EntryList'
 import {
@@ -14,6 +14,7 @@ import {
     Modal,
     Segment,
     Input,
+    Confirm,
 } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 
@@ -34,14 +35,14 @@ const Row = styled.div`
     align-items: center;
 `
 
-const AddPlantModal = () => {
+const AddPlantModal = ({disabled}: any) => {
     const { isOpen, closeModal, openModal } = useModal()
     return (
         <Modal
             onClose={closeModal}
             open={isOpen}
             trigger={
-                <Button onClick={openModal} primary fluid>
+                <Button disabled={disabled} onClick={openModal} primary fluid>
                     Add New Plant
                 </Button>
             }>
@@ -134,15 +135,24 @@ const EditGardenNameInput = ({ garden, setEditing }: any) => {
     )
 }
 
-const Garden = ({ garden, setPlanting, removeGarden, removePlanting }: Props) => {
+const Garden = ({
+    garden,
+    setPlanting,
+    removeGarden,
+    removePlanting,
+}: Props) => {
     const [isEditing, setEditing] = useState(false)
+    const { isOpen, openModal, closeModal } = useModal()
 
     if (!garden) {
         return <div />
     }
 
     const handleRemove = () => removeGarden(garden.gardenId)
-    const handleRemovePlanting = (plantingId: string) => () => removePlanting(plantingId)
+    const handleRemovePlanting = (plantingId: string) => () => {
+        removePlanting(plantingId)
+        closeModal()
+    }
 
     const renderPlantings = () => {
         return (
@@ -169,9 +179,23 @@ const Garden = ({ garden, setPlanting, removeGarden, removePlanting }: Props) =>
                                 />
                             )}
                         </Card.Content>
-                        {isEditing && <Card.Content>
-                            <Button onClick={handleRemovePlanting(p.plantingId)} fluid size="tiny" basic negative >Remove Plant</Button>
-                        </Card.Content>}
+                        {isEditing && (
+                            <Card.Content>
+                                <Button
+                                    onClick={openModal}
+                                    fluid
+                                    size="tiny"
+                                    basic
+                                    negative>
+                                    Remove Plant
+                                </Button>
+                                <Confirm 
+                                    open={isOpen}
+                                    onCancel={closeModal}
+                                    onConfirm={handleRemovePlanting(p.plantingId)}
+                                 />
+                            </Card.Content>
+                        )}
                         <Card.Content>
                             <ListContainer>
                                 <EntryList
@@ -204,7 +228,7 @@ const Garden = ({ garden, setPlanting, removeGarden, removePlanting }: Props) =>
                     />
                 )}
             </Row>
-            <AddPlantModal />
+            <AddPlantModal disabled={isEditing} />
             {renderPlantings()}
         </CenterWrapper>
     )

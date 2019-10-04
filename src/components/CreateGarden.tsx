@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 
 import CreateGardenForm from '../containers/CreateGardenForm'
 import CenterWrapper from '../components/CenterWrapper'
-import NavBar from '../components/NavBar'
+import NavBar from '../containers/NavBar'
 
 import { getPlants } from '../redux/plants'
 

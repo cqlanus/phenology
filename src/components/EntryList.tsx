@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import { Entry } from '../types/user'
 import { Card, Icon, Feed, Accordion, Modal } from 'semantic-ui-react'
-import { format } from 'date-fns'
+import moment from 'moment'
 import { PhenophaseEntity } from '../redux/entities'
 // import AddEntryForm from '../containers/AddEntryForm'
 import EditEntryForm from '../containers/EditEntryForm'
@@ -13,6 +14,16 @@ interface Props {
     setPlanting: (plantingId?: string) => void
     plantingId: string | undefined
 }
+
+const Row = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+`
+
+const Title = styled.h4`
+    margin: 0;
+`
 
 const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: Props) => {
     const [isOpen, setOpen] = useState(false)
@@ -41,7 +52,8 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: 
 
     const renderEntry = (phenophases: PhenophaseEntity) => (entry: Entry) => {
         const phenophase = phenophases[entry.phenophase]
-        const formatted = format(new Date(entry.created), 'MM/d/yyyy')
+        const created = moment(entry.created)
+        const formatted = created.format('ddd, MMM Do')
         return (
             <Feed.Event key={entry.entryId}>
                 <Feed.Label>
@@ -73,7 +85,11 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: 
     return (
         <Accordion>
             <Accordion.Title active={isOpen} onClick={toggleOpen}>
-                {title}
+            <Row>
+
+                <Icon name='dropdown' />
+                <Title>{title}</Title>
+            </Row>
             </Accordion.Title>
             <Accordion.Content active={isOpen}>
                 {renderEntries(entries, phenophases)}

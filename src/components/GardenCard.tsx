@@ -1,6 +1,6 @@
 import React from 'react'
+import moment from 'moment'
 import { Card } from 'semantic-ui-react'
-import { format } from 'date-fns'
 
 import { ActionLink } from './Link'
 
@@ -25,7 +25,7 @@ const GardenCard = ({ garden, history, setGarden }: Props) => {
 
     const [ latestEntry ] = allEntries.map(e => new Date(e.created))
         .sort((dateA, dateB) => dateB.getTime() - dateA.getTime())
-        .map(d => format(d, 'ddd MMM do'))
+        .map(d => moment(d).format('ddd, MMM Do'))
         .filter(Boolean)
 
     const meta1 = `${numPlantings} plantings of ${distinctPlants} plants`

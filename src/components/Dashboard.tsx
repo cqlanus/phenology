@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react'
 import GardenCard from '../containers/GardenCard'
 import Link from './Link'
 import CenterWrapper from './CenterWrapper'
-import { withNavBar } from './NavBar'
+import { withNavBar } from '../containers/NavBar'
 
 const Row = styled.div`
     display: flex;
