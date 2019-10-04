@@ -3,23 +3,26 @@ import styled from 'styled-components'
 
 import StationsList from '../containers/StationsList'
 import DataDisplay from '../containers/DataDisplay'
-import { PopLink } from '../components/Link'
+import NavBar from '../containers/NavBar'
+import CenterWrapper from '../components/CenterWrapper'
 
 const Container = styled.div`
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 1em;
+    padding: 0 1em;
 `
 
 const LocationPage = () => {
     return (
-        <Container>
-            <PopLink/>
-            <StationsList />
-            <DataDisplay />
-        </Container>
+        <div>
+            <NavBar />
+            <CenterWrapper>
+                <StationsList />
+                {/* <DataDisplay /> */}
+            </CenterWrapper>
+        </div>
     )
 }
 

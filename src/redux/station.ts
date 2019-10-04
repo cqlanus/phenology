@@ -74,6 +74,7 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
         const county = selectCounty(getState())
         if (county) {
             const stations = await API.getNearbyStations(county.countyId)
+            console.log({stations})
             dispatch(getStationsComplete(stations))
         } else {
             throw Error('No county id')

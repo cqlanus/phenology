@@ -1,58 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, ButtonGroup } from 'semantic-ui-react'
+import { Button, ButtonGroup, Card, Modal, Segment } from 'semantic-ui-react'
 
 import { Station } from '../types/climate'
-import { County } from '../types/location';
+import { County } from '../types/location'
+import { useModal } from '../hooks/mdoal'
 
 const Container = styled.div`
-    padding: 0.5em;
-    
+    /* padding: 0.5em; */
 `
 
-const List = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-`
-
-const StationCard: any = styled.div`
-    flex-basis: 15vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    border: 1px solid rgba(0,0,0,0.1);
-    box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
-    padding: .5em;
-    margin-right: 0.5em;
-    margin-bottom: 0.5em;
-    border-radius: 0.5em;
-    font-size: 0.8em;
-    cursor: pointer;
-    background: ${(p: any) => p['data-selected'] && 'whitesmoke'};
-    
-    :hover {
-        box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-    }
-
-    :last-child {
-        margin-right: 0;
-    }
-`
-
-const Text = styled.span`
-`
-
-const ListTitle = styled.div`
-
-`
-
-const ItemContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
-const ItemTitle = styled.span`
-    font-weight: bold;
+const ButtonCoontainer = styled.div`
+    padding-bottom: 0.5em;
 `
 
 interface Props {
@@ -61,61 +20,74 @@ interface Props {
     handleYtdWeather: () => void
     selectStation: (stationId: string) => void
     selectedStation: string | undefined
-    county?: County | undefined,
-    isClimateActive: boolean,
+    county?: County | undefined
+    isClimateActive: boolean
     isHistoricalWeatherActive: boolean
 }
 
-interface ItemProps {
-    title: string,
-    value: string
-}
-
-const StationItem = ({ title, value}: ItemProps) => (
-    <ItemContainer>
-        <ItemTitle>{`${title}:`}</ItemTitle>
-        <Text>{value}</Text>
-    </ItemContainer>
-)
-
-const StationsList = ({ 
-    stations, 
-    selectStation, 
-    selectedStation, 
+const StationsList = ({
+    stations,
+    selectStation,
+    selectedStation,
     handleNorms,
     handleYtdWeather,
     isClimateActive,
     isHistoricalWeatherActive,
-    county }: Props) => {
+    county,
+}: Props) => {
+    const { isOpen, closeModal, openModal } = useModal()
 
     const handleClick = (id: string) => () => {
+        openModal()
         selectStation(id)
     }
 
     const renderButtons = () => (
-        <ButtonGroup fluid>
-            <Button active={isClimateActive} onClick={handleNorms} >Get Climate Normals</Button>
-            <Button active={isHistoricalWeatherActive} onClick={handleYtdWeather} >Get YTD Weather</Button>
-        </ButtonGroup>
+        <div>
+            <ButtonCoontainer>
+                <Button fluid active={isClimateActive} onClick={handleNorms}>
+                    Get Climate Normals
+                </Button>
+            </ButtonCoontainer>
+            <ButtonCoontainer>
+                <Button
+                    fluid
+                    active={isHistoricalWeatherActive}
+                    onClick={handleYtdWeather}>
+                    Get YTD Weather
+                </Button>
+            </ButtonCoontainer>
+        </div>
     )
-    
+
+    const renderCard = (station: Station) => {
+        return (
+            <Card onClick={handleClick(station.id)} fluid key={station.id}>
+                <Card.Content>
+                    <Card.Header>{station.name}</Card.Header>
+                    <Card.Meta>{station.id}</Card.Meta>
+                </Card.Content>
+            </Card>
+        )
+    }
+
+    const renderCardModal = (station: Station) => {
+        const open = isOpen && station.id === selectedStation
+        return (
+            <Modal
+                open={open}
+                onClose={closeModal}
+                trigger={renderCard(station)}
+                key={station.id}>
+                <Modal.Content>{renderButtons()}</Modal.Content>
+            </Modal>
+        )
+    }
+
     return (
         <Container>
-            { county && <ListTitle>{`${county.name} County Stations`}</ListTitle>}
-            <List>
-                {
-                    stations.map(s => (
-                        <StationCard 
-                            key={s.id} 
-                            data-selected={s.id === selectedStation}
-                            onClick={handleClick(s.id)} >
-                            <StationItem value={s.name} title={'Station'}/>
-                            <StationItem value={s.id} title={'ID'}/>
-                        </StationCard>
-                    ))
-                }
-            </List>
-            { selectedStation && renderButtons() }
+            {county && <h2>{`${county.name} County Stations`}</h2>}
+            {stations.map(renderCardModal)}
         </Container>
     )
 }
