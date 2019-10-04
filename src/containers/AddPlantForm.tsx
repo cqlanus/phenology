@@ -5,9 +5,10 @@ import { AppState } from '../redux'
 import { selectPlants } from '../redux/plants'
 import { addPlantings } from '../redux/planting'
 
-const mapState = (state: AppState) => {
+const mapState = (state: AppState, ownProps: any) => {
     return {
-        plants: selectPlants(state)
+        plants: selectPlants(state),
+        closeModal: ownProps.closeModal,
     }
 }
 

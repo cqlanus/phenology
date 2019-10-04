@@ -103,12 +103,10 @@ export const addPlantings = (selection: PlantSelection) => async (
     dispatch: any,
     getState: any,
 ) => {
-    const builtGarden = selectGarden(getState())
-    const builtUser = selectUser(getState())
-    if (builtGarden) {
-        const { plantings } = builtGarden
+
+    const addSelection = (plantings: Planting[]) => {
         const structuredPlantings = structurePlantings(plantings)
-        const updatedPlantings = Object.values(selection).reduce(
+        return Object.values(selection).reduce(
             (acc: Structure, qtyPlant: QtyPlant) => {
                 const { qty, ...plant } = qtyPlant
                 const { commonName } = plant
@@ -132,6 +130,38 @@ export const addPlantings = (selection: PlantSelection) => async (
             },
             structuredPlantings,
         )
+    }
+    
+    await dispatch(changePlanting(addSelection))
+}
+
+export const removePlanting = (plantingId: string) => async (dispatch: any, getState: any) => {
+    const filterPlanting = (plantings : Planting[]) => plantings.filter(p => p.plantingId !== plantingId)
+    await dispatch(changePlanting(filterPlanting))
+    
+    // const builtGarden = selectGarden(getState())
+    // const builtUser = selectUser(getState())
+    // if (builtGarden) {
+    //     const { plantings } = builtGarden
+    //     const updatedPlantings = plantings.filter(p => p.plantingId !== plantingId)
+    //     const updatedGarden = Garden.of({
+    //         ...builtGarden,
+    //         plantings: Object.values(updatedPlantings),
+    //     })
+    //     if (builtUser) {
+    //         const updatedUser = editUserGardens(builtUser, updatedGarden)
+    //         const response = await api.updateUser(updatedUser)
+    //         dispatch(setEntities(response))
+    //     }
+    // }
+}
+
+const changePlanting = (cb: (t: any) => any) => async (dispatch: any, getState: any) => {
+    const builtGarden = selectGarden(getState())
+    const builtUser = selectUser(getState())
+    if (builtGarden) {
+        const { plantings } = builtGarden
+        const updatedPlantings = cb(plantings)
         const updatedGarden = Garden.of({
             ...builtGarden,
             plantings: Object.values(updatedPlantings),
@@ -143,6 +173,7 @@ export const addPlantings = (selection: PlantSelection) => async (
         }
     }
 }
+
 
 /* Initial State */
 const initialState: PlantingState = {

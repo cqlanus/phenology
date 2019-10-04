@@ -109,14 +109,16 @@ const initialValues: FormValues = {
 interface Props {
     plants: QtyPlant[]
     addPlantings: (selection: PlantSelection) => void
+    closeModal: () => void
 }
 
 export default withFormik<Props, FormValues>({
     handleSubmit: (
         { selectedPlants }: FormValues,
-        { props: { addPlantings } }: FormikBag<Props, any>,
+        { props: { addPlantings, closeModal } }: FormikBag<Props, any>,
     ) => {
         addPlantings(selectedPlants)
+        closeModal()
     },
     mapPropsToValues: () => initialValues,
 })(AddPlantForm)
