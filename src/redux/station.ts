@@ -1,6 +1,8 @@
 import API from '../api'
 import { Station } from '../types/climate'
 import { getCounty, selectCounty } from './county';
+import { AppState } from '.';
+import { createSelector } from 'reselect';
 
 /* Action Types */
 const GET_STATIONS_START: 'GET_STATIONS_START' = 'GET_STATIONS_START'
@@ -74,7 +76,6 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
         const county = selectCounty(getState())
         if (county) {
             const stations = await API.getNearbyStations(county.countyId)
-            console.log({stations})
             dispatch(getStationsComplete(stations))
         } else {
             throw Error('No county id')
@@ -139,3 +140,13 @@ export default (state = initialState, action: StationActions): StationState => {
     }
     
 }
+
+/* Selectors */
+export const getSelectedStation = (state: AppState) => state.station.selectedStation
+const selectStations = (state: AppState) => state.station.stations
+export const getStation = createSelector(
+    [getSelectedStation, selectStations],
+    (stationId, stations) => {
+        return stations.find(s => s.id === stationId)
+    }
+)

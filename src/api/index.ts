@@ -69,7 +69,7 @@ class API {
 
     getNearbyStations = async (countyId: string) => {
         const params = { headers: { token: this.token } }
-        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&datasetid=GHCND&datacategoryid=TEMP&startdate=2019-01-01&enddate=2019-12-31&datatypeid=TAVG`
+        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&startdate=2010-01-01&enddate=2010-12-31&datasetid=NORMAL_DLY&datasetid=GHCND`
 
         const response = await request(url, params)
 

@@ -14,6 +14,7 @@ const Container = styled.div`
     height: 100%;
     padding: 0 0.5em;
     min-height: 30vh;
+    overflow: scroll;
 `
 
 const HistoricalWeather = ({ ytdWeather}: Props) => {
@@ -59,7 +60,7 @@ const HistoricalWeather = ({ ytdWeather}: Props) => {
     return (
         <Container>
             { renderButtons() }
-            <ResponsiveContainer height="60%">
+            <ResponsiveContainer minWidth="700px" height="60%">
                 <ComposedChart data={ytdWeather} >
                     <Bar dataKey={calculateGdd(base)} />
                     <Tooltip formatter={calcYtdGdd} />

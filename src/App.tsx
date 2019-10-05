@@ -7,7 +7,7 @@ import Amplify from 'aws-amplify'
 import awsconfig from './aws-exports'
 
 import configureStore from './redux'
-import { getNearbyStations } from './redux/station'
+import { getNearbyStations, getSelectedStation } from './redux/station'
 import { getSignedInUser } from './redux/auth'
 import { selectGardenId } from './redux/garden'
 
@@ -16,6 +16,7 @@ import MainPage from './pages/Main';
 import Garden from './containers/Garden';
 import CreateGarden from './containers/CreateGarden';
 import Dashboard from './containers/Dashboard';
+import StationData from './containers/StationData'
 
 Amplify.configure(awsconfig)
 
@@ -37,6 +38,10 @@ const App: React.FC = () => {
             <Route path="/garden/:gardenId" render={props => {
                 const selectedGarden = selectGardenId(store.getState())
                 return selectedGarden ? <Garden {...props} /> : <Redirect to="/home" />
+            } } />
+            <Route path="/station/:stationId" render={(props: any) => {
+                const station = getSelectedStation(store.getState())
+                return station ? <StationData {...props} /> : <Redirect to="/location" />
             } } />
           </Router>
           

@@ -18,7 +18,6 @@ const NavBar = ({ history, signOut }: Props & RouteComponentProps) => {
             <Menu.Item
                 name="arrow left"
                 onClick={() => {
-                    console.log({ here: 1 })
                     history.goBack()
                 }}>
                 <Icon name="arrow left" />
