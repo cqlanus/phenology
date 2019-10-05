@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DataDisplay from '../containers/DataDisplay'
 import { withNavBar } from '../containers/NavBar'
 import styled from 'styled-components'
@@ -31,9 +31,25 @@ interface Props {
 }
 
 const FavoriteStationModal = ({ gardens }: { gardens?: Garden[] }) => {
+    const initialChecked: { [key: string]: string } = {}
+    const [checkedGardens, setChecked] = useState(initialChecked)
     const { isOpen, closeModal, openModal } = useModal()
     const handleClick = () => {
         openModal()
+    }
+
+    const handleCheck = (id: string) => () => {
+        let updatedChecked = {}
+
+        if (checkedGardens[id]) {
+            const { [id]: value, ...newChecked } = checkedGardens
+            updatedChecked = newChecked
+        } else {
+            const newChecked = { ...checkedGardens, [id]: id }
+            updatedChecked = newChecked
+        }
+
+        setChecked(updatedChecked)
     }
 
     return (
@@ -54,7 +70,12 @@ const FavoriteStationModal = ({ gardens }: { gardens?: Garden[] }) => {
                                 <Card.Header>
                                     <Row>
                                         {g.name}
-                                        <Checkbox />
+                                        <Checkbox
+                                            checked={
+                                                !!checkedGardens[g.gardenId]
+                                            }
+                                            onChange={handleCheck(g.gardenId)}
+                                        />
                                     </Row>
                                 </Card.Header>
                             </Card.Content>
@@ -62,7 +83,9 @@ const FavoriteStationModal = ({ gardens }: { gardens?: Garden[] }) => {
                     ))}
             </Modal.Content>
             <Modal.Content>
-                <Button fluid primary>Apply</Button>
+                <Button onClick={closeModal} fluid primary>
+                    Apply
+                </Button>
             </Modal.Content>
         </Modal>
     )

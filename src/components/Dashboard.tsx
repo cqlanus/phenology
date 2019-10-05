@@ -14,9 +14,13 @@ const Row = styled.div`
     margin-bottom: 5px;
 `
 
-const GardenTitle = styled.h3`
+const Title = styled.h3`
     padding: 0;
     margin: 0;
+`
+
+const GardensContainer = styled.div`
+    padding-bottom: 2em;
 `
 
 interface Props {
@@ -33,17 +37,34 @@ const Dashboard = ({ user, history }: Props) => {
 
         if (hasGardens) {
             return (
-                <div>
+                <GardensContainer>
                     {
                         gardens.map((g: any) => <GardenCard key={g.gardenId} garden={g} />)
                     }
-                </div>
+                </GardensContainer>
             )
         } else {
             return (
-                <div>No gardens</div>
+                <GardensContainer>No gardens</GardensContainer>
             )
         }
+    }
+
+    const renderStations = () => { 
+        const { gardens } = user
+        const gardensWithFavorites = gardens.filter((g: any) => g.station)
+        const hasGardens = gardensWithFavorites.length > 0
+
+        if (hasGardens) {
+            return (
+                gardensWithFavorites.map((g: any) => <h3>g.name</h3>)
+            )
+        } else {
+            return (
+                <GardensContainer>No stations</GardensContainer>
+            )
+        }
+
         
     }
     
@@ -51,13 +72,21 @@ const Dashboard = ({ user, history }: Props) => {
         <CenterWrapper>
             <h2>Welcome {user.firstName}</h2>
             <Row>
-                <GardenTitle>My Gardens</GardenTitle>
+                <Title>My Gardens</Title>
 
                 <Link to="/create">
                     <Button primary size={'tiny'}>New Garden</Button>
                 </Link>
             </Row>
             {renderGardens()}
+            <Row>
+                <Title>Favorite Stations</Title>
+
+                <Link to="/location">
+                    <Button primary size={'tiny'}>Find Stations</Button>
+                </Link>
+            </Row>
+            {renderStations()}
         </CenterWrapper>
     )
 }

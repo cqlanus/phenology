@@ -60,7 +60,7 @@ const HistoricalWeather = ({ ytdWeather}: Props) => {
     return (
         <Container>
             { renderButtons() }
-            <ResponsiveContainer minWidth="700px" height="60%">
+            <ResponsiveContainer minWidth="700px" height="90%">
                 <ComposedChart data={ytdWeather} >
                     <Bar dataKey={calculateGdd(base)} />
                     <Tooltip formatter={calcYtdGdd} />

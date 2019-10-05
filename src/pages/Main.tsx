@@ -31,6 +31,8 @@ const TextContainer = styled.div`
 
 const Row = styled.div`
     display: flex;
+    justify-content: center;
+    text-align: center;
 `
 
 const AuthRow = styled.div`
@@ -69,7 +71,6 @@ const MainPage = ({ signIn, signOut, getUser, user, loading }: Props) => {
             return (
                 <Row>
                     <Link to="/home">Dashboard</Link>
-                    <Link to="/location">My Location</Link>
                 </Row>
             )
         }
