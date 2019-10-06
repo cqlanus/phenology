@@ -35,7 +35,7 @@ export default (state = initialState, action: UserAction): UserState => {
 /* Selectors */
 export const selectUserId = (state: AppState) => state.user.selected
 export const selectUser = createSelector(
-    [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity, state => state.plants],
+    [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity, state => state.plants.plants],
     (userId, users, allGardens, allPlantings, allEntries, allPlants) => {
         if (userId) { 
             const user = users[userId]

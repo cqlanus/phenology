@@ -1,8 +1,13 @@
 import API from '../api'
-import { Station } from '../types/climate'
-import { getCounty, selectCounty } from './county';
-import { AppState } from '.';
-import { createSelector } from 'reselect';
+import { Station, StationArgs } from '../types/climate'
+import { getCounty, selectCounty } from './county'
+import { AppState } from '.'
+import { createSelector } from 'reselect'
+import { selectGarden, editUserGardens } from './garden'
+import { selectUser } from './user'
+import { Garden } from '../types/user'
+import { setEntities } from './entities'
+import api from '../api'
 
 /* Action Types */
 const GET_STATIONS_START: 'GET_STATIONS_START' = 'GET_STATIONS_START'
@@ -13,63 +18,63 @@ export const SELECT_STATION: 'SELECT_STATION' = 'SELECT_STATION'
 /* Action Creators */
 const getStationStart = () => {
     return {
-        type: GET_STATIONS_START
+        type: GET_STATIONS_START,
     }
 }
 
-const getStationsComplete = (stations: Station[]) => {
+const getStationsComplete = (stations: StationArgs[]) => {
     return {
         type: GET_STATIONS_COMPLETE,
-        response: stations
+        response: stations,
     }
 }
 
 const getStationsFailed = (error: Error) => {
     return {
         type: GET_STATIONS_FAILED,
-        error
+        error,
     }
 }
 
 export const selectStation = (station: string) => {
     return {
         type: SELECT_STATION,
-        station: station
+        station: station,
     }
 }
 
 /* Interfaces */
 interface GetStationStartAction {
-    type: typeof GET_STATIONS_START,
+    type: typeof GET_STATIONS_START
 }
 interface GetStationCompleteAction {
-    type: typeof GET_STATIONS_COMPLETE,
-    response: Station[]
+    type: typeof GET_STATIONS_COMPLETE
+    response: StationArgs[]
 }
 interface GetStationFailedAction {
-    type: typeof GET_STATIONS_FAILED,
+    type: typeof GET_STATIONS_FAILED
     error: Error
 }
 export interface SelectStationAction {
-    type: typeof SELECT_STATION,
+    type: typeof SELECT_STATION
     station: string
 }
 
-export type StationActions = GetStationStartAction 
+export type StationActions =
+    | GetStationStartAction
     | GetStationCompleteAction
     | GetStationFailedAction
     | SelectStationAction
 
 export interface StationState {
     loading: boolean
-    stations: Station[]
+    stations: StationArgs[]
     selectedStation: string | undefined
     error?: Error
 }
 
 /* Async  */
 export const getNearbyStations = () => async (dispatch: any, getState: any) => {
-    
     try {
         dispatch(getStationStart())
         await dispatch(getCounty())
@@ -80,10 +85,9 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
         } else {
             throw Error('No county id')
         }
-        
     } catch (error) {
-        console.log({error})
-        dispatch(getStationsFailed(error))        
+        console.log({ error })
+        dispatch(getStationsFailed(error))
     }
     // return {
     //     types: [ GET_STATIONS_START, GET_STATIONS_COMPLETE, GET_STATIONS_FAILED ],
@@ -92,23 +96,45 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
     // }
 }
 
+export const markStationAsFavorite = (
+    station: StationArgs,
+    gardens: Garden[],
+) => async (dispatch: any, getState: any) => {
+    try {
+        const builtUser = selectUser(getState())
+
+        const favoriteGarden = (station: StationArgs) => async (garden: Garden) => {
+            const newStation = Station.of(station)
+            const updatedGarden = Garden.of({ ...garden, station: newStation })
+            if (builtUser) {
+                const updatedUser = editUserGardens(builtUser, updatedGarden)
+                const response = await api.updateUser(updatedUser)
+                dispatch(setEntities(response))
+            }
+        }
+
+        await Promise.all(gardens.map(favoriteGarden(station)))
+    } catch (error) {
+        console.log({ error })
+    }
+}
+
 /* Initial State */
 const initialState: StationState = {
     loading: false,
     stations: [],
     selectedStation: undefined,
-    error: undefined
+    error: undefined,
 }
-    
+
 /* Reducer */
 export default (state = initialState, action: StationActions): StationState => {
-
     switch (action.type) {
         case GET_STATIONS_START: {
-            return { 
+            return {
                 ...state,
                 loading: true,
-                error: undefined
+                error: undefined,
             }
         }
 
@@ -116,7 +142,7 @@ export default (state = initialState, action: StationActions): StationState => {
             return {
                 ...state,
                 loading: false,
-                stations: action.response
+                stations: action.response,
             }
         }
 
@@ -124,29 +150,29 @@ export default (state = initialState, action: StationActions): StationState => {
             return {
                 ...state,
                 loading: false,
-                error: action.error
+                error: action.error,
             }
         }
 
         case SELECT_STATION: {
             return {
                 ...state,
-                selectedStation: action.station
+                selectedStation: action.station,
             }
         }
 
         default:
             return state
     }
-    
 }
 
 /* Selectors */
-export const getSelectedStation = (state: AppState) => state.station.selectedStation
+export const getSelectedStation = (state: AppState) =>
+    state.station.selectedStation
 const selectStations = (state: AppState) => state.station.stations
 export const getStation = createSelector(
     [getSelectedStation, selectStations],
     (stationId, stations) => {
         return stations.find(s => s.id === stationId)
-    }
+    },
 )

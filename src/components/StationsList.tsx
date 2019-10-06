@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router'
 import { Card } from 'semantic-ui-react'
 
-import { Station } from '../types/climate'
+import { StationArgs } from '../types/climate'
 import { County } from '../types/location'
 
 const Container = styled.div`
@@ -11,7 +11,7 @@ const Container = styled.div`
 `
 
 interface Props {
-    stations: Station[]
+    stations: StationArgs[]
     selectStation: (stationId: string) => void
     selectedStation: string | undefined
     county?: County | undefined
@@ -29,7 +29,7 @@ const StationsList = ({
         history.push(`/station/${id}`)
     }
 
-    const renderCard = (station: Station) => {
+    const renderCard = (station: StationArgs) => {
         const name = station.name.split(',')[0]
         return (
             <Card link onClick={handleClick(station.id)} fluid key={station.id}>

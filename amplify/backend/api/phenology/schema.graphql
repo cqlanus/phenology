@@ -35,6 +35,16 @@ type Garden {
 	gardenId: String!
 	name: String!
     plantings: [Planting]
+    station: Station
+}
+
+type Station {
+    stationId: String!
+    name: String!
+    longitude: Float
+    latitude: Float
+    elevation: Float
+    elevationUnit: String
 }
 
 type Planting {

@@ -1,5 +1,6 @@
 import CreateGardenForm from '../components/CreateGardenForm'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { AppState } from '../redux'
 import { selectPlants, selectIsPlantsLoading, addPlant, selectJustAdded } from '../redux/plants';
 import { addGardenToUser, AddGardenInput } from '../redux/garden'
@@ -21,4 +22,6 @@ const mapDispatch = (dispatch: any, ownProps: any) => {
     }
 }
 
-export default connect(mapState, mapDispatch)(CreateGardenForm)
+export default withRouter(
+    connect(mapState, mapDispatch)(CreateGardenForm)
+)

@@ -41,6 +41,14 @@ export const getUser = `query GetUser($id: ID!) {
         plantingId
         qty
       }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
+      }
     }
   }
 }

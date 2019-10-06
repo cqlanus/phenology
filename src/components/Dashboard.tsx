@@ -57,7 +57,7 @@ const Dashboard = ({ user, history }: Props) => {
 
         if (hasGardens) {
             return (
-                gardensWithFavorites.map((g: any) => <h3>g.name</h3>)
+                gardensWithFavorites.map((g: any) => <h3 key={g.gardenId}>{g.station.name}</h3>)
             )
         } else {
             return (

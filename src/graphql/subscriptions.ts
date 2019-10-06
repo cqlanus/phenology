@@ -44,6 +44,14 @@ export const onCreateUser = `subscription OnCreateUser {
         plantingId
         qty
       }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
+      }
     }
   }
 }
@@ -61,6 +69,14 @@ export const onUpdateUser = `subscription OnUpdateUser {
         plantingId
         qty
       }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
+      }
     }
   }
 }
@@ -77,6 +93,14 @@ export const onDeleteUser = `subscription OnDeleteUser {
       plantings {
         plantingId
         qty
+      }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
       }
     }
   }

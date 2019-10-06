@@ -43,6 +43,7 @@ export type GardenInput = {
   gardenId: string,
   name: string,
   plantings?: Array< PlantingInput | null > | null,
+  station?: StationInput | null,
 };
 
 export type PlantingInput = {
@@ -64,7 +65,7 @@ export type EntryInput = {
   entryId: string,
   created: string,
   category?: PhenophaseCategory | null,
-  phenophase: string,
+  phenophase: Phenophase,
   note?: string | null,
 };
 
@@ -74,6 +75,42 @@ export enum PhenophaseCategory {
   FRUIT_SEED = "FRUIT_SEED",
 }
 
+
+export enum Phenophase {
+  INITIAL_GROWTH = "INITIAL_GROWTH",
+  BUD_BREAK = "BUD_BREAK",
+  ALL_BUDS_BREAK = "ALL_BUDS_BREAK",
+  LEAVES = "LEAVES",
+  INCREASED_LEAVES = "INCREASED_LEAVES",
+  COLORED_LEAVES = "COLORED_LEAVES",
+  FALLING_LEAVES = "FALLING_LEAVES",
+  EMERGING_NEEDLES = "EMERGING_NEEDLES",
+  YOUNG_NEEDLES = "YOUNG_NEEDLES",
+  FLOWER_HEADS = "FLOWER_HEADS",
+  FLOWERS = "FLOWERS",
+  OPEN_FLOWERS = "OPEN_FLOWERS",
+  FULL_FLOWERING = "FULL_FLOWERING",
+  END_FLOWERING = "END_FLOWERING",
+  POLLEN_CONES = "POLLEN_CONES",
+  OPEN_POLLEN_CONES = "OPEN_POLLEN_CONES",
+  POLLEN_RELEASE = "POLLEN_RELEASE",
+  POLLEN_RELEASE_CONIFERS = "POLLEN_RELEASE_CONIFERS",
+  UNRIPE_SEED_CONES = "UNRIPE_SEED_CONES",
+  RIPE_SEED_CONES = "RIPE_SEED_CONES",
+  RECENT_CONE_DROP = "RECENT_CONE_DROP",
+  RIPE_FRUITS = "RIPE_FRUITS",
+  FRUIT_DROP = "FRUIT_DROP",
+}
+
+
+export type StationInput = {
+  stationId: string,
+  name: string,
+  longitude?: number | null,
+  latitude?: number | null,
+  elevation?: number | null,
+  elevationUnit?: string | null,
+};
 
 export type UpdateUserInput = {
   id: string,
@@ -209,6 +246,15 @@ export type CreateUserMutation = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };
@@ -233,6 +279,15 @@ export type UpdateUserMutation = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };
@@ -257,6 +312,15 @@ export type DeleteUserMutation = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };
@@ -317,6 +381,15 @@ export type GetUserQuery = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };
@@ -421,6 +494,15 @@ export type OnCreateUserSubscription = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };
@@ -441,6 +523,15 @@ export type OnUpdateUserSubscription = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };
@@ -461,6 +552,15 @@ export type OnDeleteUserSubscription = {
         plantingId: string,
         qty: number,
       } | null > | null,
+      station:  {
+        __typename: "Station",
+        stationId: string,
+        name: string,
+        longitude: number | null,
+        latitude: number | null,
+        elevation: number | null,
+        elevationUnit: string | null,
+      } | null,
     } | null > | null,
   } | null,
 };

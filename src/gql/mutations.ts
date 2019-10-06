@@ -1,5 +1,5 @@
-export const updateUser = `mutation UpdateUser($onput: UpdateUserInput!) {
-    updateUser(input: $onput) {
+export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
       id
       userName
       firstName
@@ -7,6 +7,12 @@ export const updateUser = `mutation UpdateUser($onput: UpdateUserInput!) {
       gardens {
         gardenId
         name
+        station {
+            stationId
+            name
+            latitude
+            longitude
+        }
         plantings {
           plantingId
           qty

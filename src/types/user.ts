@@ -1,3 +1,5 @@
+import { Station } from "./climate"
+
 export interface ApiUser {
     id: string
     firstName: string
@@ -10,15 +12,18 @@ interface GardenArgs {
     gardenId: string
     name: string
     plantings: Planting[]
+    station?: Station
 }
 export class Garden {
     gardenId: string
     name: string
     plantings: Planting[]
-    constructor({ gardenId, name, plantings }: GardenArgs) {
+    station?: Station
+    constructor({ gardenId, name, plantings, station }: GardenArgs) {
         this.gardenId = gardenId
         this.name = name
         this.plantings = plantings
+        this.station = station
     }
 
     static of(gardenArgs: GardenArgs) {

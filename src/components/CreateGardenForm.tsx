@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { Form, Header, Loader } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
@@ -40,7 +41,7 @@ const CreateGardenForm = ({
     addPlant,
     justAdded,
     loading
-}: FormProps & FormikProps<FormValues>) => {
+}: FormProps & FormikProps<FormValues> & RouteComponentProps) => {
 
     const { checked, handleCheck } = usePlant()
 
@@ -133,10 +134,11 @@ interface FormProps {
     justAdded?: QtyPlant
 }
 
-export default withFormik<FormProps, FormValues>({
-    handleSubmit: (values: FormValues, { props }: FormikBag<FormProps, any>) => {
-        const { addGardenToUser } = props
+export default withFormik<FormProps & RouteComponentProps, FormValues>({
+    handleSubmit: (values: FormValues, { props }: FormikBag<FormProps & RouteComponentProps, any>) => {
+        const { addGardenToUser, history } = props
         addGardenToUser(values)
+        history.push('/home')
     },
     mapPropsToValues: () => initialValues
 })(CreateGardenForm)

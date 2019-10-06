@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
 import AddPlantForm from '../containers/AddPlantForm'
@@ -62,12 +63,18 @@ const AddPlantModal = ({ disabled }: any) => {
     )
 }
 
-const GardenSettingsModal = ({ handleRemove, setEditing }: any) => {
+const GardenSettingsModal = withRouter(({ handleRemove, setEditing, history }: any & RouteComponentProps) => {
     const { isOpen, closeModal, openModal } = useModal()
 
     const handleEdit = () => {
         setEditing(true)
         closeModal()
+    }
+
+    const remove = () => {
+        handleRemove()
+        closeModal()
+        history.goBack()
     }
 
     return (
@@ -82,14 +89,14 @@ const GardenSettingsModal = ({ handleRemove, setEditing }: any) => {
                     </Button>
                 </Container>
                 <Container>
-                    <Button fluid negative onClick={handleRemove}>
+                    <Button fluid negative onClick={remove}>
                         Delete Garden
                     </Button>
                 </Container>
             </Segment>
         </Modal>
     )
-}
+})
 
 const AddEntryModal = ({ setPlanting, plantingId }: any) => {
     const { isOpen, closeModal, openModal } = useModal()

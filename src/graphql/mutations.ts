@@ -44,6 +44,14 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
         plantingId
         qty
       }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
+      }
     }
   }
 }
@@ -61,6 +69,14 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
         plantingId
         qty
       }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
+      }
     }
   }
 }
@@ -77,6 +93,14 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
       plantings {
         plantingId
         qty
+      }
+      station {
+        stationId
+        name
+        longitude
+        latitude
+        elevation
+        elevationUnit
       }
     }
   }

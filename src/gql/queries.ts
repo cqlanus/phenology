@@ -18,6 +18,12 @@ export const getUserByUserName = `query GetUserByUserName(
         gardens {
           gardenId
           name
+          station {
+            stationId
+            name
+            latitude
+            longitude
+        }
           plantings {
               qty
               plantingId

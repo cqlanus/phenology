@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Menu, Button, Modal, Card, Checkbox } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 import { Garden } from '../types/user'
+import { Station } from '../types/climate'
 
 const Container = styled.div`
     height: calc(100vh - 50px - 1rem);
@@ -23,6 +24,7 @@ const Row = styled.div`
 interface Props {
     handleNorms: () => void
     handleYtdWeather: () => void
+    handleApply: (garden: Garden[]) => void,
     selectedStation: string | undefined
     stationName: string | undefined
     isClimateActive: boolean
@@ -30,26 +32,32 @@ interface Props {
     gardens?: Garden[]
 }
 
-const FavoriteStationModal = ({ gardens }: { gardens?: Garden[] }) => {
-    const initialChecked: { [key: string]: string } = {}
+const FavoriteStationModal = ({ gardens, handleApply }: { gardens?: Garden[], handleApply: (garden: Garden[]) => void }) => {
+    const initialChecked: { [key: string]: Garden } = {}
     const [checkedGardens, setChecked] = useState(initialChecked)
     const { isOpen, closeModal, openModal } = useModal()
     const handleClick = () => {
         openModal()
     }
 
-    const handleCheck = (id: string) => () => {
+    const handleCheck = (garden: Garden) => () => {
         let updatedChecked = {}
 
-        if (checkedGardens[id]) {
-            const { [id]: value, ...newChecked } = checkedGardens
+        if (checkedGardens[garden.gardenId]) {
+            const { [garden.gardenId]: value, ...newChecked } = checkedGardens
             updatedChecked = newChecked
         } else {
-            const newChecked = { ...checkedGardens, [id]: id }
+            const newChecked = { ...checkedGardens, [garden.gardenId]: garden }
             updatedChecked = newChecked
         }
 
         setChecked(updatedChecked)
+    }
+
+    const applyStation = () => {
+        const selectedGardens = Object.values(checkedGardens)
+        handleApply(selectedGardens)
+        closeModal()
     }
 
     return (
@@ -74,7 +82,7 @@ const FavoriteStationModal = ({ gardens }: { gardens?: Garden[] }) => {
                                             checked={
                                                 !!checkedGardens[g.gardenId]
                                             }
-                                            onChange={handleCheck(g.gardenId)}
+                                            onChange={handleCheck(g)}
                                         />
                                     </Row>
                                 </Card.Header>
@@ -83,7 +91,7 @@ const FavoriteStationModal = ({ gardens }: { gardens?: Garden[] }) => {
                     ))}
             </Modal.Content>
             <Modal.Content>
-                <Button onClick={closeModal} fluid primary>
+                <Button onClick={applyStation} fluid primary>
                     Apply
                 </Button>
             </Modal.Content>
@@ -98,6 +106,7 @@ const StationData = ({
     handleYtdWeather,
     stationName,
     gardens,
+    handleApply,
 }: Props) => {
     const renderButtons = () => (
         <Menu tabular>
@@ -114,7 +123,7 @@ const StationData = ({
     return (
         <Container>
             {stationName && <h4>{stationName}</h4>}
-            <FavoriteStationModal gardens={gardens} />
+            <FavoriteStationModal gardens={gardens} handleApply={handleApply} />
             {renderButtons()}
             <DataDisplay />
         </Container>

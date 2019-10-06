@@ -136,6 +136,8 @@ export const addPlantings = (selection: PlantSelection) => async (
 }
 
 export const removePlanting = (plantingId: string) => async (dispatch: any, getState: any) => {
+    console.log({plantingId})
+
     const filterPlanting = (plantings : Planting[]) => plantings.filter(p => p.plantingId !== plantingId)
     await dispatch(changePlanting(filterPlanting))
     
@@ -161,6 +163,7 @@ const changePlanting = (cb: (t: any) => any) => async (dispatch: any, getState: 
     const builtUser = selectUser(getState())
     if (builtGarden) {
         const { plantings } = builtGarden
+        console.log({plantings})
         const updatedPlantings = cb(plantings)
         const updatedGarden = Garden.of({
             ...builtGarden,
