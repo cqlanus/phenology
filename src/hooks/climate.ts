@@ -18,7 +18,6 @@ const ALT_HISTORICAL_DATA_TYPES = {
 }
 
 const arrayifyData = <T>(data: any[], keys: any[]): T[] => {
-    console.log({ data })
     const object = data
         .map(n => n.results)
         .filter(Boolean)

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { AppState } from '../redux';
 import { selectUser } from '../redux/user'
+import { selectStation } from '../redux/station';
 
 const mapState = (state: AppState) => {
     const user = selectUser(state)
@@ -12,6 +13,7 @@ const mapState = (state: AppState) => {
 }
 
 const mapDispatch = {
+    selectStation
 }
 
 export default connect(mapState, mapDispatch)(Dashboard)

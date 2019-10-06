@@ -73,7 +73,6 @@ class API {
 
         const response = await request(url, params)
 
-        console.log({response})
         return response.results
     }
 
@@ -82,7 +81,6 @@ class API {
         const plantSchema = new schema.Array(plant)
 
         const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(qtyPlants, plantSchema)
-        console.log({normalizedPlants})
         return new Promise((res) => {
             setTimeout(() => res(normalizedPlants.entities.plants), 500)
         })
@@ -100,7 +98,6 @@ class API {
 
         const { data } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 
-        console.log({data})
         const entry = new schema.Entity('entries', {}, {idAttribute: 'entryId'})
         const plant = new schema.Entity('plant', {}, {idAttribute: 'plantId'})
         const planting = new schema.Entity('plantings', {
@@ -117,7 +114,6 @@ class API {
         const entitiesSchema = new schema.Array(user)
 
         const normalizedEntities: { entities: Entities } = normalize(data.getUserByUserName.items, entitiesSchema)
-        console.log({normalizedEntities})
 
         return new Promise((res) => {
             setTimeout(() => res(normalizedEntities), 500)
@@ -163,7 +159,7 @@ class API {
     }
 
     updateUser = async (updatedUser: any) => {
-        console.log({updatedUser})
+        // console.log({updatedUser})
         const { data }: { data: { updateUser: any }} = await A.graphql(graphqlOperation(updateUser, {input: updatedUser}))
         const { updateUser: user } = data
         return this.normalizeUser(user)

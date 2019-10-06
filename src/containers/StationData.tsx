@@ -13,7 +13,6 @@ const mapState = (state: AppState) => {
     const stationName = station && station.name.split(',')[0]
     const user = selectUser(state)
     const gardens = user && user.gardens
-    console.log({gardens})
     return {
         selectedStation: getSelectedStation(state),
         stationName,

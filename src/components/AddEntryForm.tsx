@@ -112,7 +112,6 @@ export default withFormik<FormProps, FormValues>({
         values: FormValues,
         { props }: FormikBag<FormProps, any>,
     ) => {
-        // console.log({ values }, { props })
         const { handleSubmitForm, closeModal, plantingId } = props
         plantingId && handleSubmitForm(values, plantingId)
         closeModal()

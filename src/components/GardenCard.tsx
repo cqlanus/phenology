@@ -29,7 +29,7 @@ const GardenCard = ({ garden, history, setGarden }: Props) => {
         .filter(Boolean)
 
     const meta1 = `${numPlantings} plantings of ${distinctPlants} plants`
-    const meta2 = `Last updated: ${latestEntry}`
+    const meta2 = `Last updated: ${latestEntry || 'Never'}`
 
     const handleClick = () => {
         setGarden(garden.gardenId)

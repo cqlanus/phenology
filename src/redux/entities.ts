@@ -95,7 +95,6 @@ export const addUser = async () => {
     try {
         const [ input ] = entities
         const response = await API.graphql(graphqlOperation(createUser, {input}))
-        console.log({response})
         
     } catch (error) {
         console.log({error})

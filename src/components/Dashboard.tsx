@@ -1,11 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button } from 'semantic-ui-react'
+import { Button, Card } from 'semantic-ui-react'
+import { Link as L } from 'react-router-dom'
 
 import GardenCard from '../containers/GardenCard'
 import Link from './Link'
 import CenterWrapper from './CenterWrapper'
 import { withNavBar } from '../containers/NavBar'
+import { Station } from '../types/climate'
+import { Garden } from '../types/user'
 
 const Row = styled.div`
     display: flex;
@@ -23,13 +26,38 @@ const GardensContainer = styled.div`
     padding-bottom: 2em;
 `
 
-interface Props {
-    user?: any
-    history: any
+interface StationProps {
+    station?: Station, 
+    selectStation: (id: string) => void
+}
+const StationCard = ({ station, selectStation }: StationProps) => {
+    if (station) {
+        const name = station.name.split(',')[0]
+        const handleClick = () => selectStation(station.stationId)
+        return (
+            <L to={`/station/${station.stationId}`} onClick={handleClick}>
+                <Card fluid  >
+                    <Card.Content>
+                        <Card.Header>{name}</Card.Header>
+                        <Card.Meta>{station.stationId}</Card.Meta>
+                    </Card.Content>
+                </Card>
+            </L>
+        )
+    } else {
+        return null
+    }
 }
 
-const Dashboard = ({ user, history }: Props) => {
-    if (user === undefined) { return <div/>}
+interface Props {
+    user?: any,
+    selectStation: (id: string) => void
+}
+
+const Dashboard = ({ user, selectStation }: Props) => {
+    if (user === undefined) {
+        return <div />
+    }
 
     const renderGardens = () => {
         const { gardens } = user
@@ -38,36 +66,37 @@ const Dashboard = ({ user, history }: Props) => {
         if (hasGardens) {
             return (
                 <GardensContainer>
-                    {
-                        gardens.map((g: any) => <GardenCard key={g.gardenId} garden={g} />)
-                    }
+                    {gardens.map((g: any) => (
+                        <GardenCard key={g.gardenId} garden={g} />
+                    ))}
                 </GardensContainer>
             )
         } else {
-            return (
-                <GardensContainer>No gardens</GardensContainer>
-            )
+            return <GardensContainer>No gardens</GardensContainer>
         }
     }
 
-    const renderStations = () => { 
+    const renderStations = () => {
         const { gardens } = user
         const gardensWithFavorites = gardens.filter((g: any) => g.station)
         const hasGardens = gardensWithFavorites.length > 0
 
         if (hasGardens) {
-            return (
-                gardensWithFavorites.map((g: any) => <h3 key={g.gardenId}>{g.station.name}</h3>)
+            return gardensWithFavorites.map(
+                ({ station }: Garden) =>
+                    station && (
+                        <StationCard
+                            key={station.stationId}
+                            station={station}
+                            selectStation={selectStation}
+                        />
+                    ),
             )
         } else {
-            return (
-                <GardensContainer>No stations</GardensContainer>
-            )
+            return <GardensContainer>No stations</GardensContainer>
         }
-
-        
     }
-    
+
     return (
         <CenterWrapper>
             <h2>Welcome {user.firstName}</h2>
@@ -75,7 +104,9 @@ const Dashboard = ({ user, history }: Props) => {
                 <Title>My Gardens</Title>
 
                 <Link to="/create">
-                    <Button primary size={'tiny'}>New Garden</Button>
+                    <Button primary size={'tiny'}>
+                        New Garden
+                    </Button>
                 </Link>
             </Row>
             {renderGardens()}
@@ -83,7 +114,9 @@ const Dashboard = ({ user, history }: Props) => {
                 <Title>Favorite Stations</Title>
 
                 <Link to="/location">
-                    <Button primary size={'tiny'}>Find Stations</Button>
+                    <Button primary size={'tiny'}>
+                        Find Stations
+                    </Button>
                 </Link>
             </Row>
             {renderStations()}

@@ -153,9 +153,6 @@ export const buildGarden = ({
             const planting = allPlantings[plantingId] || {}
             const entries = (planting.entries || []).map((eId: string) => Entry.of(allEntries[eId]))
 
-            const thing = allPlants[planting.plant]
-            console.log({allPlants})
-            
             const plant = Plant.of(allPlants[planting.plant] || {})
             return Planting.of({ ...planting, entries, plant, plantingId })
         })
