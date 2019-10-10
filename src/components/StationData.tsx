@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { Menu, Button, Modal, Card, Checkbox } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 import { Garden } from '../types/user'
-import { Station } from '../types/climate'
 
 const Container = styled.div`
     height: calc(100vh - 50px - 1rem);

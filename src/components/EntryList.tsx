@@ -6,6 +6,7 @@ import moment from 'moment'
 import { PhenophaseEntity } from '../redux/entities'
 // import AddEntryForm from '../containers/AddEntryForm'
 import EditEntryForm from '../containers/EditEntryForm'
+import { YtdWeather } from '../types/weather'
 
 interface Props {
     entries: Entry[]
@@ -13,6 +14,7 @@ interface Props {
     setEntry: (entryId?: string) => void
     setPlanting: (plantingId?: string) => void
     plantingId: string | undefined
+    ytdWeather: YtdWeather
 }
 
 const Row = styled.div`

@@ -26,10 +26,33 @@ interface NoaaQuery {
     endDate: string
 }
 
+interface NceiQuery {
+    dataset: string
+    stations: string
+    dataTypes: string
+    startDate: string
+    endDate: string
+}
+
+interface WeatherDataObject {
+    TAVG: string
+    TMIN: string
+    TMAX: string
+    DATE: string
+    STATION: string
+}
+
+
 class API {
     BASE_URL = 'https://fierce-atoll-66412.herokuapp.com'
     NOAA_BASE = 'https://www.ncdc.noaa.gov/cdo-web/api/v2'
+    NCEI_BASE = 'https://www.ncei.noaa.gov/access/services/data/v1'
     token = 'YRUCkKgIqSPdMLIrNezdyThISwcaBZyI'
+    queryNcei = async ({ dataset, dataTypes, stations, startDate, endDate}: NceiQuery) => {
+        const url = `${this.NCEI_BASE}?dataset=${dataset}&stations=${stations}&dataTypes=${dataTypes}&startDate=${startDate}&endDate=${endDate}&format=json`
+        return await request(url)
+    }
+    
     queryNoaa = async ({ stationId, datasetId, datatypeId, startDate, endDate }: NoaaQuery) => {
         const params = { headers: { token: this.token } }
         const url = `${this.NOAA_BASE}/data?datasetid=${datasetId}&stationid=${stationId}&datatypeid=${datatypeId}&startdate=${startDate}&enddate=${endDate}&limit=1000`
@@ -37,18 +60,31 @@ class API {
         return await request(url, params)
     }
     
-    getClimateNorms = async (stationId: string, datatypeId: string) => {
-        const query = {
-            datasetId: 'NORMAL_DLY',
-            stationId,
-            datatypeId,
+    getNormals = async (station: string, datatypes: string[]) => {
+        const query: NceiQuery = {
+            dataset: 'normals-daily',
+            dataTypes: datatypes.join(),
+            stations: station,
             startDate: '2010-01-01',
             endDate: '2010-12-31'
         }
-        
-        return await this.queryNoaa(query)
-    }
 
+        return await this.queryNcei(query)
+    }
+    
+    getYtdWeather = async (station: string, datatypes: string[]): Promise<WeatherDataObject[]> => {
+        const query: NceiQuery = {
+            dataset: 'daily-summaries',
+            dataTypes: datatypes.join(),
+            stations: station,
+            startDate: '2019-01-01',
+            endDate: '2019-12-31'
+        }
+
+        return await this.queryNcei(query)
+
+    }
+    
     getHistoricalWeather = async (stationId: string, datatypeId: string) => {
         const query = {
             datasetId: 'GHCND',

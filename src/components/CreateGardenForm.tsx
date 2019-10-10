@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { Form, Header, Loader } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'

@@ -43,11 +43,6 @@ export const getClimateNorms = (stationId: string) => async (dispatch: any) => {
         dispatch ({ type: GET_CLIMATE_NORMS_FAILED, error })
         
     }
-    // return {
-    //     types: [ GET_CLIMATE_NORMS_START, GET_CLIMATE_NORMS_COMPLETE, GET_CLIMATE_NORMS_FAILED],
-    //     callAPI: () => getNorms(stationId),
-    //     payload: { stationId }
-    // }
 }
 
 /* Initial State */

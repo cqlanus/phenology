@@ -7,7 +7,8 @@ import { setPlanting } from '../redux/planting'
 const mapState = (state: AppState, ownProps: any) => {
     return {
         phenophases: state.phenophase,
-        plantingId: ownProps.plantingId
+        plantingId: ownProps.plantingId,
+        ytdWeather: state.weather.ytdWeather
     }
 }
 

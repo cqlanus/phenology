@@ -78,6 +78,7 @@ export const changeEntries = (
         })
         if (builtUser) {
             const updatedUser = editUserGardens(builtUser, updatedGarden)
+            console.log({updatedUser})
             const response = await api.updateUser(updatedUser)
             dispatch(setEntities(response))
         }

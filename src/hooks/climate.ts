@@ -1,110 +1,71 @@
 import API from '../api'
-import { ClimateNorms, Station } from '../types/climate'
+import { Station } from '../types/climate'
 
-const CLIMATE_DATA_TYPES = {
-    dailyMaxTemp: 'DLY-TMAX-NORMAL',
-    dailyMinTemp: 'DLY-TMIN-NORMAL',
-    dailyGdd40: 'DLY-GRDD-BASE40',
-    dailyPrecip50: 'DLY-PRCP-50PCTL',
+const dailyMaxTemp: 'dailyMaxTemp' = 'dailyMaxTemp'
+const dailyMinTemp: 'dailyMinTemp' = 'dailyMinTemp'
+const dailyGdd40: 'dailyGdd40' = 'dailyGdd40'
+const dailyPrecip50: 'dailyPrecip50' = 'dailyPrecip50'
+
+const NORMS_DATA_TYPES = {
+    'DLY-TMAX-NORMAL': dailyMaxTemp,
+    'DLY-TMIN-NORMAL': dailyMinTemp,
+    'DLY-GRDD-BASE40': dailyGdd40,
+    'DLY-PRCP-50PCTL': dailyPrecip50,
+}
+interface StringObject { [key: string]: string }
+
+const WEATHER_DATA_TYPES = {
+    TAVG: 'avgTemp',
+    TMAX: 'maxTemp',
+    TMIN: 'minTemp'
 }
 
-const HISTORICAL_DATA_TYPES = {
-    avgTemp: 'TAVG',
-}
-
-const ALT_HISTORICAL_DATA_TYPES = {
-    maxTemp: 'TMAX',
-    minTemp: 'TMIN',
-}
-
-const arrayifyData = <T>(data: any[], keys: any[]): T[] => {
-    const object = data
-        .map(n => n.results)
-        .filter(Boolean)
-        .reduce((acc: any, results: any, idx: number) => {
-            const key = keys[idx]
-
-            results.forEach((day: any) => {
-                const { date } = day
-
-                if (acc[date]) {
-                    acc[date] = { ...acc[date], [key]: day }
-                } else {
-                    acc[date] = { [key]: day }
-                }
-            })
-
-            return acc
+const updateKeysWithMapping = (data: object[], mapping: StringObject): StringObject[] => {
+    return data.map(obj => {
+        return Object.entries(obj).reduce((acc, entry) => {
+            const [ key, value ] = entry
+            const newKey = mapping[key] || key.toLowerCase()
+            return {
+                ...acc,
+                [newKey]: value
+            }
         }, {})
-    return Object.values(object)
+
+    })
 }
 
 export const getClimateNorms = async (
     stationId: string,
-): Promise<ClimateNorms> => {
-    const normsKeys = Object.keys(CLIMATE_DATA_TYPES)
-
-    const processingNorms = Object.values(CLIMATE_DATA_TYPES).map(
-        datatypeId => {
-            return API.getClimateNorms(stationId, datatypeId)
-        },
-    )
-
-    const norms = await Promise.all(processingNorms)
-
-    return arrayifyData(norms, normsKeys)
+): Promise<any> => {
+    const climateKeys = Object.keys(NORMS_DATA_TYPES)
+    const newNorms = await API.getNormals(stationId.split(':')[1], climateKeys)
+    const norms = updateKeysWithMapping(newNorms, NORMS_DATA_TYPES)
+    return norms
 }
 
-const getWeatherForKeys = async (
-    keys: { [key: string]: string },
-    stationId: string,
-) => {
-    const weatherKeys = Object.keys(keys)
-    const processingWeather = Object.values(keys).map(datatypeId => {
-        return API.getHistoricalWeather(stationId, datatypeId)
-    })
-
-    const weather = await Promise.all(processingWeather)
-    return { weather, weatherKeys }
+const trimToNumber = (stringNum: string) => {
+    return +stringNum.trim()
 }
-
-const deriveAvgTemp = (weather: any[]) => {
-    return weather
-        .filter(({ minTemp, maxTemp }) => minTemp && maxTemp)
-        .map(({ minTemp, maxTemp }) => {
-            const { value: min } = minTemp
-            const { value: max } = maxTemp
-            const avgTemp = (max + min) / 2
-            return {
-                avgTemp: {
-                    ...minTemp,
-                    value: avgTemp,
-                    datatype: 'TAVG',
-                },
-            }
-        })
-}
-
 export const getHistoricalWeather = async (stationId: string): Promise<any> => {
-    const { weather, weatherKeys } = await getWeatherForKeys(
-        HISTORICAL_DATA_TYPES,
-        stationId,
-    )
-    if (!weather[0].results) {
-        const { weather, weatherKeys } = await getWeatherForKeys(
-            ALT_HISTORICAL_DATA_TYPES,
-            stationId,
-        )
-        const arrayified = arrayifyData(weather, weatherKeys)
-        try {
-            const derived = deriveAvgTemp(arrayified)
-            return derived
-        } catch (error) {
-            console.log({ error })
-        }
-    }
+    const newKeys = Object.keys(WEATHER_DATA_TYPES)
+    const newWeather = await API.getYtdWeather(stationId.split(':')[1], newKeys)
+    const weather = updateKeysWithMapping(newWeather, WEATHER_DATA_TYPES)
 
-    return arrayifyData(weather, weatherKeys)
+    return weather.map((obj: any) => {
+        const { maxTemp, minTemp, avgTemp } = obj
+        if ([maxTemp, minTemp].includes(undefined)) {
+            return undefined
+        }
+        const max = trimToNumber(maxTemp)
+        const min = trimToNumber(minTemp)
+        const avg = avgTemp ? trimToNumber(avgTemp) : ((max + min) / 2)
+        return {
+            ...obj,
+            maxTemp: max,
+            minTemp: min,
+            avgTemp: avg,
+        }
+    }).filter(Boolean)
 }
 
 export const getNearbyStations = async (

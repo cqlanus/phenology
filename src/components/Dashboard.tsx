@@ -56,7 +56,7 @@ interface Props {
 
 const Dashboard = ({ user, selectStation }: Props) => {
     if (user === undefined) {
-        return <div />
+        return null
     }
 
     const renderGardens = () => {

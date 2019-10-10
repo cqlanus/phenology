@@ -17,11 +17,11 @@ const Container = styled.div`
 `
 
 const ClimateNorms = ({ norms }: Props) => {
-    if (!norms || norms.length === 0) { return <div/> }
-    const convertToTemp = (key: string) => (d: any) => d[key] && d[key].value / 10
+    if (!norms || norms.length === 0) { return null }
+    const convertToTemp = (key: string) => (d: any) => d[key] && d[key] / 10
 
-    const convertGdd = (key: string) => (d: any) => d[key] && d[key].value > 0 ? d[key].value : 0
-    const convertPrecip = (key: string) => (d: any) => d[key] && d[key].value > 0 ? d[key].value / 10 : 0
+    const convertGdd = (key: string) => (d: any) => d[key] && d[key] > 0 ? d[key] : 0
+    const convertPrecip = (key: string) => (d: any) => d[key] && d[key] > 0 ? d[key] / 10 : 0
     const formatDate = (d: any) => format(d.dailyMaxTemp.date, "M/D")
     
     return (
