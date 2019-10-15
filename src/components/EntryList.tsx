@@ -4,9 +4,8 @@ import { Entry } from '../types/user'
 import { Card, Icon, Feed, Accordion, Modal } from 'semantic-ui-react'
 import moment from 'moment'
 import { PhenophaseEntity } from '../redux/entities'
-// import AddEntryForm from '../containers/AddEntryForm'
 import EditEntryForm from '../containers/EditEntryForm'
-import { YtdWeather } from '../types/weather'
+import { YtdWeather, DailyTemp } from '../types/weather'
 
 interface Props {
     entries: Entry[]
@@ -27,7 +26,7 @@ const Title = styled.h4`
     margin: 0;
 `
 
-const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: Props) => {
+const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting, ytdWeather }: Props) => {
     const [isOpen, setOpen] = useState(false)
     const [isFormOpen, setFormOpen] = useState(false)
 
@@ -52,6 +51,13 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: 
         </Modal>
     )
 
+    const findSameDate = (e: Entry) => (d: DailyTemp) => {
+        const created = moment(e.created)
+        const date = moment(d.date)
+        const dayOfYear = date.get("dayOfYear")
+        return dayOfYear === created.get("dayOfYear")
+    }
+
     const renderEntry = (phenophases: PhenophaseEntity) => (entry: Entry) => {
         const phenophase = phenophases[entry.phenophase]
         const created = moment(entry.created)
@@ -66,6 +72,7 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: 
                     date={formatted}
                     summary={phenophase && phenophase.text}
                     extraText={`Notes: ${entry.note}`}
+                    meta={`GDD: ${entry.gdd}°C\nYTDGDD: ${entry.ytdGdd}°C`}
                 />
                 <Feed.Label>{renderEditEntry(entry.entryId)}</Feed.Label>
             </Feed.Event>

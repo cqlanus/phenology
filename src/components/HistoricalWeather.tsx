@@ -21,7 +21,7 @@ const Container = styled.div`
 const HistoricalWeather = ({ ytdWeather}: Props) => {
     const [ base, setBase ] = useState(40)
     
-    if (ytdWeather.length === 0) { return <div/> }
+    if (ytdWeather.length === 0) { return null }
     
     const calcYtdGdd = (val: any, name: string, props: any) => {
         const { payload: { avgTemp: { date }} } = props

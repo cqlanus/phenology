@@ -92,4 +92,6 @@ type Entry {
     category: PhenophaseCategory
     phenophase: Phenophase!
     note: String
+    gdd: Int
+    ytdGdd: Int
 }

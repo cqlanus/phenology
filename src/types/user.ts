@@ -97,6 +97,8 @@ export interface EntryArgs {
     created: string
     note: string
     phenophase: string
+    gdd?: number
+    ytdGdd?: number
 }
 
 export class Entry {
@@ -105,13 +107,17 @@ export class Entry {
     created: string
     note: string
     phenophase: string
+    gdd?: number
+    ytdGdd?: number
 
-    constructor({ entryId, category, created, note, phenophase }: EntryArgs) {
+    constructor({ entryId, category, created, note, phenophase, gdd, ytdGdd }: EntryArgs) {
         this.entryId = entryId
         this.category = category
         this.created = created
         this.note = note
         this.phenophase = phenophase
+        this.gdd = gdd
+        this.ytdGdd = ytdGdd
     }
 
     static of(entryArgs: EntryArgs) {

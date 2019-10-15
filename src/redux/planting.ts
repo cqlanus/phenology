@@ -6,6 +6,7 @@ import { selectUser } from './user'
 import api from '../api'
 import { setEntities } from './entities'
 import { QtyPlant } from '../types/entities'
+import { getGddForEntry } from '../utils/weather'
 
 /* Action creators */
 const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
@@ -36,12 +37,18 @@ export const setPlanting = (
 export const addEntryToPlanting = (
     addEntryInput: AddEntryInput,
     plantingId: string,
-) => async (dispatch: any) => {
+) => async (dispatch: any, getState: () => AppState) => {
     try {
+        const { ytdWeather } = getState().weather
+        const { gdd, ytdGdd } = getGddForEntry(addEntryInput, ytdWeather)
+
         const entry = Entry.of({
             ...addEntryInput,
+            gdd, 
+            ytdGdd,
             entryId: uuid(),
         })
+
         await dispatch(changeEntries(entry, plantingId, appendEntry))
     } catch (error) {
         console.log({ error })

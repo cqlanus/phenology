@@ -3,6 +3,7 @@ import { createSelector } from "reselect"
 import { selectEntryEntity } from "./entities"
 import { Entry, Planting, AddEntryInput } from "../types/user"
 import { selectPlanting, changeEntries } from "./planting"
+import { getGddForEntry } from "../utils/weather"
 
 /* Action constants */
 const SET_ENTRY: 'SET_ENTRY' = 'SET_ENTRY'
@@ -44,8 +45,13 @@ export const removeEntry = () => async (dispatch: any, getState: any) => {
 const replaceEntry = (planting: Planting, entry: Entry) => planting.entries.map(e => entry.entryId === e.entryId ? entry : e)
 export const editEntry = (editEntryInput: AddEntryInput, plantingId: string) => async (dispatch: any, getState: any) => {
     try {
+        const { ytdWeather } = getState().weather
+        const { gdd, ytdGdd } = getGddForEntry(editEntryInput, ytdWeather)
+
         const entry = Entry.of({
             ...editEntryInput,
+            gdd, 
+            ytdGdd,
             entryId: getSelectedEntry(getState()) || ''
         })
         await dispatch(changeEntries(entry, plantingId, replaceEntry))

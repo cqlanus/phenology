@@ -22,6 +22,8 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
             category
             created
             note
+            gdd
+            ytdGdd
           }
           plant {
             commonName

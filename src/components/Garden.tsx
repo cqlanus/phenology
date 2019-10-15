@@ -122,9 +122,9 @@ const Garden = ({
 
     useEffect(() => {
         if (garden && garden.station) {
-            getHistoricalWeather(garden.station.stationId)    
+            getHistoricalWeather(garden.station.stationId)
         }
-    })
+    }, [])
 
     if (!garden) {
         return <div />
