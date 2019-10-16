@@ -18,6 +18,7 @@ import CreateGarden from './containers/CreateGarden';
 import Dashboard from './containers/Dashboard';
 import StationData from './containers/StationData'
 import EntryReview from './containers/EntryReview';
+import BulkAddEntry from './containers/BulkAddEntry';
 
 Amplify.configure(awsconfig)
 
@@ -43,6 +44,10 @@ const App: React.FC = () => {
             <Route path="/garden/:gardenId/entries" render={props => {
                 const selectedGarden = selectGardenId(store.getState())
                 return selectedGarden ? <EntryReview {...props} /> : <Redirect to="/home" />
+            } } />
+            <Route path="/garden/:gardenId/bulkadd" render={props => {
+                const selectedGarden = selectGardenId(store.getState())
+                return selectedGarden ? <BulkAddEntry {...props} /> : <Redirect to="/home" />
             } } />
             <Route path="/station/:stationId" render={(props: any) => {
                 const station = getSelectedStation(store.getState())

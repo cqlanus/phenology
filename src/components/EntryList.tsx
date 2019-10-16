@@ -51,13 +51,6 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting, yt
         </Modal>
     )
 
-    const findSameDate = (e: Entry) => (d: DailyTemp) => {
-        const created = moment(e.created)
-        const date = moment(d.date)
-        const dayOfYear = date.get("dayOfYear")
-        return dayOfYear === created.get("dayOfYear")
-    }
-
     const renderEntry = (phenophases: PhenophaseEntity) => (entry: Entry) => {
         const phenophase = phenophases[entry.phenophase]
         const created = moment(entry.created)

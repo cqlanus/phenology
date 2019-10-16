@@ -169,10 +169,16 @@ const Garden = ({
             <Container>
                 <AddPlantModal disabled={isEditing} />
             </Container>
+            <Container>
+                <Link to={`/garden/${garden.gardenId}/bulkadd`}>
+                    <Button primary fluid >Bulk Add Entries</Button>
+                </Link>
+            </Container>
             {renderPlantings()}
             <Link to={`/garden/${garden.gardenId}/entries`}>
                 <Button primary fluid >Review Entries</Button>
             </Link>
+
         </CenterWrapper>
     )
 }
