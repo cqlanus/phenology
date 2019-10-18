@@ -1,17 +1,18 @@
 import EntryList from '../components/EntryList'
 import { connect } from 'react-redux'
 import { AppState } from '../redux'
-import { setEntry } from '../redux/entry'
+import { setEntry, selectOrderedEntries } from '../redux/entry'
 import { setPlanting } from '../redux/planting'
 
 const mapState = (state: AppState, ownProps: any) => {
     return {
+        entries: selectOrderedEntries(state, ownProps),
         phenophases: state.phenophase,
         plantingId: ownProps.plantingId,
         ytdWeather: state.weather.ytdWeather
     }
 }
-
+ 
 const mapDispatch = {
     setEntry,
     setPlanting

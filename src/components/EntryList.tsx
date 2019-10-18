@@ -5,7 +5,7 @@ import { Card, Icon, Feed, Accordion, Modal } from 'semantic-ui-react'
 import moment from 'moment'
 import { PhenophaseEntity } from '../redux/entities'
 import EditEntryForm from '../containers/EditEntryForm'
-import { YtdWeather, DailyTemp } from '../types/weather'
+import { YtdWeather } from '../types/weather'
 
 interface Props {
     entries: Entry[]

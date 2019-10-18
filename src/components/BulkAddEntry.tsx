@@ -6,6 +6,7 @@ import phenophaseCategories from '../data/phenophase.json'
 import CenterWrapper from './CenterWrapper'
 import { withNavBar } from '../containers/NavBar'
 import { Garden, Planting } from '../types/user.js'
+import { BulkEntries } from '../redux/entry'
 
 interface Phenophase {
     key: string
@@ -30,22 +31,22 @@ const PlantingContainer = styled.div`
 interface BulkEntryCardProps {
     phase: Phenophase
     plantings: Planting[]
-    handleBulkEntry: (phase: Phenophase) => (planting: Planting) => void
+    handleBulkEntry: (categoory: string, phase: Phenophase) => (planting: Planting) => void
     bulkEntries: any
     date: string
+    category: string
 }
-const BulkEntryCard = ({ phase, plantings, handleBulkEntry, bulkEntries, date }: BulkEntryCardProps) => {
+const BulkEntryCard = ({ phase, plantings, handleBulkEntry, bulkEntries, date, category }: BulkEntryCardProps) => {
     const [isOpen, setOpen] = useState(false)
 
     const toggleOpen = () => setOpen(!isOpen)
 
-    const handleClick = (planting: Planting) => () => handleBulkEntry(phase)(planting)
+    const handleClick = (planting: Planting) => () => handleBulkEntry(category, phase)(planting)
     
     const isActive = (planting: Planting) => {
-        const plantingsForPhase = bulkEntries[phase.value]
-
-        if (plantingsForPhase) {
-            return !!plantingsForPhase[planting.plantingId]
+        const entriesForPlanting = bulkEntries[planting.plantingId]
+        if (entriesForPlanting) {
+            return !!entriesForPlanting[phase.value]
         }
 
         return false
@@ -72,11 +73,12 @@ const BulkEntryCard = ({ phase, plantings, handleBulkEntry, bulkEntries, date }:
 
 interface Props {
     garden?: Garden
+    bulkAddEntry: (bulk: BulkEntries) => void
 }
 
 const initialBulkEntries: { [key: string]: any } = {}
 
-const BulkAddEntry = ({ garden }: Props & RouteComponentProps) => {
+const BulkAddEntry = ({ garden, bulkAddEntry }: Props & RouteComponentProps) => {
     const [ date, setDate ] = useState()
     const [ bulkEntries, setBulkEntries ] = useState(initialBulkEntries)
     
@@ -84,40 +86,35 @@ const BulkAddEntry = ({ garden }: Props & RouteComponentProps) => {
         return null
     }
 
-    console.log({bulkEntries})
-    
     const { plantings } = garden
     const handleDate = (e: React.ChangeEvent, {value}: InputOnChangeData) => {
          setDate(value)
     }
-
-    const handleBulkEntry = (phase: Phenophase) => (planting: Planting) => {
-        const plantingsForPhase = bulkEntries[phase.value]
-        const { plantingId } = planting
-        let updatedBulkEntries = {}
-        if (plantingsForPhase) {
-            const specificPlanting = plantingsForPhase[plantingId]
-            let updatedPlantingsForPhase = {}
-            if (specificPlanting) {
-                const { [plantingId]: id, ...restOffPlantingsForPhase } = plantingsForPhase
-                updatedPlantingsForPhase = restOffPlantingsForPhase
-            } else {
-                updatedPlantingsForPhase = { ...plantingsForPhase, [plantingId]: plantingId }
-            }
-            updatedBulkEntries = {
-                ...bulkEntries,
-                [phase.value]: updatedPlantingsForPhase
-            }
-            
-        } else {
-            updatedBulkEntries = {
-                ...bulkEntries,
-                [phase.value]: {
-                   [plantingId]: plantingId 
-                }
-            }
+    
+    const handleSubmit = () => bulkAddEntry(bulkEntries)
+    
+    const handleBulkEntry = (category: string, phase: Phenophase) => (planting: Planting) => {
+        const entryForPlanting = {
+            category,
+            created: date,
+            phenophase: phase.value,
+            note: "asdf"
         }
+
+        const { plantingId } = planting
+        const bulkEntriesForPlanting = bulkEntries[plantingId]
+        let updatedBulkEntriesForPlanting = {
+            ...bulkEntriesForPlanting,
+            [phase.value]: entryForPlanting
+        }
+
+        const updatedBulkEntries = {
+            ...bulkEntries,
+            [plantingId]: updatedBulkEntriesForPlanting
+        }
+
         setBulkEntries(updatedBulkEntries)
+        
     }
 
     const categories: PhenophaseCategories = phenophaseCategories
@@ -137,6 +134,7 @@ const BulkAddEntry = ({ garden }: Props & RouteComponentProps) => {
                                     key={phase.key}
                                     phase={phase}
                                     plantings={plantings}
+                                    category={category}
                                     handleBulkEntry={handleBulkEntry}
                                     bulkEntries={bulkEntries}
                                     date={date}
@@ -146,7 +144,7 @@ const BulkAddEntry = ({ garden }: Props & RouteComponentProps) => {
                     </CategoryContainer>
                 )
             })}
-            <Button fluid primary>
+            <Button fluid primary onClick={handleSubmit}>
                 Add All Entries
             </Button>
         </CenterWrapper>

@@ -1,12 +1,11 @@
 import { AppState } from '.'
-import { AddEntryInput, Entry, Planting, Garden, Plant } from '../types/user'
+import { Planting, Garden, Plant } from '../types/user'
 import uuid from 'uuid'
 import { selectGarden, editUserGardens } from './garden'
 import { selectUser } from './user'
 import api from '../api'
 import { setEntities } from './entities'
 import { QtyPlant } from '../types/entities'
-import { getGddForEntry } from '../utils/weather'
 
 /* Action creators */
 const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
@@ -34,64 +33,6 @@ export const setPlanting = (
 }
 
 /* Thunks */
-export const addEntryToPlanting = (
-    addEntryInput: AddEntryInput,
-    plantingId: string,
-) => async (dispatch: any, getState: () => AppState) => {
-    try {
-        const { ytdWeather } = getState().weather
-        const { gdd, ytdGdd } = getGddForEntry(addEntryInput, ytdWeather)
-
-        const entry = Entry.of({
-            ...addEntryInput,
-            gdd, 
-            ytdGdd,
-            entryId: uuid(),
-        })
-
-        await dispatch(changeEntries(entry, plantingId, appendEntry))
-    } catch (error) {
-        console.log({ error })
-    }
-}
-
-const appendEntry = (planting: Planting, entry: Entry) => [
-    ...planting.entries,
-    entry,
-]
-
-type EntryCallback = (planting: Planting, entry: Entry) => Entry[]
-export const changeEntries = (
-    entry: Entry,
-    plantingId: string,
-    cb: EntryCallback,
-) => async (dispatch: any, getState: any) => {
-    const builtGarden = selectGarden(getState())
-    const builtUser = selectUser(getState())
-
-    if (builtGarden) {
-        const { plantings } = builtGarden
-        const updatedPlantings = plantings.map(p => {
-            if (p.plantingId === plantingId) {
-                const entries = cb(p, entry)
-                return Planting.of({ ...p, entries })
-            } else {
-                return p
-            }
-        })
-        const updatedGarden = Garden.of({
-            ...builtGarden,
-            plantings: updatedPlantings,
-        })
-        if (builtUser) {
-            const updatedUser = editUserGardens(builtUser, updatedGarden)
-            console.log({updatedUser})
-            const response = await api.updateUser(updatedUser)
-            dispatch(setEntities(response))
-        }
-    }
-}
-
 interface Structure {
     [key: string]: Planting
 }
