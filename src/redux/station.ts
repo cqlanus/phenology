@@ -3,7 +3,7 @@ import { Station, StationArgs } from '../types/climate'
 import { getCounty, selectCounty } from './county'
 import { AppState } from '.'
 import { createSelector } from 'reselect'
-import { selectGarden, editUserGardens } from './garden'
+import { editUserGardens } from './garden'
 import { selectUser } from './user'
 import { Garden } from '../types/user'
 import { setEntities } from './entities'
@@ -89,11 +89,6 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
         console.log({ error })
         dispatch(getStationsFailed(error))
     }
-    // return {
-    //     types: [ GET_STATIONS_START, GET_STATIONS_COMPLETE, GET_STATIONS_FAILED ],
-    //     callAPI: () => API.getNearbyStations(countyId),
-    //     station: { countyId }
-    // }
 }
 
 export const markStationAsFavorite = (

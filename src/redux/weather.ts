@@ -37,9 +37,11 @@ export const getHistoricalWeather = (stationId: string) => async (dispatch: any)
     try {
         dispatch({ type: GET_HISTORICAL_WEATHER_START })
         const ytdWeather = await getWeather(stationId)
+        console.log({ytdWeather})
         dispatch({ type: GET_HISTORICAL_WEATHER_COMPLETE, response: ytdWeather })
         
     } catch (error) {
+        console.log({error})
         dispatch({ type: GET_HISTORICAL_WEATHER_FAILED, error })
         
     }

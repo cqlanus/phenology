@@ -1,12 +1,7 @@
-import { API, graphqlOperation } from 'aws-amplify';
-
 import { User, Garden, Planting, Entry } from '../types/entities'
 
 import api from '../api/index'
 import { AppState } from '.'
-import { createUser } from '../graphql/mutations'
-
-import {entities} from '../data/entities.js'
 import { AuthUser } from './auth'
 import { getPlants } from './plants';
 
@@ -91,15 +86,15 @@ export const getEntities = () => async (dispatch: any) => {
     }
 }
 
-export const addUser = async () => {
-    try {
-        const [ input ] = entities
-        const response = await API.graphql(graphqlOperation(createUser, {input}))
+// export const addUser = async () => {
+//     try {
+//         const [ input ] = entities
+//         const response = await API.graphql(graphqlOperation(createUser, {input}))
         
-    } catch (error) {
-        console.log({error})
-    }
-}
+//     } catch (error) {
+//         console.log({error})
+//     }
+// }
 
 export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
     try {

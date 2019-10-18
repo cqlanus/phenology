@@ -2,7 +2,8 @@ import AddEntryForm from '../components/AddEntryForm'
 import { connect } from 'react-redux'
 
 import { AppState } from '../redux'
-import { selectPlanting, addEntryToPlanting } from '../redux/planting'
+import { selectPlanting } from '../redux/planting'
+import { addEntryToPlanting } from '../redux/entry'
 
 const mapState = (state: AppState) => {
     return {

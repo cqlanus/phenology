@@ -67,6 +67,8 @@ export type EntryInput = {
   category?: PhenophaseCategory | null,
   phenophase: Phenophase,
   note?: string | null,
+  gdd?: number | null,
+  ytdGdd?: number | null,
 };
 
 export enum PhenophaseCategory {

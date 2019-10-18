@@ -1,16 +1,9 @@
-interface DailyNorm {
-    date: string,
-    value: number,
-    attributes: string,
-    datatype: string,
-    station: string
-}
-
-
+export interface StringObject { [key: string]: string }
 interface ClimateNormDay {
-    dailyMaxTemp: DailyNorm,
-    dailyMinTemp: DailyNorm,
-    dailyGdd40: DailyNorm,
+    dailyMaxTemp: number,
+    dailyMinTemp: number,
+    dailyGdd40: number,
+    dailyPrecip50: number,
 }
 
 export type ClimateNorms = ClimateNormDay[]

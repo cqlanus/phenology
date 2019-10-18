@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { ButtonGroup, Button } from 'semantic-ui-react'
 
 import { YtdWeather } from '../types/weather'
+import { calculateGdd } from '../utils/weather'
 
 interface Props {
     ytdWeather: YtdWeather
@@ -20,20 +21,8 @@ const Container = styled.div`
 const HistoricalWeather = ({ ytdWeather}: Props) => {
     const [ base, setBase ] = useState(40)
     
-    if (ytdWeather.length === 0) { return <div/> }
+    if (ytdWeather.length === 0) { return null }
     
-
-    const fToC = (f: number) => (f - 32) / (1.8)
-
-    const calculateGdd = (baseTemp: number = base) => (d: any) => {
-        const { value } = d.avgTemp
-        const convertedTemp = fToC(baseTemp)
-        const decimalValue = value / 10
-        return decimalValue > convertedTemp
-            ? decimalValue - convertedTemp
-            : 0
-    }
-
     const calcYtdGdd = (val: any, name: string, props: any) => {
         const { payload: { avgTemp: { date }} } = props
         const index = ytdWeather.findIndex((data: any) => data.avgTemp.date === date)

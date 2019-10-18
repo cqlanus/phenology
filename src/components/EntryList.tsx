@@ -4,8 +4,8 @@ import { Entry } from '../types/user'
 import { Card, Icon, Feed, Accordion, Modal } from 'semantic-ui-react'
 import moment from 'moment'
 import { PhenophaseEntity } from '../redux/entities'
-// import AddEntryForm from '../containers/AddEntryForm'
 import EditEntryForm from '../containers/EditEntryForm'
+import { YtdWeather } from '../types/weather'
 
 interface Props {
     entries: Entry[]
@@ -13,6 +13,7 @@ interface Props {
     setEntry: (entryId?: string) => void
     setPlanting: (plantingId?: string) => void
     plantingId: string | undefined
+    ytdWeather: YtdWeather
 }
 
 const Row = styled.div`
@@ -25,7 +26,7 @@ const Title = styled.h4`
     margin: 0;
 `
 
-const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: Props) => {
+const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting, ytdWeather }: Props) => {
     const [isOpen, setOpen] = useState(false)
     const [isFormOpen, setFormOpen] = useState(false)
 
@@ -64,6 +65,7 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting }: 
                     date={formatted}
                     summary={phenophase && phenophase.text}
                     extraText={`Notes: ${entry.note}`}
+                    meta={`GDD: ${entry.gdd}°C\nYTDGDD: ${entry.ytdGdd}°C`}
                 />
                 <Feed.Label>{renderEditEntry(entry.entryId)}</Feed.Label>
             </Feed.Event>

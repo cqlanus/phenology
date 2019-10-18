@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { RouteComponentProps, withRouter, Link } from 'react-router-dom'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
 import AddPlantForm from '../containers/AddPlantForm'
@@ -14,6 +14,7 @@ interface Props {
     setPlanting: (plantingId: string) => void
     removeGarden: (gardenId: string) => void
     removePlanting: (plantingId: string) => void
+    getHistoricalWeather: (stationId: string) => void
 }
 
 const Container = styled.div`
@@ -115,8 +116,15 @@ const Garden = ({
     setPlanting,
     removeGarden,
     removePlanting,
+    getHistoricalWeather
 }: Props) => {
     const [isEditing, setEditing] = useState(false)
+
+    useEffect(() => {
+        if (garden && garden.station) {
+            getHistoricalWeather(garden.station.stationId)
+        }
+    }, [])
 
     if (!garden) {
         return <div />
@@ -161,7 +169,16 @@ const Garden = ({
             <Container>
                 <AddPlantModal disabled={isEditing} />
             </Container>
+            <Container>
+                <Link to={`/garden/${garden.gardenId}/bulkadd`}>
+                    <Button primary fluid >Bulk Add Entries</Button>
+                </Link>
+            </Container>
             {renderPlantings()}
+            <Link to={`/garden/${garden.gardenId}/entries`}>
+                <Button primary fluid >Review Entries</Button>
+            </Link>
+
         </CenterWrapper>
     )
 }

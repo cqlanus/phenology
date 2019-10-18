@@ -39,6 +39,8 @@ export const getUserByUserName = `query GetUserByUserName(
                   created
                   note
                   category
+                  gdd
+                  ytdGdd
               }
           }
         }

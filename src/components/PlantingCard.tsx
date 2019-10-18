@@ -66,13 +66,9 @@ const PlantingCard = ({ planting, isEditing, setPlanting, removePlanting }: Plan
                     size="tiny"
                     src="http://lorempixel.com/200/200/food/"
                 />
-                <AddEntryModal
-                    plantingId={planting.plantingId}
-                    setPlanting={setPlanting}
-                />
+                
                 <Card.Header>{planting.plant.commonName}</Card.Header>
                 <Card.Meta>{planting.plant.latinName}</Card.Meta>
-                <Card.Meta>{planting.plantingId}</Card.Meta>
                 <LabelContainer>
                     <Label>
                         Qty
@@ -102,10 +98,15 @@ const PlantingCard = ({ planting, isEditing, setPlanting, removePlanting }: Plan
             )}
             <Card.Content>
                 <ListContainer>
+                <AddEntryModal
+                        plantingId={planting.plantingId}
+                        setPlanting={setPlanting}
+                    />
                     <EntryList
                         entries={planting.entries}
                         plantingId={planting.plantingId}
                     />
+                    
                 </ListContainer>
             </Card.Content>
         </Card>

@@ -13,7 +13,7 @@ const mapState = (state: AppState, { garden, history }: any) => {
 }
 
 const mapDispatch = {
-    setGarden
+    setGarden,
 }
 
 export default withRouter(
