@@ -103,10 +103,18 @@ const BulkAddEntry = ({ garden, bulkAddEntry }: Props & RouteComponentProps) => 
 
         const { plantingId } = planting
         const bulkEntriesForPlanting = bulkEntries[plantingId]
-        let updatedBulkEntriesForPlanting = {
-            ...bulkEntriesForPlanting,
-            [phase.value]: entryForPlanting
+        const previousEntry = bulkEntriesForPlanting && bulkEntriesForPlanting[phase.value]
+        let updatedBulkEntriesForPlanting = {}
+        if (previousEntry) {
+            const { [phase.value]: removed, ...restOfPlanting } = previousEntry
+            updatedBulkEntriesForPlanting = restOfPlanting
+        } else {
+            updatedBulkEntriesForPlanting = {
+                ...bulkEntriesForPlanting,
+                [phase.value]: entryForPlanting
+            }
         }
+        
 
         const updatedBulkEntries = {
             ...bulkEntries,
