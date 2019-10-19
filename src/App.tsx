@@ -17,7 +17,7 @@ import Garden from './containers/Garden';
 import CreateGarden from './containers/CreateGarden';
 import Dashboard from './containers/Dashboard';
 import StationData from './containers/StationData'
-import EntryReview from './containers/EntryReview';
+import SeasonReview from './containers/SeasonReview';
 import BulkAddEntry from './containers/BulkAddEntry';
 
 Amplify.configure(awsconfig)
@@ -41,9 +41,9 @@ const App: React.FC = () => {
                 const selectedGarden = selectGardenId(store.getState())
                 return selectedGarden ? <Garden {...props} /> : <Redirect to="/home" />
             } } />
-            <Route path="/garden/:gardenId/entries" render={props => {
+            <Route path="/garden/:gardenId/season" render={props => {
                 const selectedGarden = selectGardenId(store.getState())
-                return selectedGarden ? <EntryReview {...props} /> : <Redirect to="/home" />
+                return selectedGarden ? <SeasonReview {...props} /> : <Redirect to="/home" />
             } } />
             <Route path="/garden/:gardenId/bulkadd" render={props => {
                 const selectedGarden = selectGardenId(store.getState())

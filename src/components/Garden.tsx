@@ -175,8 +175,8 @@ const Garden = ({
                 </Link>
             </Container>
             {renderPlantings()}
-            <Link to={`/garden/${garden.gardenId}/entries`}>
-                <Button primary fluid >Review Entries</Button>
+            <Link to={`/garden/${garden.gardenId}/season`}>
+                <Button primary fluid >Review Season</Button>
             </Link>
 
         </CenterWrapper>

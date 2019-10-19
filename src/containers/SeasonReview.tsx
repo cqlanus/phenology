@@ -1,4 +1,4 @@
-import EntryReview from '../components/EntryReview'
+import SeasonReview from '../components/SeasonReview'
 import { connect } from 'react-redux'
 import { AppState } from '../redux'
 import { selectGarden } from '../redux/garden'
@@ -10,4 +10,4 @@ const mapState = (state: AppState) => {
     }
 }
 
-export default connect(mapState)(EntryReview)
+export default connect(mapState)(SeasonReview)
