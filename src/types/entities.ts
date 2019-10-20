@@ -1,3 +1,5 @@
+import { Plant } from "./user";
+
 export interface User {
     id: string
     firstName: string
@@ -15,14 +17,14 @@ export interface Planting {
     qty: number
     entries: string[]
 }
-export interface Plant {
-    id: string,
-    commonName: string,
-    latinName: string,
-    isNative: boolean,
-    type: string
-}
-export type QtyPlant = Plant & { qty: number }
+// export interface Plant {
+//     id: string,
+//     commonName: string,
+//     latinName: string,
+//     isNative: boolean,
+//     type: string
+// }
+// export type QtyPlant = Plant & { qty: number }
 export interface Entry {
     entryId: string
     category: string
@@ -31,4 +33,4 @@ export interface Entry {
     phenophase: string
 }
 
-export type PlantEntity = { [plantId: string]: QtyPlant }
+export type PlantEntity = { [plantId: string]: Plant }

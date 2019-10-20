@@ -1,12 +1,12 @@
 import {useState} from 'react'
-import { QtyPlant } from '../types/entities'
+import { NetworkPlant } from '../types/user'
 
-export interface InitialPlants { [key: string]: QtyPlant }
+export interface InitialPlants { [key: string]: NetworkPlant}
 export const usePlant = () => {
     const initialPlants: InitialPlants = {}
     const [checked, setChecked] = useState(initialPlants)
 
-    const handleCheck = (plant: QtyPlant) => {
+    const handleCheck = (plant: NetworkPlant) => {
         const { commonName } = plant
         let updatedChecked = {}
 

@@ -56,12 +56,21 @@ export class Planting {
     }
 }
 
+export interface NetworkPlant {
+    id: string
+    commonName: string
+    isNative: boolean
+    latinName: string
+    type: string
+}
+
 export interface PlantArgs {
     id: string
     commonName: string
     isNative: boolean
     latinName: string
     type: string
+    qty?: number
 }
 
 export class Plant {
@@ -70,19 +79,23 @@ export class Plant {
     isNative: boolean
     latinName: string
     type: string
+    qty?: number
 
-    constructor({ id, commonName, isNative, latinName, type }: PlantArgs) {
+    constructor({ id, commonName, isNative, latinName, type, qty }: PlantArgs) {
         this.plantId = id
         this.commonName = commonName
         this.latinName = latinName
         this.isNative = isNative
         this.type = type
+        this.qty = qty
     }
 
     static of(plantArgs: PlantArgs) {
         return new Plant(plantArgs)
     }
 }
+
+export type PlantEntity = { [plantId: string]: NetworkPlant }
 
 export interface AddEntryInput {
     category: string

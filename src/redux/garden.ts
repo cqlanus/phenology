@@ -2,8 +2,7 @@ import { createSelector } from "reselect"
 import uuid from 'uuid'
 import { selectGardenEntity, GardenEntity, PlantingEntity, selectPlantingEntity, EntryEntity, selectEntryEntity, setEntities } from "./entities"
 import { AppState } from "."
-import { Garden, Planting, Entry, Plant } from "../types/user"
-import { QtyPlant } from "../types/entities"
+import { Garden, Planting, Entry, Plant, NetworkPlant } from "../types/user"
 import { selectUser } from "./user"
 import api from "../api"
 
@@ -30,7 +29,7 @@ interface BuildGardenArgs {
     allPlants: any
 }
 
-interface Plants { [key: string]: QtyPlant }
+interface Plants { [key: string]: NetworkPlant & { qty: number } }
 export interface AddGardenInput {
     name: string
     plants: Plants
@@ -59,11 +58,12 @@ const addUserGarden = (user: any, garden: Garden) => {
 export const addGardenToUser = ({ name, plants }: AddGardenInput) => async (dispatch: any, getState: any) => {
     try {
         const plantings = Object.values(plants).map(({ qty, ...plant}) => {
+            const quant = qty || 0
             return {
                 plantingId: uuid(),
                 plant: Plant.of(plant),
                 entries: [],
-                qty,
+                qty: quant,
             }
         })
         const garden = {
