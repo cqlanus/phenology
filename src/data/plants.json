@@ -4,97 +4,139 @@
         "commonName": "Snow drops",
         "latinName": "Galanthus nivalis",
         "type": "BULB",
-        "isNative": false
+        "isNative": false,
+        "hasNeedles": false,
+        "isDeciduous": false,
+        "isPerennial": true
     },
     {
         "id": "p2",
         "commonName": "Northern sea oats",
         "latinName": "Chasmanthium latifolium",
         "type": "GRASS",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     },
     {
         "id": "p3",
         "commonName": "Hakone grass",
         "latinName": "Hakonechloa macra",
         "type": "GRASS",
-        "isNative": false
+        "isNative": false,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     },
     {
         "id": "p4",
         "commonName": "Virginia bluebells",
         "latinName": "Mertensia virginica",
         "type": "HERB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     },
     {
         "id": "p5",
         "commonName": "Sweet woodruff",
         "latinName": "Galium odoratum",
         "type": "HERB",
-        "isNative": false
+        "isNative": false,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     },
     {
         "id": "p6",
         "commonName": "Yarrow",
         "latinName": "Achillea millefolium",
         "type": "HERB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     },
     {
         "id": "p7",
         "commonName": "Hellebore",
         "latinName": "Helleborus ballardiae",
         "type": "HERB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": false,
+        "isPerennial": true
     },
     {
         "id": "p8",
         "commonName": "Missouri evening primrose",
         "latinName": "Oenothera macrocarpa",
         "type": "HERB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     },
     {
         "id": "p9",
         "commonName": "Oak leaf hydrangea",
         "latinName": "Hydrangea quercifolia",
         "type": "SHRUB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": false
     },
     {
         "id": "p10",
         "commonName": "Red twig dogwood",
         "latinName": "Cornus alba",
         "type": "SHRUB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": false
     },
     {
         "id": "p11",
         "commonName": "Winterberry",
         "latinName": "Ilex verticillata",
         "type": "SHRUB",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": false
     },
     {
         "id": "p12",
-        "commonName": "Black birch",
+        "commonName": "River birch",
         "latinName": "Betula nigra",
         "type": "TREE",
-        "isNative": true
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": false
     },
     {
         "id": "p13",
         "commonName": "Pagoda dogwood",
         "latinName": "Cornus alternifolia",
         "type": "TREE",
-        "isNative": false
+        "isNative": false,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": false
     },
     {
         "id": "p14",
         "commonName": "Japanese maple",
         "latinName": "Acer palmatum",
         "type": "TREE",
-        "isNative": false
+        "isNative": false,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     }
 ]

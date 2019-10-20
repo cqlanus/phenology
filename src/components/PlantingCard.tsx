@@ -64,7 +64,7 @@ const PlantingCard = ({ planting, isEditing, setPlanting, removePlanting }: Plan
                 <Image
                     floated="left"
                     size="tiny"
-                    src="http://lorempixel.com/200/200/food/"
+                    src={planting.plant.image}
                 />
                 
                 <Card.Header>{planting.plant.commonName}</Card.Header>

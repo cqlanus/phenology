@@ -61,6 +61,7 @@ export interface NetworkPlant {
     commonName: string
     isNative: boolean
     latinName: string
+    image?: string
     type: string
 }
 
@@ -70,6 +71,7 @@ export interface PlantArgs {
     isNative: boolean
     latinName: string
     type: string
+    image?: string
     qty?: number
 }
 
@@ -79,15 +81,19 @@ export class Plant {
     isNative: boolean
     latinName: string
     type: string
+    image?: string
     qty?: number
 
-    constructor({ id, commonName, isNative, latinName, type, qty }: PlantArgs) {
+    constructor({ id, commonName, isNative, latinName, type, qty, image }: PlantArgs) {
         this.plantId = id
         this.commonName = commonName
         this.latinName = latinName
         this.isNative = isNative
         this.type = type
         this.qty = qty
+        if (image) {
+            this.image = image
+        }
     }
 
     static of(plantArgs: PlantArgs) {

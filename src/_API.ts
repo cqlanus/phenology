@@ -7,6 +7,10 @@ export type CreatePlantModelInput = {
   latinName: string,
   type?: PlantType | null,
   isNative?: boolean | null,
+  hasNeedles?: boolean | null,
+  isDeciduous?: boolean | null,
+  isPerennial?: boolean | null,
+  image?: string | null,
 };
 
 export enum PlantType {
@@ -25,6 +29,10 @@ export type UpdatePlantModelInput = {
   latinName?: string | null,
   type?: PlantType | null,
   isNative?: boolean | null,
+  hasNeedles?: boolean | null,
+  isDeciduous?: boolean | null,
+  isPerennial?: boolean | null,
+  image?: string | null,
 };
 
 export type DeletePlantModelInput = {
@@ -59,6 +67,10 @@ export type PlantInput = {
   latinName: string,
   type?: PlantType | null,
   isNative?: boolean | null,
+  hasNeedles?: boolean | null,
+  isDeciduous?: boolean | null,
+  isPerennial?: boolean | null,
+  image?: string | null,
 };
 
 export type EntryInput = {
@@ -132,6 +144,10 @@ export type ModelPlantModelFilterInput = {
   latinName?: ModelStringFilterInput | null,
   type?: ModelPlantTypeFilterInput | null,
   isNative?: ModelBooleanFilterInput | null,
+  hasNeedles?: ModelBooleanFilterInput | null,
+  isDeciduous?: ModelBooleanFilterInput | null,
+  isPerennial?: ModelBooleanFilterInput | null,
+  image?: ModelStringFilterInput | null,
   and?: Array< ModelPlantModelFilterInput | null > | null,
   or?: Array< ModelPlantModelFilterInput | null > | null,
   not?: ModelPlantModelFilterInput | null,
@@ -195,6 +211,10 @@ export type CreatePlantModelMutation = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 
@@ -210,6 +230,10 @@ export type UpdatePlantModelMutation = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 
@@ -225,6 +249,10 @@ export type DeletePlantModelMutation = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 
@@ -339,6 +367,10 @@ export type GetPlantModelQuery = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 
@@ -358,6 +390,10 @@ export type ListPlantModelsQuery = {
       latinName: string,
       type: PlantType | null,
       isNative: boolean | null,
+      hasNeedles: boolean | null,
+      isDeciduous: boolean | null,
+      isPerennial: boolean | null,
+      image: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -455,6 +491,10 @@ export type OnCreatePlantModelSubscription = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 
@@ -466,6 +506,10 @@ export type OnUpdatePlantModelSubscription = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 
@@ -477,6 +521,10 @@ export type OnDeletePlantModelSubscription = {
     latinName: string,
     type: PlantType | null,
     isNative: boolean | null,
+    hasNeedles: boolean | null,
+    isDeciduous: boolean | null,
+    isPerennial: boolean | null,
+    image: string | null,
   } | null,
 };
 

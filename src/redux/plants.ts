@@ -116,6 +116,6 @@ export default (state = initialState, action: GetPlantAction): PlantState => {
 }
 
 /* Selectors */
-export const selectPlants = (state: AppState) => Object.values(state.plants.plants)
+export const selectPlants = (state: AppState) => Object.values(state.plants.plants || [])
 export const selectIsPlantsLoading = (state: AppState) => state.plants.loading
 export const selectJustAdded = (state: AppState) => state.plants.justAdded

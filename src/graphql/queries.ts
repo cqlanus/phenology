@@ -8,6 +8,10 @@ export const getPlantModel = `query GetPlantModel($id: ID!) {
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;
@@ -23,6 +27,10 @@ export const listPlantModels = `query ListPlantModels(
       latinName
       type
       isNative
+      hasNeedles
+      isDeciduous
+      isPerennial
+      image
     }
     nextToken
   }

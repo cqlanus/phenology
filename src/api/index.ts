@@ -4,7 +4,7 @@ import { Coords } from '../types/location'
 import { Entities } from '../redux/entities'
 import { PlantEntity } from '../types/entities'
 import { getUserByUserName } from '../gql/queries'
-import { createUser, createPlantModel } from '../graphql/mutations'
+import { createUser, createPlantModel, updatePlantModel } from '../graphql/mutations'
 import { listPlantModels } from '../graphql/queries'
 import { updateUser } from '../gql/mutations'
 import { AuthUser } from '../redux/auth'
@@ -46,6 +46,7 @@ interface WeatherDataObject {
 
 
 class API {
+    INATURALIST_BASE = `https://api.inaturalist.org/v1`
     BASE_URL = 'https://fierce-atoll-66412.herokuapp.com'
     NOAA_BASE = 'https://www.ncdc.noaa.gov/cdo-web/api/v2'
     NCEI_BASE = 'https://www.ncei.noaa.gov/access/services/data/v1'
@@ -125,9 +126,31 @@ class API {
         return normalizedPlants.entities.plants
     }
 
+    getPlantImage = async (latinName: string): Promise<any> => {
+        if (!latinName) {
+            return null
+        }
+        
+        const url = `${this.INATURALIST_BASE}/taxa?q=${latinName}`
+
+        const { results } = await request(url)
+        const [ firstResult = {} ] = results
+        const { default_photo = {} } = firstResult
+        const { square_url } = default_photo
+
+        if (!square_url) {
+            return this.getPlantImage(latinName.split(' ')[0])
+        }
+        
+        return square_url
+        
+    }
+
     addPlant = async (plantArgs: PlantArgs): Promise<Plant[]> => {
+        const image = await this.getPlantImage(plantArgs.latinName)
         const plant = {
             ...plantArgs,
+            image,
             id: uuid()
         }
         const { data: { createPlantModel: plantModel } } = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
@@ -206,14 +229,28 @@ class API {
         return this.normalizeUser(user)
     }
     
-    addPlants = async (plantList: Plant[]) => {
-        const processingPlants = await plantList.map(async (plant) => await createOnePlant(plant))
+    addPlants = async (plantList: PlantArgs[]) => {
+        const currentInventory = await this.getPlants()
+        
+        const processingPlants = await plantList.map(async (plant) => {
+            const existingPlant = currentInventory && currentInventory[plant.id]
+            if (existingPlant) {
+                return await updateOnePlant(plant)
+            } else {
+                return await this.addPlant(plant)
+            }
+        })
         await Promise.all(processingPlants)
     }
 }
 
 const createOnePlant = async (plant: Plant) => {
     const response = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
+    console.log({plant}, {response})
+}
+
+const updateOnePlant = async (plant: PlantArgs) => {
+    const response = await A.graphql(graphqlOperation(updatePlantModel, { input: plant }))
     console.log({plant}, {response})
 }
 

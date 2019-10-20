@@ -10,6 +10,9 @@ import { withNavBar } from '../containers/NavBar'
 import { Station } from '../types/climate'
 import { Garden } from '../types/user'
 
+import plants from '../data/plants.json'
+import api from '../api'
+
 const Row = styled.div`
     display: flex;
     justify-content: space-between;
@@ -121,9 +124,9 @@ const Dashboard = ({ user, selectStation }: Props) => {
             </Row>
             {renderStations()}
 
-            {/* <Row>
+            <Row>
                 <Button onClick={() => api.addPlants(plants)} >Add Plants</Button>
-            </Row> */}
+            </Row>
             
         </CenterWrapper>
     )

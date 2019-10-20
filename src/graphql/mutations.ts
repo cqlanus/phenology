@@ -8,6 +8,10 @@ export const createPlantModel = `mutation CreatePlantModel($input: CreatePlantMo
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;
@@ -18,6 +22,10 @@ export const updatePlantModel = `mutation UpdatePlantModel($input: UpdatePlantMo
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;
@@ -28,6 +36,10 @@ export const deletePlantModel = `mutation DeletePlantModel($input: DeletePlantMo
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;

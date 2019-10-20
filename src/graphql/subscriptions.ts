@@ -8,6 +8,10 @@ export const onCreatePlantModel = `subscription OnCreatePlantModel {
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;
@@ -18,6 +22,10 @@ export const onUpdatePlantModel = `subscription OnUpdatePlantModel {
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;
@@ -28,6 +36,10 @@ export const onDeletePlantModel = `subscription OnDeletePlantModel {
     latinName
     type
     isNative
+    hasNeedles
+    isDeciduous
+    isPerennial
+    image
   }
 }
 `;

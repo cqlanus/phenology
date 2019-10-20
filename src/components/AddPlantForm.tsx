@@ -1,6 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card, Checkbox, Button, Form, Label, Icon } from 'semantic-ui-react'
+import {
+    Card,
+    Checkbox,
+    Button,
+    Form,
+    Label,
+    Icon,
+    Image,
+} from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
 import { NetworkPlant } from '../types/user'
 import { usePlant } from '../hooks/plant'
@@ -8,9 +16,10 @@ import { PlantSelection } from '../redux/planting'
 
 const Row = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    padding: 1em;
+    /* padding: 1em;
+    padding-top: 0; */
 `
 
 const AddButtonContainer = styled.div`
@@ -27,6 +36,18 @@ const StyledForm = styled(Form)`
     margin-bottom: 4em;
 `
 
+const StyledImage = styled(Image)`
+    &&&&& {
+        margin-right: 1em !important;
+    }
+`
+
+const StyledLabel = styled(Label)`
+    &&& {
+        margin-right: 1em;
+    }
+`
+
 const CheckboxContainer = styled.div`
     flex-grow: 1;
     margin-right: 0.5em;
@@ -36,18 +57,20 @@ const Input = styled(Form.Input)`
     width: 60px;
 `
 
-const RED: "red" = "red"
-const BLUE: "blue" = "blue"
-const PURPLE: "purple" = "purple"
-const ORANGE: "orange" = "orange"
-const TEAL: "teal" = "teal"
+const RED: 'red' = 'red'
+const BLUE: 'blue' = 'blue'
+const PURPLE: 'purple' = 'purple'
+const ORANGE: 'orange' = 'orange'
+const TEAL: 'teal' = 'teal'
 
-const PLANT_TYPE_COLOR_MAPPING: { [key: string]: "red" | "blue" | "purple" | "orange" | "teal" | undefined } = {
+const PLANT_TYPE_COLOR_MAPPING: {
+    [key: string]: 'red' | 'blue' | 'purple' | 'orange' | 'teal' | undefined
+} = {
     GRASS: RED,
     SHRUB: BLUE,
     TREE: PURPLE,
     HERB: ORANGE,
-    BULB: TEAL
+    BULB: TEAL,
 }
 
 const AddPlantForm = ({
@@ -76,28 +99,36 @@ const AddPlantForm = ({
         return (
             <Card key={plant.id} fluid>
                 <Card.Content>
+                    {plant.image && (
+                        <StyledImage floated="left" src={plant.image} />
+                    )}
                     <Card.Header>{plant.commonName}</Card.Header>
                     <Card.Meta>{plant.latinName}</Card.Meta>
-                    {plant.isNative && <Label corner="right" color="green">
-                        <Icon name="check" />
-                    </Label>}
-                    <Label ribbon="right" color={PLANT_TYPE_COLOR_MAPPING[plant.type]} >{plant.type}</Label>
-                </Card.Content>
-                <Row>
-                    <CheckboxContainer>
-                        <Checkbox toggle onChange={handleChange(plant)} />
-                    </CheckboxContainer>
-
-                    {hasChecked && (
-                        <Input
-                            size="mini"
-                            type="number"
-                            defaultValue={1}
-                            min={0}
-                            onChange={updateQty(plant)}
-                        />
+                    {plant.isNative && (
+                        <Label corner="right" color="green">
+                            <Icon name="check" />
+                        </Label>
                     )}
-                </Row>
+                </Card.Content>
+                <Card.Content>
+                    <Row>
+                        <StyledLabel color={PLANT_TYPE_COLOR_MAPPING[plant.type]}>
+                            {plant.type}
+                        </StyledLabel>
+                        <CheckboxContainer>
+                            <Checkbox toggle onChange={handleChange(plant)} />
+                        </CheckboxContainer>
+                        {hasChecked && (
+                            <Input
+                                size="mini"
+                                type="number"
+                                defaultValue={1}
+                                min={0}
+                                onChange={updateQty(plant)}
+                            />
+                        )}
+                    </Row>
+                </Card.Content>
             </Card>
         )
     }

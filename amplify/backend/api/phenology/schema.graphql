@@ -13,6 +13,10 @@ type PlantModel @model @key(name: "ByLatinName", fields: ["latinName"]) {
     latinName: String!
     type: PlantType
     isNative: Boolean
+    hasNeedles: Boolean
+    isDeciduous: Boolean
+    isPerennial: Boolean
+    image: String
 }
 
 type Plant {
@@ -21,6 +25,10 @@ type Plant {
     latinName: String!
     type: PlantType
     isNative: Boolean
+    hasNeedles: Boolean
+    isDeciduous: Boolean
+    isPerennial: Boolean
+    image: String
 }
 
 type User @model @key(name: "ByUserName", fields: ["userName"], queryField: "getUserByUserName") {
