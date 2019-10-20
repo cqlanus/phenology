@@ -18,8 +18,6 @@ const Row = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    /* padding: 1em;
-    padding-top: 0; */
 `
 
 const AddButtonContainer = styled.div`
