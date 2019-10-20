@@ -120,6 +120,11 @@ const Dashboard = ({ user, selectStation }: Props) => {
                 </Link>
             </Row>
             {renderStations()}
+
+            {/* <Row>
+                <Button onClick={() => api.addPlants(plants)} >Add Plants</Button>
+            </Row> */}
+            
         </CenterWrapper>
     )
 }

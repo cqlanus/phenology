@@ -3,12 +3,6 @@ import { connect } from 'react-redux'
 import { AppState } from '../redux'
 import { selectWeather } from '../redux/weather';
 import { Planting } from '../types/user';
-import moment from 'moment';
-
-const formatDate = (date: string) => moment(date).format("M/D")
-/* 
-Where time of year is x coord, plantId is mapped to y coord, color is mapped to phenophase, shape is matched to season
- */
 
 const stripYear = (dateStr: string) => dateStr.split('-').slice(1).join('-')
 const calculateEntries = (plantings: Planting[]) => {

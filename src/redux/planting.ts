@@ -1,11 +1,10 @@
 import { AppState } from '.'
-import { Planting, Garden, Plant } from '../types/user'
+import { Planting, Garden, Plant, NetworkPlant } from '../types/user'
 import uuid from 'uuid'
 import { selectGarden, editUserGardens } from './garden'
 import { selectUser } from './user'
 import api from '../api'
 import { setEntities } from './entities'
-import { QtyPlant } from '../types/entities'
 
 /* Action creators */
 const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
@@ -46,42 +45,46 @@ const structurePlantings = (plantings: Planting[]): Structure => {
 }
 
 export interface PlantSelection {
-    [key: string]: QtyPlant
+    [key: string]: NetworkPlant & { qty: number }
 }
 export const addPlantings = (selection: PlantSelection) => async (
     dispatch: any,
-    getState: any,
 ) => {
-
-    const addSelection = (plantings: Planting[]) => {
-        const structuredPlantings = structurePlantings(plantings)
-        return Object.values(selection).reduce(
-            (acc: Structure, qtyPlant: QtyPlant) => {
-                const { qty, ...plant } = qtyPlant
-                const { commonName } = plant
-                let existingPlant = acc[commonName]
-                let planting
-                if (existingPlant) {
-                    const newQty = existingPlant.qty + qty
-                    planting = Planting.of({ ...existingPlant, qty: newQty })
-                } else {
-                    planting = Planting.of({
-                        plantingId: uuid(),
-                        plant: Plant.of(plant),
-                        qty,
-                        entries: [],
-                    })
-                }
-                return {
-                    ...acc,
-                    [commonName]: planting,
-                }
-            },
-            structuredPlantings,
-        )
+    try {
+        const addSelection = (plantings: Planting[]) => {
+            const structuredPlantings = structurePlantings(plantings)
+            return Object.values(selection).reduce(
+                (acc: Structure, qtyPlant: NetworkPlant & { qty: number }) => {
+                    const { qty, ...plant } = qtyPlant
+                    const { commonName } = plant
+                    let existingPlant = acc[commonName]
+                    const quant = qty || 0
+                    let planting
+                    if (existingPlant) {
+                        const newQty = existingPlant.qty + quant
+                        planting = Planting.of({ ...existingPlant, qty: newQty })
+                    } else {
+                        planting = Planting.of({
+                            plantingId: uuid(),
+                            plant: Plant.of(plant),
+                            qty: quant,
+                            entries: [],
+                        })
+                    }
+                    return {
+                        ...acc,
+                        [commonName]: planting,
+                    }
+                },
+                structuredPlantings,
+            )
+        }
+        
+        await dispatch(changePlanting(addSelection))
+        
+    } catch (error) {
+        console.log({error})
     }
-    
-    await dispatch(changePlanting(addSelection))
 }
 
 export const removePlanting = (plantingId: string) => async (dispatch: any, getState: any) => {
