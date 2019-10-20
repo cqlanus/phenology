@@ -1,15 +1,17 @@
 import { normalize, schema } from 'normalizr'
 import { API as A, graphqlOperation } from 'aws-amplify'
-import plants from '../data/plants.json'
 import { Coords } from '../types/location'
 import { Entities } from '../redux/entities'
-import { QtyPlant, PlantEntity } from '../types/entities'
+import { PlantEntity } from '../types/entities'
 import { getUserByUserName } from '../gql/queries'
-import { createUser } from '../graphql/mutations'
+import { createUser, createPlantModel } from '../graphql/mutations'
+import { listPlantModels } from '../graphql/queries'
 import { updateUser } from '../gql/mutations'
 import { AuthUser } from '../redux/auth'
+import { Plant, PlantArgs } from '../types/user.js'
+import uuid from 'uuid'
 
-const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
+// const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
 
 const request = async (url: string, params?: any) => {
     const response = await fetch(url, params)
@@ -112,22 +114,25 @@ class API {
         return response.results
     }
 
-    getPlants = (): Promise<PlantEntity> => {
+    getPlants = async (): Promise<PlantEntity> => {
         const plant = new schema.Entity('plants')
         const plantSchema = new schema.Array(plant)
 
-        const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(qtyPlants, plantSchema)
-        return new Promise((res) => {
-            setTimeout(() => res(normalizedPlants.entities.plants), 500)
-        })
+        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels))
+
+        const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(plantModels.items, plantSchema)
+        console.log({normalizedPlants})
+        return normalizedPlants.entities.plants
     }
 
-    addPlant = (plant: QtyPlant): Promise<QtyPlant[]> => {
-        
-        return new Promise((res) => {
-            const plants = [ ...qtyPlants, plant]
-            setTimeout(() => res(plants), 500)
-        })
+    addPlant = async (plantArgs: PlantArgs): Promise<Plant[]> => {
+        const plant = {
+            ...plantArgs,
+            id: uuid()
+        }
+        const { data: { createPlantModel: plantModel } } = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
+        console.log({plantModel})
+        return plantModel
     }
     
     getEntities = async (userName = "cqlanus"): Promise<{ entities: Entities }> => {
@@ -201,6 +206,15 @@ class API {
         return this.normalizeUser(user)
     }
     
+    addPlants = async (plantList: Plant[]) => {
+        const processingPlants = await plantList.map(async (plant) => await createOnePlant(plant))
+        await Promise.all(processingPlants)
+    }
+}
+
+const createOnePlant = async (plant: Plant) => {
+    const response = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
+    console.log({plant}, {response})
 }
 
 export default new API()

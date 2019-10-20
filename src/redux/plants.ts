@@ -1,7 +1,7 @@
 import { AppState } from './index.js';
 import api from '../api';
 
-import { QtyPlant, PlantEntity } from '../types/entities'
+import { PlantEntity, PlantArgs, NetworkPlant } from '../types/user.js';
 
 /* Action Types */
 const PLANTS_LOADING: 'PLANTS_LOADING' = 'PLANTS_LOADING'
@@ -22,7 +22,7 @@ interface GetPlantCompleteAction {
 interface AddPlantCompleteAction {
     type: typeof ADD_PLANTS_COMPLETE
     plants: PlantEntity,
-    plant: QtyPlant
+    plant: NetworkPlant
 }
 
 interface GetPlantFailedAction {
@@ -35,7 +35,7 @@ type GetPlantAction = GetPlantStartAction | GetPlantCompleteAction | GetPlantFai
 export interface PlantState {
     loading: boolean
     plants: PlantEntity
-    justAdded?: QtyPlant
+    justAdded?: NetworkPlant
     error?: Error
 }
 
@@ -50,7 +50,7 @@ export const getPlants = () => async (dispatch: any) => {
     }
 }
 
-export const addPlant = (plant: QtyPlant) => async (dispatch: any) => {
+export const addPlant = (plant: PlantArgs) => async (dispatch: any) => {
     try {
         dispatch({ type: PLANTS_LOADING })
         const plants = await api.addPlant(plant)

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form } from 'semantic-ui-react'
 import { withFormik, FormikValues, FormikBag, FormikProps } from 'formik'
-import { QtyPlant } from '../types/entities'
+import { PlantArgs } from '../types/user'
 
 interface FormValues {
     commonName: string
@@ -11,7 +11,7 @@ interface FormValues {
 }
 
 interface FormProps {
-    addPlant: (plant: QtyPlant) => void
+    addPlant: (plant: PlantArgs) => void
 }
 
 const NewPlantModal = ({handleSubmit, handleChange, setFieldValue, addPlant}: FormProps & FormikProps<FormValues>) => {

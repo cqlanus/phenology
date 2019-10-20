@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Card, Checkbox, Button, Form, Label, Icon } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
-import { QtyPlant } from '../types/entities'
+import { NetworkPlant } from '../types/user'
 import { usePlant } from '../hooks/plant'
 import { PlantSelection } from '../redux/planting'
 
@@ -57,12 +57,12 @@ const AddPlantForm = ({
 }: Props & FormikProps<FormValues>) => {
     const { checked, handleCheck } = usePlant()
 
-    const handleChange = (plant: QtyPlant) => () => {
+    const handleChange = (plant: NetworkPlant) => () => {
         const updatedChecked = handleCheck(plant)
         setFieldValue('selectedPlants', updatedChecked)
     }
 
-    const updateQty = (plant: QtyPlant) => (e: any, { value }: any) => {
+    const updateQty = (plant: NetworkPlant) => (e: any, { value }: any) => {
         const checkedPlant = checked[plant.commonName]
 
         if (checkedPlant) {
@@ -71,7 +71,7 @@ const AddPlantForm = ({
         }
     }
 
-    const renderPlant = (plant: QtyPlant) => {
+    const renderPlant = (plant: NetworkPlant) => {
         const hasChecked = !!checked[plant.commonName]
         return (
             <Card key={plant.id} fluid>
@@ -127,7 +127,7 @@ const initialValues: FormValues = {
 }
 
 interface Props {
-    plants: QtyPlant[]
+    plants: NetworkPlant[]
     addPlantings: (selection: PlantSelection) => void
     closeModal: () => void
 }

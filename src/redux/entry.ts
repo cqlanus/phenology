@@ -128,7 +128,7 @@ export const bulkAddEntry = (bulkEntries: BulkEntries) => async (dispatch: any, 
 
             if (observationObject) {
                 const entries = Object.values(observationObject).map(addEntryInput => getEntryFromInput(addEntryInput, ytdWeather))
-                return Planting.of({ ...p, entries })
+                return Planting.of({ ...p, entries: [ ...p.entries, ...entries ] })
             } else {
                 return p
             }
@@ -208,7 +208,7 @@ export const selectEntry = createSelector(
         return entryId ? Entry.of(allEntities[entryId]) : undefined
     }
 )
-const sortByCreated = (e1: Entry, e2: Entry) => moment(e1.created).isBefore(moment(e2.created)) ? 1 : -1
+const sortByCreated = (e1: Entry, e2: Entry) => moment(e1.created).isAfter(moment(e2.created)) ? 1 : -1
 const getEntriesFromProps = (state: AppState, ownProps: any) => ownProps.entries
 export const selectOrderedEntries = createSelector([getEntriesFromProps], 
     (entries) => entries.sort(sortByCreated))

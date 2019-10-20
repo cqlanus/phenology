@@ -4,11 +4,10 @@ import styled from 'styled-components'
 import { Form, Header, Loader } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
 
-import { QtyPlant } from '../types/entities'
-
 import NewPlantModal from './NewPlantModal'
 import { AddGardenInput } from '../redux/garden'
 import { usePlant } from '../hooks/plant'
+import { PlantArgs, NetworkPlant } from '../types/user'
 
 const Row = styled.div`
     display: flex;
@@ -49,12 +48,12 @@ const CreateGardenForm = ({
         getPlants()
     }, [getPlants])
 
-    const _handleCheck = (plant: QtyPlant) => () => {
+    const _handleCheck = (plant: NetworkPlant) => () => {
         const updatedChecked = handleCheck(plant)
         setFieldValue('plants', updatedChecked)
     }
 
-    const updateQty = (plant: QtyPlant) => (e: any, { value }: any) => {
+    const updateQty = (plant: NetworkPlant) => (e: any, { value }: any) => {
         const checkedPlant = checked[plant.commonName]
 
         if (checkedPlant) {
@@ -65,7 +64,7 @@ const CreateGardenForm = ({
 
     const renderPlants = () => (
         <PlantContainer>
-            {plants.map((plant: QtyPlant, idx: number) => {
+            {plants.map((plant: NetworkPlant, idx: number) => {
                 const label = `${plant.commonName} / ${plant.latinName}`
                 const justAddedPlant = justAdded && justAdded.commonName === plant.commonName
                 const checkedPlant = justAddedPlant ? plant : checked[plant.commonName]
@@ -113,7 +112,7 @@ const CreateGardenForm = ({
     )
 }
 
-interface Plants { [key: string]: QtyPlant }
+interface Plants { [key: string]: NetworkPlant & { qty: number } }
 
 interface FormValues {
     name: string
@@ -127,11 +126,11 @@ const initialValues: FormValues = {
 
 interface FormProps {
     getPlants: () => void,
-    addPlant: (plant: QtyPlant) => void,
+    addPlant: (plant: PlantArgs) => void,
     addGardenToUser: (garden: AddGardenInput) => void,
-    plants: QtyPlant[],
+    plants: NetworkPlant[],
     loading: boolean,
-    justAdded?: QtyPlant
+    justAdded?: NetworkPlant
 }
 
 export default withFormik<FormProps & RouteComponentProps, FormValues>({
