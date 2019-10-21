@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { RouteComponentProps, withRouter, Link } from 'react-router-dom'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
+import StationModal from './StationModal'
 import AddPlantForm from '../containers/AddPlantForm'
 import { withNavBar } from '../containers/NavBar'
 import { Icon, Button, Modal, Segment, Input } from 'semantic-ui-react'
@@ -119,10 +120,16 @@ const Garden = ({
     getHistoricalWeather
 }: Props) => {
     const [isEditing, setEditing] = useState(false)
+    const { isOpen, openModal, closeModal } = useModal()
 
     useEffect(() => {
-        if (garden && garden.station) {
-            getHistoricalWeather(garden.station.stationId)
+        if (garden) {
+            if (garden.station) {
+                getHistoricalWeather(garden.station.stationId)
+            } else {
+                openModal()
+                console.log("no station", {garden})
+            }
         }
     }, [])
 
@@ -178,6 +185,7 @@ const Garden = ({
             <Link to={`/garden/${garden.gardenId}/season`}>
                 <Button primary fluid >Review Season</Button>
             </Link>
+            <StationModal isOpen={isOpen} openModal={openModal} closeModal={closeModal} />
 
         </CenterWrapper>
     )

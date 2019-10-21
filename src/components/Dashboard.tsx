@@ -12,6 +12,7 @@ import { Garden } from '../types/user'
 
 import plants from '../data/plants.json'
 import api from '../api'
+import { useModal } from '../hooks/mdoal'
 
 const Row = styled.div`
     display: flex;
@@ -58,6 +59,7 @@ interface Props {
 }
 
 const Dashboard = ({ user, selectStation }: Props) => {
+    
     if (user === undefined) {
         return null
     }
@@ -127,7 +129,7 @@ const Dashboard = ({ user, selectStation }: Props) => {
             <Row>
                 <Button onClick={() => api.addPlants(plants)} >Add Plants</Button>
             </Row>
-            
+
         </CenterWrapper>
     )
 }
