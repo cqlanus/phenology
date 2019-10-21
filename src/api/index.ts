@@ -8,7 +8,7 @@ import { createUser, createPlantModel, updatePlantModel } from '../graphql/mutat
 import { listPlantModels } from '../graphql/queries'
 import { updateUser } from '../gql/mutations'
 import { AuthUser } from '../redux/auth'
-import { Plant, PlantArgs } from '../types/user.js'
+import { Plant, PlantArgs, NetworkPlant } from '../types/user.js'
 import uuid from 'uuid'
 
 // const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
@@ -146,7 +146,7 @@ class API {
         
     }
 
-    addPlant = async (plantArgs: PlantArgs): Promise<Plant[]> => {
+    addPlant = async (plantArgs: PlantArgs): Promise<NetworkPlant> => {
         const image = await this.getPlantImage(plantArgs.latinName)
         const plant = {
             ...plantArgs,
@@ -154,7 +154,6 @@ class API {
             id: uuid()
         }
         const { data: { createPlantModel: plantModel } } = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
-        console.log({plantModel})
         return plantModel
     }
     

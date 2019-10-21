@@ -2,7 +2,7 @@ import AddPlantForm from '../components/AddPlantForm'
 import { connect } from 'react-redux'
 
 import { AppState } from '../redux'
-import { selectPlants } from '../redux/plants'
+import { selectPlants, addPlant } from '../redux/plants'
 import { addPlantings } from '../redux/planting'
 
 const mapState = (state: AppState, ownProps: any) => {
@@ -13,7 +13,8 @@ const mapState = (state: AppState, ownProps: any) => {
 }
 
 const mapDispatch = {
-    addPlantings
+    addPlantings,
+    addPlant
 }
 
 export default connect(mapState, mapDispatch)(AddPlantForm)

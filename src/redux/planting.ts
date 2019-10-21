@@ -91,22 +91,6 @@ export const removePlanting = (plantingId: string) => async (dispatch: any, getS
 
     const filterPlanting = (plantings : Planting[]) => plantings.filter(p => p.plantingId !== plantingId)
     await dispatch(changePlanting(filterPlanting))
-    
-    // const builtGarden = selectGarden(getState())
-    // const builtUser = selectUser(getState())
-    // if (builtGarden) {
-    //     const { plantings } = builtGarden
-    //     const updatedPlantings = plantings.filter(p => p.plantingId !== plantingId)
-    //     const updatedGarden = Garden.of({
-    //         ...builtGarden,
-    //         plantings: Object.values(updatedPlantings),
-    //     })
-    //     if (builtUser) {
-    //         const updatedUser = editUserGardens(builtUser, updatedGarden)
-    //         const response = await api.updateUser(updatedUser)
-    //         dispatch(setEntities(response))
-    //     }
-    // }
 }
 
 const changePlanting = (cb: (t: any) => any) => async (dispatch: any, getState: any) => {

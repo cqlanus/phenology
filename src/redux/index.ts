@@ -22,12 +22,12 @@ const rootReducer = combineReducers({
     weather,
     county,
     ui,
-    plants,
     entities,
     auth,
     user,
     garden,
     planting,
+    plants,
     phenophase,
     entry
 })

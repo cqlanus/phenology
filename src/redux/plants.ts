@@ -2,6 +2,7 @@ import { AppState } from './index.js';
 import api from '../api';
 
 import { PlantEntity, PlantArgs, NetworkPlant } from '../types/user.js';
+import { addPlantings } from './planting';
 
 /* Action Types */
 const PLANTS_LOADING: 'PLANTS_LOADING' = 'PLANTS_LOADING'
@@ -50,15 +51,23 @@ export const getPlants = () => async (dispatch: any) => {
     }
 }
 
-export const addPlant = (plant: PlantArgs) => async (dispatch: any) => {
+export const addPlant = ({ qty, ...plant}: PlantArgs, shouldAddPlanting: boolean = false) => async (dispatch: any) => {
     try {
         dispatch({ type: PLANTS_LOADING })
-        const plants = await api.addPlant(plant)
+        const plantModel = await api.addPlant(plant)
+        const plants = await api.getPlants()
+        console.log({plantModel}, {plants})
         dispatch({ 
             type: ADD_PLANTS_COMPLETE, 
             plants, 
-            plant })
+            plant: plantModel })
+
+        const selection = {
+            [plantModel.id]: { ...plantModel, qty: 1 }
+        }
+        shouldAddPlanting && addPlantings(selection)
     } catch (error) {
+        console.log({error})
         dispatch({ type: PLANTS_FAILED, error })
     }
 }

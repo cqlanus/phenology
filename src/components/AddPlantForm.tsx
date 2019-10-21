@@ -10,9 +10,10 @@ import {
     Image,
 } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
-import { NetworkPlant } from '../types/user'
+import { NetworkPlant, PlantArgs } from '../types/user'
 import { usePlant } from '../hooks/plant'
 import { PlantSelection } from '../redux/planting'
+import NewPlantModal from './NewPlantModal'
 
 const Row = styled.div`
     display: flex;
@@ -75,6 +76,7 @@ const AddPlantForm = ({
     plants,
     handleSubmit,
     setFieldValue,
+    addPlant
 }: Props & FormikProps<FormValues>) => {
     const { checked, handleCheck } = usePlant()
 
@@ -138,6 +140,7 @@ const AddPlantForm = ({
             <Icon color="green" name="check circle" />
             <span>= Native</span>
             {renderPlants()}
+            <NewPlantModal shouldAddPlanting fluid addPlant={addPlant} buttonTitle="Create New Plant" />
             <AddButtonContainer>
                 <Button type="submit" fluid>
                     Add Plants
@@ -158,7 +161,8 @@ const initialValues: FormValues = {
 interface Props {
     plants: NetworkPlant[]
     addPlantings: (selection: PlantSelection) => void
-    closeModal: () => void
+    closeModal: () => void,
+    addPlant: (plant: PlantArgs) => void,
 }
 
 export default withFormik<Props, FormValues>({

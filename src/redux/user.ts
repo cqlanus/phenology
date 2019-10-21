@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { ADD_ENTITY, AddEntityAction, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity } from './entities'
+import { ADD_ENTITY, AddEntityAction, /* selectGardenEntity, selectPlantingEntity, selectEntryEntity */ } from './entities'
 import { AppState } from '.';
 import { buildGarden } from './garden';
 
@@ -33,6 +33,10 @@ export default (state = initialState, action: UserAction): UserState => {
 }
 
 /* Selectors */
+export const selectUserEntity = (state: AppState) => state.entities.users
+export const selectGardenEntity = (state: AppState) => state.entities.gardens
+export const selectPlantingEntity = (state: AppState) => state.entities.plantings
+export const selectEntryEntity = (state: AppState) => state.entities.entries
 export const selectUserId = (state: AppState) => state.user.selected
 export const selectUser = createSelector(
     [selectUserId, selectUserEntity, selectGardenEntity, selectPlantingEntity, selectEntryEntity, state => state.plants.plants],
