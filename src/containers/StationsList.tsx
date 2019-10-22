@@ -13,6 +13,7 @@ const mapState = (state: AppState, ownProps: any) => {
         history: ownProps.history,
         garden: selectGarden(state),
         closeModal: ownProps.closeModal,
+        shouldNavigate: ownProps.shouldNavigate
     }
 }
 

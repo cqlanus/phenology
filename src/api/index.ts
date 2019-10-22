@@ -8,7 +8,7 @@ import { createUser, createPlantModel, updatePlantModel } from '../graphql/mutat
 import { listPlantModels } from '../graphql/queries'
 import { updateUser } from '../gql/mutations'
 import { AuthUser } from '../redux/auth'
-import { Plant, PlantArgs, NetworkPlant } from '../types/user.js'
+import { PlantArgs, NetworkPlant } from '../types/user.js'
 import uuid from 'uuid'
 
 // const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))

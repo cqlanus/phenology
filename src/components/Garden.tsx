@@ -28,6 +28,12 @@ const Row = styled.div`
     align-items: center;
 `
 
+const ShrinkButton = styled(Button)`
+    &&&&& {
+        flex-shrink: 1;
+        }
+`
+
 const AddPlantModal = ({ disabled }: any) => {
     const { isOpen, closeModal, openModal } = useModal()
     return (
@@ -35,9 +41,7 @@ const AddPlantModal = ({ disabled }: any) => {
             onClose={closeModal}
             open={isOpen}
             trigger={
-                <Button disabled={disabled} onClick={openModal} primary fluid>
-                    Add New Plant
-                </Button>
+                <ShrinkButton icon="leaf" disabled={disabled} onClick={openModal} primary />
             }>
             <Modal.Content scrolling>
                 <AddPlantForm closeModal={closeModal} />
@@ -117,10 +121,13 @@ const Garden = ({
     setPlanting,
     removeGarden,
     removePlanting,
-    getHistoricalWeather
-}: Props) => {
+    getHistoricalWeather,
+    history
+}: Props & RouteComponentProps) => {
     const [isEditing, setEditing] = useState(false)
     const { isOpen, openModal, closeModal } = useModal()
+
+    const handleClick = (path: string) => () => history.push(path)
 
     useEffect(() => {
         if (garden) {
@@ -128,7 +135,7 @@ const Garden = ({
                 getHistoricalWeather(garden.station.stationId)
             } else {
                 openModal()
-                console.log("no station", {garden})
+                console.log("no station", { garden })
             }
         }
     }, [])
@@ -164,8 +171,8 @@ const Garden = ({
                         setEditing={setEditing}
                     />
                 ) : (
-                    <h2>{garden.name}</h2>
-                )}
+                        <h2>{garden.name}</h2>
+                    )}
                 {!isEditing && (
                     <GardenSettingsModal
                         setEditing={setEditing}
@@ -174,17 +181,13 @@ const Garden = ({
                 )}
             </Row>
             <Container>
-                <AddPlantModal disabled={isEditing} />
-            </Container>
-            <Container>
-                <Link to={`/garden/${garden.gardenId}/bulkadd`}>
-                    <Button primary fluid >Bulk Add Entries</Button>
-                </Link>
+                <Button.Group fluid compact>
+                    <AddPlantModal disabled={isEditing} />
+                    <Button onClick={handleClick(`/garden/${garden.gardenId}/bulkadd`)} primary icon="th list" />
+                    <Button onClick={handleClick(`/garden/${garden.gardenId}/season`)} icon="calendar alternate" primary />
+                </Button.Group>
             </Container>
             {renderPlantings()}
-            <Link to={`/garden/${garden.gardenId}/season`}>
-                <Button primary fluid >Review Season</Button>
-            </Link>
             <StationModal isOpen={isOpen} openModal={openModal} closeModal={closeModal} />
 
         </CenterWrapper>

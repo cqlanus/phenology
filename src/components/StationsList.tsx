@@ -27,7 +27,7 @@ const StationsList = ({
     selectStation,
     county,
     history,
-    shouldNavigate = false,
+    shouldNavigate,
     garden,
     markStationAsFavorite,
     closeModal

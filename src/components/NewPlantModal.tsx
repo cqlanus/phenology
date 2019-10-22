@@ -125,7 +125,7 @@ const NewPlantModal = ({
                                 />
                             </Form.Field>
                         </Row>
-                    <Form.Button type="submit" fluid>
+                    <Form.Button onClick={submit} fluid>
                         Add new plant
                     </Form.Button>
                 </Form>

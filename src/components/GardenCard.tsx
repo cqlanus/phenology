@@ -1,10 +1,10 @@
 import React from 'react'
 import moment from 'moment'
 import { Card } from 'semantic-ui-react'
-
-import { ActionLink } from './Link'
+import { Link as L } from 'react-router-dom'
 
 import { Garden, Planting, Entry } from '../types/user'
+import styled from 'styled-components'
 
 
 export interface Props {
@@ -12,6 +12,14 @@ export interface Props {
     history: any,
     setGarden: (id: string) => void
 }
+
+const StyledCard = styled(Card)``
+
+const StyledLink = styled(L)`
+    &&&& > ${StyledCard} {
+        margin-bottom: .5em;
+    }
+`
 
 const GardenCard = ({ garden, history, setGarden }: Props) => {
     const { plantings } = garden
@@ -29,23 +37,22 @@ const GardenCard = ({ garden, history, setGarden }: Props) => {
         .filter(Boolean)
 
     const meta1 = `${numPlantings} plantings of ${distinctPlants} plants`
-    const meta2 = `Last updated: ${latestEntry || 'Never'}`
+    const meta2 = `Last observation: ${latestEntry || 'Never'}`
 
     const handleClick = () => {
         setGarden(garden.gardenId)
-        history.push(`/garden/${garden.gardenId}`)
     }
 
     return (
-        <ActionLink onClick={handleClick}>
-            <Card fluid >
+        <StyledLink to={`/garden/${garden.gardenId}`} onClick={handleClick}>
+            <StyledCard fluid >
                 <Card.Content>
                     <Card.Header>{garden.name}</Card.Header>
                     <Card.Meta>{meta1}</Card.Meta>
                     <Card.Meta>{meta2}</Card.Meta>
                 </Card.Content>
-            </Card>
-        </ActionLink>
+            </StyledCard>
+        </StyledLink>
     )
 }
 
