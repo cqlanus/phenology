@@ -119,7 +119,9 @@ class API {
         const plant = new schema.Entity('plants')
         const plantSchema = new schema.Array(plant)
 
-        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels))
+        const limit = 500
+
+        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels, { limit }))
 
         const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(plantModels.items, plantSchema)
         console.log({normalizedPlants})
@@ -230,22 +232,27 @@ class API {
     
     addPlants = async (plantList: PlantArgs[]) => {
         const currentInventory = await this.getPlants()
+
+        const latinNameInventory: { [key: string]: NetworkPlant } = Object.values(currentInventory).reduce((acc, plant) => {
+            const { latinName } = plant
+            return {
+                ...acc,
+                [latinName]: plant
+            }
+        }, {})
         
         const processingPlants = await plantList.map(async (plant) => {
-            const existingPlant = currentInventory && currentInventory[plant.id]
+            const existingPlant = currentInventory && latinNameInventory[plant.latinName]
             if (existingPlant) {
-                return await updateOnePlant(plant)
+                const { id } = existingPlant
+                const updatedPlant = { ...plant, id }
+                return await updateOnePlant(updatedPlant)
             } else {
                 return await this.addPlant(plant)
             }
         })
         await Promise.all(processingPlants)
     }
-}
-
-const createOnePlant = async (plant: Plant) => {
-    const response = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
-    console.log({plant}, {response})
 }
 
 const updateOnePlant = async (plant: PlantArgs) => {

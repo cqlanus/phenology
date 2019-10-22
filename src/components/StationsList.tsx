@@ -5,6 +5,7 @@ import { Card } from 'semantic-ui-react'
 
 import { StationArgs } from '../types/climate'
 import { County } from '../types/location'
+import { Garden } from '../types/user'
 
 const Container = styled.div`
     /* padding: 0.5em; */
@@ -15,24 +16,38 @@ interface Props {
     selectStation: (stationId: string) => void
     selectedStation: string | undefined
     county?: County | undefined
+    shouldNavigate?: boolean
+    garden?: Garden
+    markStationAsFavorite: (station: StationArgs, gardens: Garden[]) => void
+    closeModal?: () => void
 }
 
 const StationsList = ({
     stations,
     selectStation,
     county,
-    history
+    history,
+    shouldNavigate = false,
+    garden,
+    markStationAsFavorite,
+    closeModal
 }: Props & RouteComponentProps) => {
 
-    const handleClick = (id: string) => () => {
+    const handleClick = (station: StationArgs) => () => {
+        const { id } = station
         selectStation(id)
-        history.push(`/station/${id}`)
+        if (shouldNavigate) {
+            history.push(`/station/${id}`)
+        } else {
+            garden && markStationAsFavorite(station, [garden])
+            closeModal && closeModal()
+        }
     }
 
     const renderCard = (station: StationArgs) => {
         const name = station.name.split(',')[0]
         return (
-            <Card link onClick={handleClick(station.id)} fluid key={station.id}>
+            <Card link onClick={handleClick(station)} fluid key={station.id}>
                 <Card.Content>
                     <Card.Header>{name}</Card.Header>
                     <Card.Meta>{station.id}</Card.Meta>

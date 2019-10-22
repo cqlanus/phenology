@@ -138,5 +138,15 @@
         "hasNeedles": false,
         "isDeciduous": true,
         "isPerennial": true
+    },
+    {
+        "id": "p15",
+        "commonName": "Purple Coneflower",
+        "latinName": "Echinacea purpurea",
+        "type": "HERB",
+        "isNative": true,
+        "hasNeedles": false,
+        "isDeciduous": true,
+        "isPerennial": true
     }
 ]

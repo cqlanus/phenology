@@ -17,5 +17,24 @@
                 }
             }
         }
+    },
+    "work": {
+        "awscloudformation": {
+            "AuthRoleName": "phenology-work-20191021132826-authRole",
+            "UnauthRoleArn": "arn:aws:iam::400081491947:role/phenology-work-20191021132826-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::400081491947:role/phenology-work-20191021132826-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "phenology-work-20191021132826-deployment",
+            "UnauthRoleName": "phenology-work-20191021132826-unauthRole",
+            "StackName": "phenology-work-20191021132826",
+            "StackId": "arn:aws:cloudformation:us-east-1:400081491947:stack/phenology-work-20191021132826/6c4ffde0-f430-11e9-ab8a-0e9c8848c400"
+        },
+        "categories": {
+            "auth": {
+                "phenologybe83c267": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"2370971969625295\",\"client_secret\":\"58eb4bbe3e67c356464421a5e7c1223b\"}]"
+                }
+            }
+        }
     }
 }
