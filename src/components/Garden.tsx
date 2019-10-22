@@ -28,20 +28,15 @@ const Row = styled.div`
     align-items: center;
 `
 
-const ShrinkButton = styled(Button)`
-    &&&&& {
-        flex-shrink: 1;
-        }
-`
-
 const AddPlantModal = ({ disabled }: any) => {
     const { isOpen, closeModal, openModal } = useModal()
+    const style = { flexShrink: 1 }
     return (
         <Modal
             onClose={closeModal}
             open={isOpen}
             trigger={
-                <ShrinkButton icon="leaf" disabled={disabled} onClick={openModal} primary />
+                <Button style={style} icon="leaf" disabled={disabled} onClick={openModal} primary />
             }>
             <Modal.Content scrolling>
                 <AddPlantForm closeModal={closeModal} />

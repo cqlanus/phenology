@@ -28,6 +28,12 @@ const PlantingContainer = styled.div`
     grid-row-gap: .25em;
 `
 
+const StyledButton = styled(Button)`
+    &&& {
+        margin: 1em 0;
+    }
+`
+
 interface BulkEntryCardProps {
     phase: Phenophase
     plantings: Planting[]
@@ -78,7 +84,7 @@ interface Props {
 
 const initialBulkEntries: { [key: string]: any } = {}
 
-const BulkAddEntry = ({ garden, bulkAddEntry }: Props & RouteComponentProps) => {
+const BulkAddEntry = ({ garden, bulkAddEntry, history }: Props & RouteComponentProps) => {
     const [ date, setDate ] = useState()
     const [ bulkEntries, setBulkEntries ] = useState(initialBulkEntries)
     
@@ -91,7 +97,10 @@ const BulkAddEntry = ({ garden, bulkAddEntry }: Props & RouteComponentProps) => 
          setDate(value)
     }
     
-    const handleSubmit = () => bulkAddEntry(bulkEntries)
+    const handleSubmit = () => {
+        bulkAddEntry(bulkEntries)
+        history.push(`/garden/${garden.gardenId}`)
+    }
     
     const handleBulkEntry = (category: string, phase: Phenophase) => (planting: Planting) => {
         const entryForPlanting = {
@@ -152,9 +161,9 @@ const BulkAddEntry = ({ garden, bulkAddEntry }: Props & RouteComponentProps) => 
                     </CategoryContainer>
                 )
             })}
-            <Button fluid primary onClick={handleSubmit}>
+            <StyledButton fluid primary onClick={handleSubmit}>
                 Add All Entries
-            </Button>
+            </StyledButton>
         </CenterWrapper>
     )
 }
