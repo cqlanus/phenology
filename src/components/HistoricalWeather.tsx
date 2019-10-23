@@ -11,10 +11,10 @@ import {
 } from 'recharts'
 import moment from 'moment'
 import { interpolateSinebow } from 'd3-scale-chromatic'
-import { ButtonGroup, Button } from 'semantic-ui-react'
+import { ButtonGroup, Button, Segment, Select } from 'semantic-ui-react'
 
 import { YtdWeather } from '../types/weather'
-import { calculateGdd } from '../utils/weather'
+import { calculateGdd, calcYtdGdd } from '../utils/weather'
 
 interface Props {
     ytdWeather: YtdWeather
@@ -29,13 +29,48 @@ const Container = styled.div`
     overflow: scroll;
 `
 
-const Dot = ({cx, cy, value, numberPlantings}: any) => {
-    if (!value) { return null }
+const Dot = ({ cx, cy, value, numberPlantings }: any) => {
+    if (!value) {
+        return null
+    }
     return (
-    <svg x={cx - 10} y={cy - 10}>
-        <rect height="10" width="10" fill={interpolateSinebow(value/numberPlantings)} />
-    </svg>
-)}
+        <svg x={cx - 5} y={cy - 5}>
+            <rect
+                height="10"
+                width="10"
+                fill={interpolateSinebow(value / numberPlantings)}
+            />
+        </svg>
+    )
+}
+
+const CustomTooltip = ({ active, payload, label: title, calcYtdGdd }: any) => {
+    if (!active) {
+        return null
+    }
+
+    const renderContent = () => {
+        const data = payload[0]
+        if (!data) {
+            return null
+        }
+        const value = payload[0] && payload[0].value
+        const ytdGdd = payload[0] && calcYtdGdd(payload[0])
+        return (
+            <div>
+                <div>{value}</div>
+                <div>{ytdGdd}</div>
+            </div>
+        )
+    }
+
+    return (
+        <Segment>
+            <label>{title}</label>
+            {renderContent()}
+        </Segment>
+    )
+}
 
 const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
     const [base, setBase] = useState(40)
@@ -44,7 +79,7 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
         return null
     }
 
-    const calcYtdGdd = (val: any, name: string, props: any) => {
+    const calcYtdGdd = (props: any) => {
         const {
             payload: { date },
         } = props
@@ -60,17 +95,27 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
     }
 
     const BASE_VALUES = [40, 45, 50, 55, 60, 65, 70]
-    const handleBase = (base: number) => () => setBase(base)
+    const handleBase = (base: any) => setBase(base)
+    const bases = BASE_VALUES.map(v => ({
+        key: v,
+        value: v,
+        text: `Base ${v}F`
+    }))
     const renderButtons = () => {
+        
         return (
-            <ButtonGroup>
-                {BASE_VALUES.map(val => (
-                    <Button
-                        active={base === val}
-                        key={val}
-                        onClick={handleBase(val)}>{`Base ${val}F`}</Button>
-                ))}
-            </ButtonGroup>
+            <div>
+                <label>Base Temperature</label>
+                <Select fluid onChange={(e, {value}) => handleBase(value)} placeholder="Select base value" options={bases} defaultValue={bases[0].value} />
+            </div>
+            // <ButtonGroup>
+            //     {BASE_VALUES.map(val => (
+            //         <Button
+            //             active={base === val}
+            //             key={val}
+            //             onClick={handleBase(val)}>{`Base ${val}F`}</ButtonG>
+            //     ))}
+            // </ButtonGroup>
         )
     }
 
@@ -86,7 +131,11 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
             <ResponsiveContainer minWidth="700px" height="90%">
                 <ComposedChart data={data}>
                     <Bar dataKey={calculateGdd(base)} />
-                    <Tooltip formatter={calcYtdGdd} />
+                    <Tooltip
+                        /* formatter={calcYtdGdd} */ content={
+                            <CustomTooltip calcYtdGdd={calcYtdGdd} />
+                        }
+                    />
                     {numberPlantings &&
                         Array.from({ length: numberPlantings }).map(
                             (pl, idx) => (
@@ -94,12 +143,18 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                                     key={idx}
                                     stroke="none"
                                     dataKey={getDot(idx + 1)}
-                                    fill={interpolateSinebow((idx + 1)/numberPlantings)}
-                                    dot={<Dot numberPlantings={numberPlantings} />}
+                                    fill={interpolateSinebow(
+                                        (idx + 1) / numberPlantings,
+                                    )}
+                                    dot={
+                                        <Dot
+                                            numberPlantings={numberPlantings}
+                                        />
+                                    }
                                 />
                             ),
-                        )}}
-
+                        )}
+                    }
                     <XAxis dataKey={formatDate} />
                     <YAxis />
                 </ComposedChart>

@@ -65,7 +65,7 @@ export const addPlant = ({ qty, ...plant}: PlantArgs, shouldAddPlanting: boolean
         const selection = {
             [plantModel.id]: { ...plantModel, qty: 1 }
         }
-        shouldAddPlanting && addPlantings(selection)
+        shouldAddPlanting && dispatch(addPlantings(selection))
     } catch (error) {
         console.log({error})
         dispatch({ type: PLANTS_FAILED, error })

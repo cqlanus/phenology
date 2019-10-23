@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Container = styled.div`
-    padding-bottom: 1em;
+    padding-bottom: .5em;
 `
 
 const Row = styled.div`
@@ -181,10 +181,12 @@ const Garden = ({
                     <Button primary fluid >Bulk Add Entries</Button>
                 </Link>
             </Container>
+            <Container>
+                <Link to={`/garden/${garden.gardenId}/season`}>
+                    <Button primary fluid >Review Season</Button>
+                </Link>
+            </Container>
             {renderPlantings()}
-            <Link to={`/garden/${garden.gardenId}/season`}>
-                <Button primary fluid >Review Season</Button>
-            </Link>
             <StationModal isOpen={isOpen} openModal={openModal} closeModal={closeModal} />
 
         </CenterWrapper>

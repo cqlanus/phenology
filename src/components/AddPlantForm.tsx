@@ -140,7 +140,7 @@ const AddPlantForm = ({
             <Icon color="green" name="check circle" />
             <span>= Native</span>
             {renderPlants()}
-            <NewPlantModal shouldAddPlanting fluid addPlant={addPlant} buttonTitle="Create New Plant" />
+            <NewPlantModal shouldAddPlanting={true} fluid addPlant={addPlant} buttonTitle="Create New Plant" />
             <AddButtonContainer>
                 <Button type="submit" fluid>
                     Add Plants

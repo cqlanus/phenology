@@ -119,7 +119,9 @@ class API {
         const plant = new schema.Entity('plants')
         const plantSchema = new schema.Array(plant)
 
-        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels))
+        const limit = 500
+        
+        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels, {limit}))
 
         const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(plantModels.items, plantSchema)
         console.log({normalizedPlants})
