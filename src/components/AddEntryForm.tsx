@@ -5,6 +5,7 @@ import PHENOPHASE from '../data/phenophase.json'
 import { AddEntryInput, Entry } from '../types/user'
 
 const EntryCategories = [
+    { key: 'P', value: 'PROPAGATION', text: 'Propagation' },
     { key: 'V', value: 'VEGETATIVE', text: 'Vegetative' },
     { key: 'R', value: 'REPRODUCTIVE', text: 'Reproductive' },
     { key: 'FS', value: 'FRUIT_SEED', text: 'Fruit/Seed' },
@@ -96,7 +97,7 @@ interface FormProps {
 interface FormValues {
     category: string
     phenophase: string
-    note: string
+    note?: string
     created: string
 }
 

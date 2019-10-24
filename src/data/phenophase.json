@@ -1,4 +1,60 @@
 {
+    "PROPAGATION": [
+        {
+            "key": "SS",
+            "value": "SOWN_SEEDS",
+            "text": "Sown seeds",
+            "description": ""
+        },
+        {
+            "key": "T",
+            "value": "TRANSPLANTATION",
+            "text": "Transplantation",
+            "description": ""
+        },
+        {
+            "key": "SC",
+            "value": "STEM_CUTTINGS",
+            "text": "Stem cuttings",
+            "description": ""
+        },
+        {
+            "key": "RC",
+            "value": "ROOT_CUTTINGS",
+            "text": "Root cuttings",
+            "description": ""
+        },
+        {
+            "key": "LC",
+            "value": "LEAF_CUTTINGS",
+            "text": "Leaf cuttings",
+            "description": ""
+        },
+        {
+            "key": "RD",
+            "value": "ROOT_DIVISION",
+            "text": "Root division",
+            "description": ""
+        },
+        {
+            "key": "AL",
+            "value": "AIR_LAYERING",
+            "text": "Air Layering",
+            "description": ""
+        },
+        {
+            "key": "GL",
+            "value": "GROUND_LAYERING",
+            "text": "Grund layering",
+            "description": ""
+        },
+        {
+            "key": "G",
+            "value": "GRAFTING",
+            "text": "Grafting",
+            "description": ""
+        }
+    ],
     "VEGETATIVE": [
         {
             "key": "IG",

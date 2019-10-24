@@ -34,10 +34,24 @@ export const setEntry = (entryId: string | undefined) => {
     }
 }
 
+const removeFalsyValuesFromObject = (object: any): any => {
+    return Object.entries(object).reduce((acc, entry) => {
+        const [key, value] = entry
+        return value
+            ? {
+                ...acc,
+                [key]: value
+            }
+            : acc
+    }, {})
+}
+
 const getEntryFromInput = (addEntryInput: AddEntryInput, ytdWeather: YtdWeather) => {
     const { gdd, ytdGdd } = getGddForEntry(addEntryInput, ytdWeather)
+    const truthyEntryInput: AddEntryInput = removeFalsyValuesFromObject(addEntryInput)
+    console.log({truthyEntryInput})
     return Entry.of({
-        ...addEntryInput,
+        ...truthyEntryInput,
         gdd, 
         ytdGdd,
         entryId: uuid(),
