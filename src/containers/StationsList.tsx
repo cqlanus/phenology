@@ -2,7 +2,7 @@ import StationsList from '../components/StationsList'
 import { AppState } from '../redux'
 import { connect } from 'react-redux'
 
-import { selectStation, markStationAsFavorite } from '../redux/station'
+import { selectStation, getStationsFromZip, markStationAsFavorite } from '../redux/station'
 import { withRouter } from 'react-router'
 import { selectGarden } from '../redux/garden'
 
@@ -19,15 +19,17 @@ const mapState = (state: AppState, ownProps: any) => {
 
 const mapDispatch = {
     selectStation,
-    markStationAsFavorite
+    markStationAsFavorite,
+    getStationsFromZip
 }
 
 const mergeProps = (stateProps: ReturnType<typeof mapState>, dispatchProps: typeof mapDispatch ) => {
-    const { selectStation, markStationAsFavorite } = dispatchProps
+    const { selectStation, markStationAsFavorite, getStationsFromZip } = dispatchProps
     return {
         ...stateProps,
         selectStation,
-        markStationAsFavorite
+        markStationAsFavorite,
+        getStationsFromZip
     }
 }
 

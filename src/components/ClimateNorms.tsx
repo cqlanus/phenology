@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ResponsiveContainer, ComposedChart, Line, XAxis, YAxis, Area } from 'recharts'
-import { format } from 'date-fns'
+import { ResponsiveContainer, ComposedChart, Line, XAxis, YAxis, Area, Tooltip } from 'recharts'
+import moment from 'moment'
 
 import { ClimateNorms as ClimateNormsType } from '../types/climate'
 
@@ -22,7 +22,7 @@ const ClimateNorms = ({ norms }: Props) => {
 
     const convertGdd = (key: string) => (d: any) => d[key] && d[key] > 0 ? d[key] : 0
     const convertPrecip = (key: string) => (d: any) => d[key] && d[key] > 0 ? d[key] / 10 : 0
-    const formatDate = (d: any) => format(d.dailyMaxTemp.date, "M/D")
+    const formatDate = (d: any) => moment(d.date, "MM-DD").format("M/D")
     
     return (
         <Container>
@@ -34,18 +34,18 @@ const ClimateNorms = ({ norms }: Props) => {
                     dataKey={convertToTemp('dailyMaxTemp')}
                     stroke={'indianred'}
                     strokeWidth={2}
-                    name={'Daily Max Temp'} />
+                    name={'Dly Max Temp'} />
                 <Line
                     dot={false}
                     connectNulls
                     dataKey={convertToTemp('dailyMinTemp')}
                     // stroke={'indianred'}
                     strokeWidth={2}
-                    name={'Daily Min Temp'} />
+                    name={'Dly Min Temp'} />
 
                 <Area
                     dataKey={convertGdd('dailyGdd40')}
-                    name={'Growing Degree Days (40)'}
+                    name={'GDD (40)'}
                     fill={'goldenrod'}
                     stroke={'goldenrod'}
                 />
@@ -57,6 +57,7 @@ const ClimateNorms = ({ norms }: Props) => {
                 />
                 <XAxis dataKey={formatDate} />
                 <YAxis/>
+                <Tooltip/>
                 </ComposedChart>
             </ResponsiveContainer>
         </Container>

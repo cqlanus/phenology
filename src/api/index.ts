@@ -106,13 +106,20 @@ class API {
         return response
     }
 
+    geocode = async (zip: string) => {
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${GOOGLE_API_KEY}`
+        const response = await request(url)
+        return response
+    }
+
+    AIRPORT_PREFIX = "USW"
     getNearbyStations = async (countyId: string) => {
         const params = { headers: { token: this.token } }
-        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&startdate=2010-01-01&enddate=2010-12-31&datasetid=NORMAL_DLY&datasetid=GHCND`
+        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&startdate=2010-01-01&enddate=2010-12-31&datasetid=NORMAL_DLY&datasetid=GHCND&limit=100`
 
-        const response = await request(url, params)
+        const { results = []} = await request(url, params)
 
-        return response.results
+        return results.filter((r: any) => r.id.includes(this.AIRPORT_PREFIX))
     }
 
     getPlants = async (): Promise<PlantEntity> => {

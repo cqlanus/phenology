@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router'
-import { Card } from 'semantic-ui-react'
+import { Card, Input, Form } from 'semantic-ui-react'
 
 import { StationArgs } from '../types/climate'
 import { County } from '../types/location'
@@ -20,6 +20,7 @@ interface Props {
     garden?: Garden
     markStationAsFavorite: (station: StationArgs, gardens: Garden[]) => void
     closeModal?: () => void
+    getStationsFromZip: (zip: string) => void
 }
 
 const StationsList = ({
@@ -30,8 +31,11 @@ const StationsList = ({
     shouldNavigate,
     garden,
     markStationAsFavorite,
-    closeModal
+    closeModal,
+    getStationsFromZip
 }: Props & RouteComponentProps) => {
+
+    const [zip, setZip] = useState('')
 
     const handleClick = (station: StationArgs) => () => {
         const { id } = station
@@ -58,6 +62,9 @@ const StationsList = ({
 
     return (
         <Container>
+            <Form  >
+                <Input fluid onChange={(e, { value }) => setZip(value)} label={"Zip Code"} icon={{ name: 'search', circular: true, link: true, onClick: () => getStationsFromZip(zip) }} />
+            </Form>
             {county && <h2>{`${county.name} County Stations`}</h2>}
             {stations.map(renderCard)}
         </Container>
