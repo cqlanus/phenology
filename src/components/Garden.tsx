@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Container = styled.div`
-    padding-bottom: 1em;
+    padding-bottom: .5em;
 `
 
 const Row = styled.div`
@@ -181,6 +181,11 @@ const Garden = ({
                     <Button onClick={handleClick(`/garden/${garden.gardenId}/bulkadd`)} primary icon="th list" />
                     <Button onClick={handleClick(`/garden/${garden.gardenId}/season`)} icon="calendar alternate" primary />
                 </Button.Group>
+            </Container>
+            <Container>
+                <Link to={`/garden/${garden.gardenId}/season`}>
+                    <Button primary fluid >Review Season</Button>
+                </Link>
             </Container>
             {renderPlantings()}
             <StationModal isOpen={isOpen} openModal={openModal} closeModal={closeModal} />

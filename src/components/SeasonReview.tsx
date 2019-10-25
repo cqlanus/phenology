@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Header, Select } from 'semantic-ui-react'
+
 import { Planting } from '../types/user'
 import { withNavBar } from '../containers/NavBar'
 import HistoricalWeather from '../containers/HistoricalWeather'
@@ -18,6 +20,7 @@ interface Props {
 const SeasonReview = ({ plantings }: Props) => {
     return (
         <Container>
+            <Header>Season Review</Header>
             <HistoricalWeather plantings={plantings} />
         </Container>
     )
