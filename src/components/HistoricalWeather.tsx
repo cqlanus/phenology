@@ -11,10 +11,11 @@ import {
 } from 'recharts'
 import moment from 'moment'
 import { interpolateSinebow } from 'd3-scale-chromatic'
-import { ButtonGroup, Button, Segment, Select } from 'semantic-ui-react'
+import { Segment, Select, Checkbox } from 'semantic-ui-react'
 
 import { YtdWeather } from '../types/weather'
-import { calculateGdd, calcYtdGdd } from '../utils/weather'
+import { calculateGdd } from '../utils/weather'
+import WeatherSettingsModal from './WeatherSettingsModal'
 
 interface Props {
     ytdWeather: YtdWeather
@@ -27,6 +28,21 @@ const Container = styled.div`
     padding: 0 0.5em;
     min-height: 30vh;
     overflow: scroll;
+`
+
+const CheckContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
+
+const StyledLabel = styled.label`
+    font-weight: bold;
+    font-size: 1.1em;
+`
+
+const MenuLabel = styled(StyledLabel)`
+    display: block
+    margin-bottom: .5em;
 `
 
 const Dot = ({ cx, cy, value, numberPlantings }: any) => {
@@ -66,14 +82,32 @@ const CustomTooltip = ({ active, payload, label: title, calcYtdGdd }: any) => {
 
     return (
         <Segment>
-            <label>{title}</label>
+            <StyledLabel>{title}</StyledLabel>
             {renderContent()}
         </Segment>
     )
 }
 
+const INCLUDED_DATA_MAP: { [key: string]: string} = {
+    maxTemp: 'Max Temp',
+    minTemp: 'Min Temp',
+    avgTemp: 'GDD',
+}
+
+type InitialIncludedData = {
+    maxTemp: boolean
+    minTemp: boolean
+    avgTemp: boolean
+}
+const initialIncludedData: InitialIncludedData = {
+    maxTemp: true,
+    minTemp: true,
+    avgTemp: true
+}
+
 const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
     const [base, setBase] = useState(40)
+    const [includedData, setIncludedData] = useState(initialIncludedData)
 
     if (ytdWeather.length === 0) {
         return null
@@ -103,20 +137,36 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
         text: `Base ${v}F`
     }))
     const renderButtons = () => {
-        
+
         return (
             <div>
-                <label>Base Temperature</label>
-                <Select fluid onChange={(e, {value}) => handleBase(value)} placeholder="Select base value" options={bases} defaultValue={bases[0].value} />
+                <MenuLabel>Base Temperature</MenuLabel>
+                <Select fluid onChange={(e, { value }) => handleBase(value)} placeholder="Select base value" options={bases} defaultValue={bases[0].value} />
             </div>
-            // <ButtonGroup>
-            //     {BASE_VALUES.map(val => (
-            //         <Button
-            //             active={base === val}
-            //             key={val}
-            //             onClick={handleBase(val)}>{`Base ${val}F`}</ButtonG>
-            //     ))}
-            // </ButtonGroup>
+        )
+    }
+
+    const handleCheck = (key: keyof InitialIncludedData) => () => {
+        const newValue = !includedData[key]
+        const newData = {
+            ...includedData,
+            [key]: newValue
+        }
+        setIncludedData(newData)
+    }
+
+    const renderWeatherChecks = () => {
+        return (
+            <div>
+                <MenuLabel>Select Data to Display</MenuLabel>
+                <CheckContainer>
+                    {Object.entries(includedData).map((entry: any) => {
+                        const [ key, checked ] = entry
+                        const label = INCLUDED_DATA_MAP[key] || ''
+                        return <Checkbox checked={checked} onChange={handleCheck(key)} key={key} label={label} />
+                    })}
+                </CheckContainer>
+            </div>
         )
     }
 
@@ -128,14 +178,19 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
 
     return (
         <Container>
-            {renderButtons()}
             <ResponsiveContainer minWidth="700px" height="90%">
                 <ComposedChart data={data}>
-                    <Line dot={false} dataKey={convertToTemp("maxTemp")} stroke="indianred" />
-                    <Line dot={false} dataKey={convertToTemp("minTemp")} stroke="steelblue" />
-                    <Bar dataKey={calculateGdd(base)} />
+                    {
+                        includedData.maxTemp && <Line dot={false} dataKey={convertToTemp("maxTemp")} stroke="indianred" />
+                    }
+                    {
+                        includedData.minTemp && <Line dot={false} dataKey={convertToTemp("minTemp")} stroke="steelblue" />
+                    }
+                    {
+                        includedData.avgTemp && <Bar dataKey={calculateGdd(base)} />
+                    }
                     <Tooltip
-                        /* formatter={calcYtdGdd} */ content={
+                        content={
                             <CustomTooltip calcYtdGdd={calcYtdGdd} />
                         }
                     />
@@ -162,6 +217,8 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                     <YAxis />
                 </ComposedChart>
             </ResponsiveContainer>
+            <WeatherSettingsModal renderWeatherChecks={renderWeatherChecks} renderButtons={renderButtons} />
+
         </Container>
     )
 }
