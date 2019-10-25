@@ -44,6 +44,8 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
         return null
     }
 
+    const convertToTemp = (key: string) => (d: any) => d[key] && d[key] >= 0 ? d[key] / 10 : 0
+
     const calcYtdGdd = (val: any, name: string, props: any) => {
         const {
             payload: { date },
@@ -85,6 +87,8 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
             {renderButtons()}
             <ResponsiveContainer minWidth="700px" height="90%">
                 <ComposedChart data={data}>
+                    <Line dot={false} dataKey={convertToTemp("maxTemp")} stroke="indianred" />
+                    <Line dot={false} dataKey={convertToTemp("minTemp")} stroke="steelblue" />
                     <Bar dataKey={calculateGdd(base)} />
                     <Tooltip formatter={calcYtdGdd} />
                     {numberPlantings &&
