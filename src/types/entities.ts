@@ -1,4 +1,4 @@
-import { Plant } from "./user";
+import { Plant, NetworkPlant } from "./user";
 
 export interface User {
     id: string
@@ -33,4 +33,4 @@ export interface Entry {
     phenophase: string
 }
 
-export type PlantEntity = { [plantId: string]: Plant }
+export type PlantEntity = { [plantId: string]: NetworkPlant }

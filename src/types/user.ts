@@ -107,14 +107,14 @@ export interface AddEntryInput {
     category: string
     phenophase: string
     created: string
-    note: string
+    note?: string
 }
 
 export interface EntryArgs {
     entryId: string
     category: string
     created: string
-    note: string
+    note?: string
     phenophase: string
     gdd?: number
     ytdGdd?: number
@@ -124,7 +124,7 @@ export class Entry {
     entryId: string
     category: string
     created: string
-    note: string
+    note?: string
     phenophase: string
     gdd?: number
     ytdGdd?: number

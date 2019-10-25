@@ -64,7 +64,7 @@ const EntryList = ({ entries, phenophases, setEntry, plantingId, setPlanting, yt
                 // format(d, 'ddd MMM do')
                     date={formatted}
                     summary={phenophase && phenophase.text}
-                    extraText={`Notes: ${entry.note}`}
+                    extraText={`Notes: ${entry.note || ""}`}
                     meta={`GDD: ${entry.gdd}°C\nYTDGDD: ${entry.ytdGdd}°C`}
                 />
                 <Feed.Label>{renderEditEntry(entry.entryId)}</Feed.Label>

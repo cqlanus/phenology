@@ -8,7 +8,7 @@ import { createUser, createPlantModel, updatePlantModel } from '../graphql/mutat
 import { listPlantModels } from '../graphql/queries'
 import { updateUser } from '../gql/mutations'
 import { AuthUser } from '../redux/auth'
-import { Plant, PlantArgs, NetworkPlant } from '../types/user.js'
+import { PlantArgs, NetworkPlant } from '../types/user.js'
 import uuid from 'uuid'
 
 // const qtyPlants = plants.map((p: any) => ({ ...p, qty: 1 }))
@@ -106,13 +106,20 @@ class API {
         return response
     }
 
+    geocode = async (zip: string) => {
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${GOOGLE_API_KEY}`
+        const response = await request(url)
+        return response
+    }
+
+    AIRPORT_PREFIX = "USW"
     getNearbyStations = async (countyId: string) => {
         const params = { headers: { token: this.token } }
-        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&startdate=2010-01-01&enddate=2010-12-31&datasetid=NORMAL_DLY&datasetid=GHCND`
+        const url = `${this.NOAA_BASE}/stations?locationid=FIPS:${countyId}&startdate=2010-01-01&enddate=2010-12-31&datasetid=NORMAL_DLY&datasetid=GHCND&limit=100`
 
-        const response = await request(url, params)
+        const { results = []} = await request(url, params)
 
-        return response.results
+        return results.filter((r: any) => r.id.includes(this.AIRPORT_PREFIX))
     }
 
     getPlants = async (): Promise<PlantEntity> => {
@@ -120,8 +127,8 @@ class API {
         const plantSchema = new schema.Array(plant)
 
         const limit = 500
-        
-        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels, {limit}))
+
+        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels, { limit }))
 
         const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(plantModels.items, plantSchema)
         console.log({normalizedPlants})
@@ -232,22 +239,27 @@ class API {
     
     addPlants = async (plantList: PlantArgs[]) => {
         const currentInventory = await this.getPlants()
+
+        const latinNameInventory: { [key: string]: NetworkPlant } = Object.values(currentInventory).reduce((acc, plant) => {
+            const { latinName } = plant
+            return {
+                ...acc,
+                [latinName]: plant
+            }
+        }, {})
         
         const processingPlants = await plantList.map(async (plant) => {
-            const existingPlant = currentInventory && currentInventory[plant.id]
+            const existingPlant = currentInventory && latinNameInventory[plant.latinName]
             if (existingPlant) {
-                return await updateOnePlant(plant)
+                const { id } = existingPlant
+                const updatedPlant = { ...plant, id }
+                return await updateOnePlant(updatedPlant)
             } else {
                 return await this.addPlant(plant)
             }
         })
         await Promise.all(processingPlants)
     }
-}
-
-const createOnePlant = async (plant: Plant) => {
-    const response = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
-    console.log({plant}, {response})
 }
 
 const updateOnePlant = async (plant: PlantArgs) => {

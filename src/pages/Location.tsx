@@ -8,7 +8,7 @@ import CenterWrapper from '../components/CenterWrapper'
 const LocationPage = () => {
     return (
         <CenterWrapper>
-            <StationsList />
+            <StationsList shouldNavigate />
         </CenterWrapper>
     )
 }

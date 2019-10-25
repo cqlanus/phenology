@@ -40,6 +40,7 @@ export const getClimateNorms = async (
     const climateKeys = Object.keys(NORMS_DATA_TYPES)
     const newNorms = await API.getNormals(stationId.split(':')[1], climateKeys)
     const norms = updateKeysWithMapping(newNorms, NORMS_DATA_TYPES)
+    console.log({norms})
     return norms
 }
 

@@ -1,5 +1,5 @@
 import { County } from '../types/location'
-import { getCountyCode } from '../hooks/location'
+import { getCountyCode, getCountyCodeFromZip } from '../hooks/location'
 import { AppState } from '.'
 
 /* Action Types */
@@ -41,12 +41,16 @@ export const getCounty = () => async (dispatch: any) => {
     } catch (error) {
         dispatch({ type: GET_COUNTY_FAILED, error })        
     }
-    
-    // return {
-    //     types: [ GET_COUNTY_START, GET_COUNTY_COMPLETE, GET_COUNTY_FAILED ],
-    //     callAPI: () => getCountyCode(),
-    //     payload: {}
-    // }
+}
+
+export const getCountyByZip = (zip: string) => async (dispatch: any) => {
+    try {
+        dispatch ({ type: GET_COUNTY_START })
+        const county = await getCountyCodeFromZip(zip)
+        dispatch ({ type: GET_COUNTY_COMPLETE, response: county })
+    } catch (error) {
+        dispatch({ type: GET_COUNTY_FAILED, error })        
+    }
 }
 
 

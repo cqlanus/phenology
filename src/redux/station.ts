@@ -1,6 +1,6 @@
 import API from '../api'
 import { Station, StationArgs } from '../types/climate'
-import { getCounty, selectCounty } from './county'
+import { getCounty, selectCounty, getCountyByZip } from './county'
 import { AppState } from '.'
 import { createSelector } from 'reselect'
 import { editUserGardens } from './garden'
@@ -78,6 +78,23 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
     try {
         dispatch(getStationStart())
         await dispatch(getCounty())
+        const county = selectCounty(getState())
+        if (county) {
+            const stations = await API.getNearbyStations(county.countyId)
+            dispatch(getStationsComplete(stations))
+        } else {
+            throw Error('No county id')
+        }
+    } catch (error) {
+        console.log({ error })
+        dispatch(getStationsFailed(error))
+    }
+}
+
+export const getStationsFromZip = (zip: string) => async (dispatch: any, getState: any) => {
+    try {
+        dispatch(getStationStart())
+        await dispatch(getCountyByZip(zip))
         const county = selectCounty(getState())
         if (county) {
             const stations = await API.getNearbyStations(county.countyId)

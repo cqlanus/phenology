@@ -15,7 +15,7 @@ const StationModal = ({ isOpen, closeModal}: Props) => {
                 Please choose a station
             </Modal.Header>
             <Modal.Content scrolling>
-                <StationsList />
+                <StationsList closeModal={closeModal} />
             </Modal.Content>
             
         </Modal>

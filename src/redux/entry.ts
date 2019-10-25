@@ -34,10 +34,24 @@ export const setEntry = (entryId: string | undefined) => {
     }
 }
 
+const removeFalsyValuesFromObject = (object: any): any => {
+    return Object.entries(object).reduce((acc, entry) => {
+        const [key, value] = entry
+        return value
+            ? {
+                ...acc,
+                [key]: value
+            }
+            : acc
+    }, {})
+}
+
 const getEntryFromInput = (addEntryInput: AddEntryInput, ytdWeather: YtdWeather) => {
     const { gdd, ytdGdd } = getGddForEntry(addEntryInput, ytdWeather)
+    const truthyEntryInput: AddEntryInput = removeFalsyValuesFromObject(addEntryInput)
+    console.log({truthyEntryInput})
     return Entry.of({
-        ...addEntryInput,
+        ...truthyEntryInput,
         gdd, 
         ytdGdd,
         entryId: uuid(),
@@ -116,33 +130,37 @@ export interface BulkEntries {
 }
 
 export const bulkAddEntry = (bulkEntries: BulkEntries) => async (dispatch: any, getState: any) => {
-    const builtGarden = selectGarden(getState())
-    const builtUser = selectUser(getState())
-    const { ytdWeather } = getState().weather
-
-    if (builtGarden) {
-        const { plantings } = builtGarden
-        const updatedPlantings = plantings.map(p => {
-            const { plantingId } = p
-            const observationObject = bulkEntries[plantingId]
-
-            if (observationObject) {
-                const entries = Object.values(observationObject).map(addEntryInput => getEntryFromInput(addEntryInput, ytdWeather))
-                return Planting.of({ ...p, entries: [ ...p.entries, ...entries ] })
-            } else {
-                return p
+    try {
+        const builtGarden = selectGarden(getState())
+        const builtUser = selectUser(getState())
+        const { ytdWeather } = getState().weather
+    
+        if (builtGarden) {
+            const { plantings } = builtGarden
+            const updatedPlantings = plantings.map(p => {
+                const { plantingId } = p
+                const observationObject = bulkEntries[plantingId]
+    
+                if (observationObject) {
+                    const entries = Object.values(observationObject).map(addEntryInput => getEntryFromInput(addEntryInput, ytdWeather))
+                    return Planting.of({ ...p, entries: [ ...p.entries, ...entries ] })
+                } else {
+                    return p
+                }
+            })
+            const updatedGarden = Garden.of({
+                ...builtGarden,
+                plantings: updatedPlantings,
+            })
+            if (builtUser) {
+                const updatedUser = editUserGardens(builtUser, updatedGarden)
+                console.log({updatedUser})
+                const response = await api.updateUser(updatedUser)
+                dispatch(setEntities(response))
             }
-        })
-        const updatedGarden = Garden.of({
-            ...builtGarden,
-            plantings: updatedPlantings,
-        })
-        if (builtUser) {
-            const updatedUser = editUserGardens(builtUser, updatedGarden)
-            console.log({updatedUser})
-            const response = await api.updateUser(updatedUser)
-            dispatch(setEntities(response))
         }
+    } catch (error) {
+        console.log({error})
     }
 }
 

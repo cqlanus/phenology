@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Button, Card } from 'semantic-ui-react'
-import { Link as L } from 'react-router-dom'
+import { Link as L, withRouter, RouteComponentProps } from 'react-router-dom'
 
 import GardenCard from '../containers/GardenCard'
 import Link from './Link'
@@ -12,7 +12,6 @@ import { Garden } from '../types/user'
 
 import plants from '../data/plants.json'
 import api from '../api'
-import { useModal } from '../hooks/mdoal'
 
 const Row = styled.div`
     display: flex;
@@ -29,29 +28,39 @@ const Title = styled.h3`
 const GardensContainer = styled.div`
     padding-bottom: 2em;
 `
+const StyledCard = styled(Card)``
+
+const StyledLink = styled(L)`
+    &&&& > ${StyledCard} {
+        margin-bottom: .5em;
+    }
+`
 
 interface StationProps {
     station?: Station, 
     selectStation: (id: string) => void
 }
-const StationCard = ({ station, selectStation }: StationProps) => {
+const StationCard = withRouter(({ station, selectStation, history }: StationProps & RouteComponentProps) => {
     if (station) {
         const name = station.name.split(',')[0]
-        const handleClick = () => selectStation(station.stationId)
+        const handleClick = () => {
+            selectStation(station.stationId)
+            // history.push(`/station/${station.stationId}`)
+        }
         return (
-            <L to={`/station/${station.stationId}`} onClick={handleClick}>
-                <Card fluid  >
+            <StyledLink to={`/station/${station.stationId}`} onClick={handleClick}>
+                <StyledCard fluid >
                     <Card.Content>
                         <Card.Header>{name}</Card.Header>
                         <Card.Meta>{station.stationId}</Card.Meta>
                     </Card.Content>
-                </Card>
-            </L>
+                </StyledCard>
+            </StyledLink>
         )
     } else {
         return null
     }
-}
+})
 
 interface Props {
     user?: any,
@@ -83,12 +92,19 @@ const Dashboard = ({ user, selectStation }: Props) => {
 
     const renderStations = () => {
         const { gardens } = user
-        const gardensWithFavorites = gardens.filter((g: any) => g.station)
+        const gardensWithFavorites: Garden[] = gardens.filter((g: Garden) => g.station)
         const hasGardens = gardensWithFavorites.length > 0
 
         if (hasGardens) {
-            return gardensWithFavorites.map(
-                ({ station }: Garden) =>
+            const uniqueStationMap: { [key: string]: Station } = gardensWithFavorites.reduce((acc, garden) => {
+                return garden.station ? {
+                    ...acc,
+                    [garden.station.stationId]: garden.station
+                } : acc
+            }, {})
+            
+            return Object.values(uniqueStationMap).map(
+                (station: Station) =>
                     station && (
                         <StationCard
                             key={station.stationId}
