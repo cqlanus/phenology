@@ -35,13 +35,16 @@ const CheckContainer = styled.div`
     justify-content: space-between;
 `
 
+interface LabelProps {
+    big?: boolean
+}
 const StyledLabel = styled.label`
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: ${(p: LabelProps) => p.big ? '1.1em' : '1em'};
 `
 
 const MenuLabel = styled(StyledLabel)`
-    display: block
+    display: block;
     margin-bottom: .5em;
 `
 
@@ -60,7 +63,7 @@ const Dot = ({ cx, cy, value, numberPlantings }: any) => {
     )
 }
 
-const CustomTooltip = ({ active, payload, label: title, calcYtdGdd }: any) => {
+const CustomTooltip = ({ active, payload, label: title, calcYtdGdd, convertToTemp }: any) => {
     if (!active) {
         return null
     }
@@ -70,25 +73,41 @@ const CustomTooltip = ({ active, payload, label: title, calcYtdGdd }: any) => {
         if (!data) {
             return null
         }
-        const value = payload[0] && payload[0].value
-        const ytdGdd = payload[0] && calcYtdGdd(payload[0])
+        const value = data && data.value
+        const ytdGdd = data && calcYtdGdd(data)
+        const maxTemp = data && convertToTemp('maxTemp')(data.payload)
+        const minTemp = data && convertToTemp('minTemp')(data.payload)
+
+        const DATA = [
+            { value, text: "GDD" },
+            { value: ytdGdd, text: "YTD GDD" },
+            { value: maxTemp, text: "MaxTemp" },
+            { value: minTemp, text: "MinTemp" },
+        ]
+        
         return (
             <div>
-                <div>{value}</div>
-                <div>{ytdGdd}</div>
+                {
+                    DATA.map(d => (
+                        <div key={d.text}>
+                            <StyledLabel>{`${d.text}: `}</StyledLabel>
+                            {d.value}
+                        </div>
+                    ))
+                }
             </div>
         )
     }
 
     return (
         <Segment>
-            <StyledLabel>{title}</StyledLabel>
+            <StyledLabel big>{title}</StyledLabel>
             {renderContent()}
         </Segment>
     )
 }
 
-const INCLUDED_DATA_MAP: { [key: string]: string} = {
+const INCLUDED_DATA_MAP: { [key: string]: string } = {
     maxTemp: 'Max Temp',
     minTemp: 'Min Temp',
     avgTemp: 'GDD',
@@ -161,7 +180,7 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                 <MenuLabel>Select Data to Display</MenuLabel>
                 <CheckContainer>
                     {Object.entries(includedData).map((entry: any) => {
-                        const [ key, checked ] = entry
+                        const [key, checked] = entry
                         const label = INCLUDED_DATA_MAP[key] || ''
                         return <Checkbox checked={checked} onChange={handleCheck(key)} key={key} label={label} />
                     })}
@@ -191,7 +210,7 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                     }
                     <Tooltip
                         content={
-                            <CustomTooltip calcYtdGdd={calcYtdGdd} />
+                            <CustomTooltip calcYtdGdd={calcYtdGdd} convertToTemp={convertToTemp} />
                         }
                     />
                     {numberPlantings &&
