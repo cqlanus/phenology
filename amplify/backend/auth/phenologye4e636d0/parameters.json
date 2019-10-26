@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "phenologybe83c267_identitypool_be83c267",
+    "identityPoolName": "phenologye4e636d0_identitypool_e4e636d0",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "phenolbe83c267",
-    "userPoolName": "phenologybe83c267_userpool_be83c267",
+    "resourceNameTruncated": "phenole4e636d0",
+    "userPoolName": "phenologye4e636d0_userpool_e4e636d0",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -18,9 +18,7 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-        "email",
-        "family_name",
-        "given_name"
+        "email"
     ],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
@@ -30,9 +28,9 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "phenolbe83c267_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "phenole4e636d0_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "resourceName": "phenologybe83c267",
+    "resourceName": "phenologye4e636d0",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -47,11 +45,5 @@
         ]
     },
     "useDefault": "default",
-    "hostedUI": true,
-    "triggers": "{}",
-    "parentStack": {
-        "Ref": "AWS::StackId"
-    },
-    "permissions": [],
     "dependsOn": []
 }

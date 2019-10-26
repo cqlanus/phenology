@@ -12,7 +12,7 @@
         },
         "categories": {
             "auth": {
-                "phenologybe83c267": {}
+                "phenologye4e636d0": {}
             }
         }
     },
@@ -29,9 +29,6 @@
         },
         "categories": {
             "auth": {
-                "phenologybe83c267": {
-                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"2370971969625295\",\"client_secret\":\"58eb4bbe3e67c356464421a5e7c1223b\"}]"
-                }
             }
         }
     }
