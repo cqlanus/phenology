@@ -242,7 +242,9 @@ class API {
     addPlants = async (plantList: PlantArgs[]) => {
         const currentInventory = await this.getPlants()
 
-        const latinNameInventory: { [key: string]: NetworkPlant } = Object.values(currentInventory).reduce((acc, plant) => {
+        // if (!currentInventory) { return }
+
+        const latinNameInventory: { [key: string]: NetworkPlant } = Object.values(currentInventory || {}).reduce((acc, plant) => {
             const { latinName } = plant
             return {
                 ...acc,
