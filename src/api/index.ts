@@ -213,11 +213,13 @@ class API {
     createApiUser = async ({username: userName, attributes}: AuthUser) => {
         const { given_name: firstName, family_name: lastName } = attributes
         const apiUserInput = { firstName, lastName, userName, id: userName, gardens: [] }
+        console.log({apiUserInput})
         const { data: { createUser: user }} = await A.graphql(graphqlOperation(createUser, {input: apiUserInput}))
         return user
     }
     
     getApiUser = async (authUser: AuthUser) => {
+        console.log({authUser})
         const { username: userName } = authUser
         const { data: { getUserByUserName: { items } } } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 

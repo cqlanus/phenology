@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "phenologye4e636d0_identitypool_e4e636d0",
+    "identityPoolName": "phenology0af4a6ce_identitypool_0af4a6ce",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "phenole4e636d0",
-    "userPoolName": "phenologye4e636d0_userpool_e4e636d0",
+    "resourceNameTruncated": "phenol0af4a6ce",
+    "userPoolName": "phenology0af4a6ce_userpool_0af4a6ce",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -18,7 +18,9 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-        "email"
+        "email",
+        "family_name",
+        "given_name"
     ],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
@@ -28,9 +30,9 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "phenole4e636d0_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "phenol0af4a6ce_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "resourceName": "phenologye4e636d0",
+    "resourceName": "phenology0af4a6ce",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -44,6 +46,16 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "defaultSocial",
+    "hostedUI": true,
+    "triggers": "{}",
+    "hostedUIDomainName": "phenology0af4a6ce-0af4a6ce",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:3000/\",\"https://phenology.chrislanus.com/\"],\"LogoutURLs\":[\"https://localhost:3000/\",\"https://phenology.chrislanus.com/\"]}",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
     "dependsOn": []
 }

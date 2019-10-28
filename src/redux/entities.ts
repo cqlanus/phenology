@@ -99,6 +99,7 @@ export const getEntities = () => async (dispatch: any) => {
 export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
     try {
         const normalizedEntities = await api.getApiUser(authUser)
+        console.log({normalizedEntities})
         await dispatch(getPlants())
         dispatch(setEntities(normalizedEntities))
     } catch (error) {

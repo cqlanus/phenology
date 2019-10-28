@@ -1,34 +1,20 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "phenology-dev-20190808082609-authRole",
-            "UnauthRoleArn": "arn:aws:iam::400081491947:role/phenology-dev-20190808082609-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::400081491947:role/phenology-dev-20190808082609-authRole",
+            "AuthRoleName": "phenology-dev-20191027194823-authRole",
+            "UnauthRoleArn": "arn:aws:iam::400081491947:role/phenology-dev-20191027194823-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::400081491947:role/phenology-dev-20191027194823-authRole",
             "Region": "us-east-2",
-            "DeploymentBucketName": "phenology-dev-20190808082609-deployment",
-            "UnauthRoleName": "phenology-dev-20190808082609-unauthRole",
-            "StackName": "phenology-dev-20190808082609",
-            "StackId": "arn:aws:cloudformation:us-east-2:400081491947:stack/phenology-dev-20190808082609/155f22c0-b9e0-11e9-9bcd-02e473ddfb1a"
+            "DeploymentBucketName": "phenology-dev-20191027194823-deployment",
+            "UnauthRoleName": "phenology-dev-20191027194823-unauthRole",
+            "StackName": "phenology-dev-20191027194823",
+            "StackId": "arn:aws:cloudformation:us-east-2:400081491947:stack/phenology-dev-20191027194823/a52e0d50-f91c-11e9-8d7c-02402ec64522"
         },
         "categories": {
             "auth": {
-                "phenologye4e636d0": {}
-            }
-        }
-    },
-    "work": {
-        "awscloudformation": {
-            "AuthRoleName": "phenology-work-20191021132826-authRole",
-            "UnauthRoleArn": "arn:aws:iam::400081491947:role/phenology-work-20191021132826-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::400081491947:role/phenology-work-20191021132826-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "phenology-work-20191021132826-deployment",
-            "UnauthRoleName": "phenology-work-20191021132826-unauthRole",
-            "StackName": "phenology-work-20191021132826",
-            "StackId": "arn:aws:cloudformation:us-east-1:400081491947:stack/phenology-work-20191021132826/6c4ffde0-f430-11e9-ab8a-0e9c8848c400"
-        },
-        "categories": {
-            "auth": {
+                "phenology0af4a6ce": {
+                    "hostedUIProviderCreds": "[]"
+                }
             }
         }
     }
