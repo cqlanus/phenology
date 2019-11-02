@@ -52,7 +52,7 @@ class API {
     NCEI_BASE = 'https://www.ncei.noaa.gov/access/services/data/v1'
     token = 'YRUCkKgIqSPdMLIrNezdyThISwcaBZyI'
     queryNcei = async ({ dataset, dataTypes, stations, startDate, endDate}: NceiQuery) => {
-        const url = `${this.NCEI_BASE}?dataset=${dataset}&stations=${stations}&dataTypes=${dataTypes}&startDate=${startDate}&endDate=${endDate}&format=json`
+        const url = `${this.NCEI_BASE}?dataset=${dataset}&stations=${stations}&dataTypes=${dataTypes}&startDate=${startDate}&endDate=${endDate}&units=standard&format=json`
         return await request(url)
     }
     

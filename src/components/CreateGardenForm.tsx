@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { Form, Header, Loader } from 'semantic-ui-react'
 import { withFormik, FormikProps, FormikBag } from 'formik'
+import * as Yup from 'yup'
 
 import NewPlantModal from './NewPlantModal'
 import { AddGardenInput } from '../redux/garden'
@@ -32,16 +33,16 @@ const PlantContainer = styled.div`
 `
 
 const CreateGardenForm = ({
-    handleSubmit, 
-    setFieldValue, 
-    handleChange, 
-    plants, 
+    handleSubmit,
+    setFieldValue,
+    handleChange,
+    plants,
     getPlants,
     addPlant,
     justAdded,
-    loading
+    loading,
+    errors,
 }: FormProps & FormikProps<FormValues> & RouteComponentProps) => {
-
     const { checked, handleCheck } = usePlant()
 
     useEffect(() => {
@@ -66,8 +67,11 @@ const CreateGardenForm = ({
         <PlantContainer>
             {plants.map((plant: NetworkPlant, idx: number) => {
                 const label = `${plant.commonName} / ${plant.latinName}`
-                const justAddedPlant = justAdded && justAdded.commonName === plant.commonName
-                const checkedPlant = justAddedPlant ? plant : checked[plant.commonName]
+                const justAddedPlant =
+                    justAdded && justAdded.commonName === plant.commonName
+                const checkedPlant = justAddedPlant
+                    ? plant
+                    : checked[plant.commonName]
                 const hasChecked = !!checkedPlant
                 return (
                     <Row key={idx}>
@@ -79,19 +83,34 @@ const CreateGardenForm = ({
                             />
                         </CheckboxContainer>
                         {hasChecked ? (
-                            <Input size="mini" type="number" defaultValue={1} min={0} onChange={updateQty(plant)} />
-                        ) : "0"}
+                            <Input
+                                size="mini"
+                                type="number"
+                                defaultValue={1}
+                                min={0}
+                                onChange={updateQty(plant)}
+                            />
+                        ) : (
+                            '0'
+                        )}
                     </Row>
                 )
             })}
         </PlantContainer>
     )
 
+    const hasErrors = Object.keys(errors).length > 0
+
     return (
         <div>
             <Header>Create A New Garden</Header>
             <Form onSubmit={handleSubmit}>
-                <Form.Input label="Garden Name" onChange={handleChange} name='name' />
+                <Form.Input
+                    label="Garden Name"
+                    onChange={handleChange}
+                    name="name"
+                    error={errors.name}
+                />
 
                 <Row>
                     <Header>Add Some Plants</Header>
@@ -102,17 +121,19 @@ const CreateGardenForm = ({
                     <span>Qty</span>
                 </Row>
                 {renderPlants()}
-                
-                <Form.Button fluid type="submit">
+
+                <Form.Button disabled={hasErrors} fluid type="submit">
                     Create Garden
                 </Form.Button>
             </Form>
-            <Loader active={loading}/>
+            <Loader active={loading} />
         </div>
     )
 }
 
-interface Plants { [key: string]: NetworkPlant & { qty: number } }
+interface Plants {
+    [key: string]: NetworkPlant & { qty: number }
+}
 
 interface FormValues {
     name: string
@@ -121,23 +142,32 @@ interface FormValues {
 
 const initialValues: FormValues = {
     name: '',
-    plants: {}
+    plants: {},
 }
 
 interface FormProps {
-    getPlants: () => void,
-    addPlant: (plant: PlantArgs) => void,
-    addGardenToUser: (garden: AddGardenInput) => void,
-    plants: NetworkPlant[],
-    loading: boolean,
+    getPlants: () => void
+    addPlant: (plant: PlantArgs) => void
+    addGardenToUser: (garden: AddGardenInput) => void
+    plants: NetworkPlant[]
+    loading: boolean
     justAdded?: NetworkPlant
 }
 
+const CreateGardenSchema = Yup.object().shape({
+    name: Yup.string()
+        .required('Required'),
+})
+
 export default withFormik<FormProps & RouteComponentProps, FormValues>({
-    handleSubmit: (values: FormValues, { props }: FormikBag<FormProps & RouteComponentProps, any>) => {
+    handleSubmit: (
+        values: FormValues,
+        { props }: FormikBag<FormProps & RouteComponentProps, any>,
+    ) => {
         const { addGardenToUser, history } = props
         addGardenToUser(values)
         history.push('/home')
     },
-    mapPropsToValues: () => initialValues
+    mapPropsToValues: () => initialValues,
+    validationSchema: CreateGardenSchema,
 })(CreateGardenForm)

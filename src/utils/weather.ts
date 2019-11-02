@@ -8,8 +8,9 @@ export const fToC = (f: number) => (f - 32) / 1.8
 export const calculateGdd = (baseTemp: number = 40) => (d: any) => {
     const value = d.avgTemp
     const convertedTemp = fToC(baseTemp)
-    const decimalValue = value / 10
-    const gdd = decimalValue > convertedTemp ? decimalValue - convertedTemp : 0
+    // const decimalValue = value
+    const gdd = (value > baseTemp) ? value - baseTemp : 0
+    // console.log({value}, {gdd})
     return Math.round(gdd)
 }
 

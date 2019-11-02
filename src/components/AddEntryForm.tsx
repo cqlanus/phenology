@@ -12,9 +12,9 @@ const EntryCategories = [
 ]
 
 interface Phenophase {
-    key: string,
-    value: string,
-    text: string,
+    key: string
+    value: string
+    text: string
     description: string
 }
 
@@ -24,13 +24,13 @@ const AddEntryForm = ({
     setFieldValue,
     handleChange,
     entry,
-    values
+    values,
 }: FormProps & FormikProps<FormValues>) => {
     const initialCategory = entry ? entry.category : ''
-    const [ category, setCategory ] = useState(initialCategory)
+    const [category, setCategory] = useState(initialCategory)
 
-    const phenophase: { [key: string]: Phenophase[]} = PHENOPHASE
-    const selectCategory = (e: any, {value}: any) => {
+    const phenophase: { [key: string]: Phenophase[] } = PHENOPHASE
+    const selectCategory = (e: any, { value }: any) => {
         setCategory(value)
         setFieldValue('category', value)
     }
@@ -60,7 +60,9 @@ const AddEntryForm = ({
                     placeholder="Phenophase"
                     name="phenophase"
                     options={options || []}
-                    onChange={(e, {value}) => setFieldValue('phenophase', value)}
+                    onChange={(e, { value }) =>
+                        setFieldValue('phenophase', value)
+                    }
                     value={values.phenophase}
                 />
                 <Form.Input 
@@ -78,9 +80,11 @@ const AddEntryForm = ({
                 <Form.Button fluid type="submit">
                     {buttonText}
                 </Form.Button>
-                {entry && <Form.Button negative fluid onClick={handleRemove} >
+                {entry && (
+                    <Form.Button negative fluid onClick={handleRemove}>
                     {'Remove'}
-                </Form.Button>}
+                    </Form.Button>
+                )}
             </Form>
         </div>
     )

@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Modal, Button, Form } from 'semantic-ui-react'
 import { withFormik, FormikValues, FormikBag, FormikProps } from 'formik'
+import * as Yup from 'yup'
 import { PlantArgs } from '../types/user'
+
+const hasError = (errors: any, touched: any) => (field: string) => touched[field] && errors[field]
 
 const Row = styled.div`
     display: flex;
@@ -29,11 +32,16 @@ interface FormProps {
 const NewPlantModal = ({
     handleSubmit,
     handleChange,
+    handleBlur,
     setFieldValue,
     buttonTitle = 'New Plant',
     fluid,
+    errors,
+    touched,
+    resetForm
 }: FormProps & FormikProps<FormValues>) => {
     const [isOpen, setOpen] = useState(false)
+    const hasErrorsForField = hasError(errors, touched)
 
     const options = [
         { key: 'tree', text: 'tree', value: 'TREE' },
@@ -43,7 +51,10 @@ const NewPlantModal = ({
         { key: 'bulb', text: 'bulb', value: 'BULB' },
     ]
 
-    const close = () => setOpen(false)
+    const close = () => {
+        resetForm()
+        setOpen(false)
+    }
 
     const open = () => setOpen(true)
 
@@ -76,18 +87,24 @@ const NewPlantModal = ({
                         <Form.Input
                             label="Common Name"
                             name="commonName"
+                            error={hasErrorsForField('commonName')}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
                         <Form.Input
                             label="Latin Name"
                             name="latinName"
+                            error={hasErrorsForField('latinName')}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
                         <Form.Select
                             options={options}
                             label="Type"
                             name="type"
+                            error={hasErrorsForField('type')}
                             onChange={handleSelect}
+                            onBlur={handleBlur}
                         />
                     </Form.Group>
                         <Row>
@@ -144,6 +161,15 @@ const initialValues: FormValues = {
     type: '',
 }
 
+const NewPlantSchema = Yup.object().shape({
+    commonName: Yup.string()
+        .required('Required'),
+    latinName: Yup.string()
+        .required('Required'),
+    type: Yup.string()
+        .required('Required'),
+})
+
 export default withFormik({
     handleSubmit: (
         values: FormikValues,
@@ -164,4 +190,5 @@ export default withFormik({
         resetForm()
     },
     mapPropsToValues: () => initialValues,
+    validationSchema: NewPlantSchema
 })(NewPlantModal)

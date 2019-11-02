@@ -40,12 +40,12 @@ interface LabelProps {
 }
 const StyledLabel = styled.label`
     font-weight: bold;
-    font-size: ${(p: LabelProps) => p.big ? '1.1em' : '1em'};
+    font-size: ${(p: LabelProps) => (p.big ? '1.1em' : '1em')};
 `
 
 const MenuLabel = styled(StyledLabel)`
     display: block;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 `
 
 const Dot = ({ cx, cy, value, numberPlantings }: any) => {
@@ -63,7 +63,14 @@ const Dot = ({ cx, cy, value, numberPlantings }: any) => {
     )
 }
 
-const CustomTooltip = ({ active, payload, label: title, calcYtdGdd, convertToTemp }: any) => {
+const CustomTooltip = ({
+    active,
+    payload,
+    label: title,
+    calcYtdGdd,
+    convertToTemp,
+    base
+}: any) => {
     if (!active) {
         return null
     }
@@ -73,28 +80,26 @@ const CustomTooltip = ({ active, payload, label: title, calcYtdGdd, convertToTem
         if (!data) {
             return null
         }
-        const value = data && data.value
+        const gdd = data && calculateGdd(base)(data.payload)
         const ytdGdd = data && calcYtdGdd(data)
         const maxTemp = data && convertToTemp('maxTemp')(data.payload)
         const minTemp = data && convertToTemp('minTemp')(data.payload)
 
         const DATA = [
-            { value, text: "GDD" },
-            { value: ytdGdd, text: "YTD GDD" },
-            { value: maxTemp, text: "MaxTemp" },
-            { value: minTemp, text: "MinTemp" },
+            { value: gdd, text: 'GDD' },
+            { value: ytdGdd, text: 'YTD GDD' },
+            { value: maxTemp, text: 'MaxTemp' },
+            { value: minTemp, text: 'MinTemp' },
         ]
-        
+
         return (
             <div>
-                {
-                    DATA.map(d => (
-                        <div key={d.text}>
-                            <StyledLabel>{`${d.text}: `}</StyledLabel>
-                            {d.value}
-                        </div>
-                    ))
-                }
+                {DATA.map(d => (
+                    <div key={d.text}>
+                        <StyledLabel>{`${d.text}: `}</StyledLabel>
+                        {d.value}
+                    </div>
+                ))}
             </div>
         )
     }
@@ -121,7 +126,7 @@ type InitialIncludedData = {
 const initialIncludedData: InitialIncludedData = {
     maxTemp: true,
     minTemp: true,
-    avgTemp: true
+    avgTemp: true,
 }
 
 const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
@@ -132,7 +137,8 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
         return null
     }
 
-    const convertToTemp = (key: string) => (d: any) => d[key] && d[key] >= 0 ? d[key] / 10 : 0
+    const convertToTemp = (key: string) => (d: any) =>
+        d[key] && d[key] >= 0 ? d[key] /* / 10 */ : 0
     const calcYtdGdd = (props: any) => {
         const {
             payload: { date },
@@ -153,14 +159,19 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
     const bases = BASE_VALUES.map(v => ({
         key: v,
         value: v,
-        text: `Base ${v}F`
+        text: `Base ${v}F`,
     }))
     const renderButtons = () => {
-
         return (
             <div>
                 <MenuLabel>Base Temperature</MenuLabel>
-                <Select fluid onChange={(e, { value }) => handleBase(value)} placeholder="Select base value" options={bases} defaultValue={bases[0].value} />
+                <Select
+                    fluid
+                    onChange={(e, { value }) => handleBase(value)}
+                    placeholder="Select base value"
+                    options={bases}
+                    defaultValue={bases[0].value}
+                />
             </div>
         )
     }
@@ -169,7 +180,7 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
         const newValue = !includedData[key]
         const newData = {
             ...includedData,
-            [key]: newValue
+            [key]: newValue,
         }
         setIncludedData(newData)
     }
@@ -182,7 +193,14 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                     {Object.entries(includedData).map((entry: any) => {
                         const [key, checked] = entry
                         const label = INCLUDED_DATA_MAP[key] || ''
-                        return <Checkbox checked={checked} onChange={handleCheck(key)} key={key} label={label} />
+                        return (
+                            <Checkbox
+                                checked={checked}
+                                onChange={handleCheck(key)}
+                                key={key}
+                                label={label}
+                            />
+                        )
                     })}
                 </CheckContainer>
             </div>
@@ -199,18 +217,30 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
         <Container>
             <ResponsiveContainer minWidth="700px" height="90%">
                 <ComposedChart data={data}>
-                    {
-                        includedData.maxTemp && <Line dot={false} dataKey={convertToTemp("maxTemp")} stroke="indianred" />
-                    }
-                    {
-                        includedData.minTemp && <Line dot={false} dataKey={convertToTemp("minTemp")} stroke="steelblue" />
-                    }
-                    {
-                        includedData.avgTemp && <Bar dataKey={calculateGdd(base)} />
-                    }
+                    {includedData.maxTemp && (
+                        <Line
+                            dot={false}
+                            dataKey={convertToTemp('maxTemp')}
+                            stroke="indianred"
+                        />
+                    )}
+                    {includedData.minTemp && (
+                        <Line
+                            dot={false}
+                            dataKey={convertToTemp('minTemp')}
+                            stroke="steelblue"
+                        />
+                    )}
+                    {includedData.avgTemp && (
+                        <Bar dataKey={calculateGdd(base)} />
+                    )}
                     <Tooltip
                         content={
-                            <CustomTooltip calcYtdGdd={calcYtdGdd} convertToTemp={convertToTemp} />
+                            <CustomTooltip
+                                base={base}
+                                calcYtdGdd={calcYtdGdd}
+                                convertToTemp={convertToTemp}
+                            />
                         }
                     />
                     {numberPlantings &&
@@ -236,8 +266,10 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                     <YAxis />
                 </ComposedChart>
             </ResponsiveContainer>
-            <WeatherSettingsModal renderWeatherChecks={renderWeatherChecks} renderButtons={renderButtons} />
-
+            <WeatherSettingsModal
+                renderWeatherChecks={renderWeatherChecks}
+                renderButtons={renderButtons}
+            />
         </Container>
     )
 }
