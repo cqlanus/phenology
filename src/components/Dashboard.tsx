@@ -9,9 +9,8 @@ import CenterWrapper from './CenterWrapper'
 import { withNavBar } from '../containers/NavBar'
 import { Station } from '../types/climate'
 import { Garden } from '../types/user'
+import { BREAKPOINTS } from '../data/breakpoints'
 
-import plants from '../data/plants.json'
-import api from '../api'
 
 const Row = styled.div`
     display: flex;
@@ -34,6 +33,28 @@ const StyledLink = styled(L)`
     &&&& > ${StyledCard} {
         margin-bottom: .5em;
     }
+`
+
+interface Section {
+    name: string
+}
+const Section = styled.div`
+    grid-area: ${({name}: Section) => name };
+`
+
+const Layout = styled.div`
+    display: grid;
+    grid-template-areas: 
+        "garden"
+        "station";
+
+    @media (min-width: ${BREAKPOINTS.TABLET}) {    
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 1em;
+        grid-template-areas: 
+            "garden station";
+    }
+    
 `
 
 interface StationProps {
@@ -121,30 +142,36 @@ const Dashboard = ({ user, selectStation }: Props) => {
     return (
         <CenterWrapper>
             <h2>Welcome {user.firstName}</h2>
-            <Row>
-                <Title>My Gardens</Title>
+            <Layout>
+                <Section name="garden" >
+                    <Row>
+                        <Title>My Gardens</Title>
 
-                <Link to="/create">
-                    <Button primary size={'tiny'}>
-                        New Garden
-                    </Button>
-                </Link>
-            </Row>
-            {renderGardens()}
-            <Row>
-                <Title>Favorite Stations</Title>
+                        <Link to="/create">
+                            <Button primary size={'tiny'}>
+                                New Garden
+                            </Button>
+                        </Link>
+                    </Row>
+                    {renderGardens()}
+                </Section>
+                <Section name="station">
+                    <Row>
+                        <Title>Favorite Stations</Title>
 
-                <Link to="/location">
-                    <Button primary size={'tiny'}>
-                        Find Stations
-                    </Button>
-                </Link>
-            </Row>
-            {renderStations()}
+                        <Link to="/location">
+                            <Button primary size={'tiny'}>
+                                Find Stations
+                            </Button>
+                        </Link>
+                    </Row>
+                    {renderStations()}
+                </Section>
+            </Layout>
 
-            <Row>
+            {/* <Row>
                 <Button onClick={() => api.addPlants(plants)} >Add Plants</Button>
-            </Row>
+            </Row> */}
 
         </CenterWrapper>
     )

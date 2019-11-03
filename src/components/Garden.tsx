@@ -9,6 +9,7 @@ import { withNavBar } from '../containers/NavBar'
 import { Icon, Button, Modal, Segment, Input } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 import PlantingCard from './PlantingCard'
+import { BREAKPOINTS } from '../data/breakpoints'
 
 interface Props {
     garden?: GardenType
@@ -93,6 +94,29 @@ const StyledInput = styled(Input)`
     }
 `
 
+const PlantingsContainer = styled.div`
+    /* display: flex;
+    flex-wrap: wrap; */
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @media (min-width: ${BREAKPOINTS.TABLET}) {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+`
+
+const PlantingCardContainer = styled.div`
+    /* flex-basis: 100%;
+    margin-bottom: 1em;
+    margin-right: 1em;
+
+    @media (min-width: ${BREAKPOINTS.TABLET}) {
+        flex-basis: calc(50% - 1em);
+    } */
+`
+
 const EditGardenNameInput = ({ garden, setEditing }: any) => {
     const [name, setName] = useState(garden.name)
 
@@ -143,17 +167,20 @@ const Garden = ({
 
     const renderPlantings = () => {
         return (
-            <div>
+            <PlantingsContainer>
                 {garden.plantings.map(p => (
-                    <PlantingCard
-                        key={p.plantingId}
-                        planting={p}
-                        isEditing={isEditing}
-                        setPlanting={setPlanting}
-                        removePlanting={removePlanting}
-                    />
+                    <PlantingCardContainer key={p.plantingId} >
+
+                        <PlantingCard
+                            
+                            planting={p}
+                            isEditing={isEditing}
+                            setPlanting={setPlanting}
+                            removePlanting={removePlanting}
+                        />
+                    </PlantingCardContainer>
                 ))}
-            </div>
+            </PlantingsContainer>
         )
     }
 
