@@ -4,6 +4,7 @@ import api from '../api/index'
 import { AppState } from '.'
 import { AuthUser } from './auth'
 import { getPlants } from './plants';
+import { toast } from 'react-toastify';
 
 /* Action Constants */
 const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
@@ -103,6 +104,7 @@ export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
         await dispatch(getPlants())
         dispatch(setEntities(normalizedEntities))
     } catch (error) {
+        toast.error('Get user failed')
         console.log({error1: error})
     }
 }

@@ -10,6 +10,7 @@ import { selectUser } from "./user"
 import api from "../api"
 import { YtdWeather } from "../types/weather"
 import moment from "moment"
+import { toast } from "react-toastify"
 
 /* Action constants */
 const SET_ENTRY: 'SET_ENTRY' = 'SET_ENTRY'
@@ -71,6 +72,7 @@ export const addEntryToPlanting = (
 
         await dispatch(changeEntries(entry, plantingId, appendEntry))
     } catch (error) {
+        toast.error('Add entry failed')
         console.log({ error })
     }
 }
@@ -104,21 +106,25 @@ export const changeEntries = (
     entry: Entry,
     plantingId: string,
     cb: EntryCallback,
-) => async (dispatch: any, getState: any) => {
-    const amendPlantingEntries = (garden: Garden, plantingId: string) => {
-        const { plantings } = garden
-        const updatedPlantings = plantings.map(p => {
-            if (p.plantingId === plantingId) {
-                const entries = cb(p, entry)
-                return Planting.of({ ...p, entries })
-            } else {
-                return p
-            }
-        })
-        return updatedPlantings
+) => async (dispatch: any) => {
+    try {
+        const amendPlantingEntries = (garden: Garden, plantingId: string) => {
+            const { plantings } = garden
+            const updatedPlantings = plantings.map(p => {
+                if (p.plantingId === plantingId) {
+                    const entries = cb(p, entry)
+                    return Planting.of({ ...p, entries })
+                } else {
+                    return p
+                }
+            })
+            return updatedPlantings
+        }
+        
+        dispatch(changeGardenPlantings(plantingId, amendPlantingEntries))
+    } catch (error) {
+        toast.error('Change entries failed')   
     }
-    
-    dispatch(changeGardenPlantings(plantingId, amendPlantingEntries))
 }
 
 
@@ -154,12 +160,12 @@ export const bulkAddEntry = (bulkEntries: BulkEntries) => async (dispatch: any, 
             })
             if (builtUser) {
                 const updatedUser = editUserGardens(builtUser, updatedGarden)
-                console.log({updatedUser})
                 const response = await api.updateUser(updatedUser)
                 dispatch(setEntities(response))
             }
         }
     } catch (error) {
+        toast.error('Bulk add entries failed')
         console.log({error})
     }
 }
@@ -173,6 +179,7 @@ export const removeEntry = () => async (dispatch: any, getState: any) => {
             await dispatch(changeEntries(entry, plantingId, filterEntry))
         }
     } catch (error) {
+        toast.error('Remove entry failed')
         console.log({error})
     }
 }
@@ -191,6 +198,7 @@ export const editEntry = (editEntryInput: AddEntryInput, plantingId: string) => 
         })
         await dispatch(changeEntries(entry, plantingId, replaceEntry))
     } catch (error) {
+        toast.error('Replace entry failed')
         console.log({error})
     }
 }

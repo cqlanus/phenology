@@ -2,6 +2,7 @@ import { getClimateNorms as getNorms } from '../hooks/climate'
 import { ClimateNorms } from '../types/climate'
 import { AppState } from '.';
 import { SELECT_STATION, SelectStationAction } from './station';
+import { toast } from 'react-toastify';
 
 /* Action Types */
 const GET_CLIMATE_NORMS_START: 'GET_CLIMATE_NORMS_START' = 'GET_CLIMATE_NORMS_START'
@@ -40,6 +41,7 @@ export const getClimateNorms = (stationId: string) => async (dispatch: any) => {
         const norms = await getNorms(stationId)
         dispatch({ type: GET_CLIMATE_NORMS_COMPLETE, response: norms })
     } catch (error) {
+        toast.error('Get climate norms failed')
         dispatch ({ type: GET_CLIMATE_NORMS_FAILED, error })
         
     }

@@ -5,6 +5,7 @@ import { selectGarden, editUserGardens } from './garden'
 import { selectUser } from './user'
 import api from '../api'
 import { setEntities } from './entities'
+import { toast } from 'react-toastify'
 
 /* Action creators */
 const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
@@ -83,14 +84,18 @@ export const addPlantings = (selection: PlantSelection) => async (
         await dispatch(changePlanting(addSelection))
         
     } catch (error) {
+        toast.error('Add plantings failed')
         console.log({error})
     }
 }
 
 export const removePlanting = (plantingId: string) => async (dispatch: any, getState: any) => {
-
-    const filterPlanting = (plantings : Planting[]) => plantings.filter(p => p.plantingId !== plantingId)
-    await dispatch(changePlanting(filterPlanting))
+    try {
+        const filterPlanting = (plantings : Planting[]) => plantings.filter(p => p.plantingId !== plantingId)
+        await dispatch(changePlanting(filterPlanting))
+    } catch (error) {
+        toast.error('Remove planting failed')
+    }
 }
 
 const changePlanting = (cb: (t: any) => any) => async (dispatch: any, getState: any) => {

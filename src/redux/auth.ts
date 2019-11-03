@@ -1,5 +1,6 @@
 import { Auth } from 'aws-amplify'
 import { getApiUser } from './entities'
+import { toast } from 'react-toastify'
 
 /* Action Types */
 const SIGN_IN_START: 'SIGN_IN_START' = 'SIGN_IN_START'
@@ -58,6 +59,7 @@ export const signIn = () => async (dispatch: any) => {
         await Auth.federatedSignIn()
         dispatch({ type: SIGN_IN_COMPLETE })
     } catch (error) {
+        toast.error('Sign in failed')
         dispatch({ type: SIGN_IN_FAILED, error })
     }
 }
@@ -68,6 +70,7 @@ export const signOut = () => async (dispatch: any) => {
         await Auth.signOut()
         dispatch({ type: SIGN_OUT_COMPLETE })
     } catch (error) {
+        toast.error('Sign out failed')
         dispatch({ type: SIGN_OUT_FAILED, error })
     }
 }
@@ -79,6 +82,7 @@ export const getUser = () => async (dispatch: any) => {
         await dispatch(getApiUser(user))
         dispatch({ type: GET_USER_COMPLETE, user })
     } catch (error) {
+        toast.error('Get user failed')
         dispatch({ type: GET_USER_FAILED, error })
     }
 }
@@ -90,6 +94,7 @@ export const getSignedInUser = () => async (dispatch: any) => {
             dispatch(getUser())
         }
     } catch (error) {
+        toast.error('Get signed in user failed')
         console.log({error})
     }
 

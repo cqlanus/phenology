@@ -2,6 +2,7 @@ import { getHistoricalWeather as getWeather } from '../hooks/climate'
 import { YtdWeather } from '../types/weather'
 import { AppState } from '.';
 import { SELECT_STATION, SelectStationAction } from './station';
+import { toast } from 'react-toastify';
 
 /* Action Types */
 const GET_HISTORICAL_WEATHER_START: 'GET_HISTORICAL_WEATHER_START' = 'GET_HISTORICAL_WEATHER_START'
@@ -42,6 +43,7 @@ export const getHistoricalWeather = (stationId: string) => async (dispatch: any)
         
     } catch (error) {
         console.log({error})
+        toast.error('Get weather failed')
         dispatch({ type: GET_HISTORICAL_WEATHER_FAILED, error })
         
     }

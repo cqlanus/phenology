@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+
 import Amplify from 'aws-amplify'
 
 import config from './aws-exports'
@@ -76,6 +78,12 @@ const App: React.FC = () => {
                 return station ? <StationData {...props} /> : <Redirect to="/location" />
             } } />
           </Router>
+          <ToastContainer
+            position="bottom-center"
+            toastClassName="black-background"
+            closeOnClick
+            draggable
+            hideProgressBar />
           
       </Provider>
   );

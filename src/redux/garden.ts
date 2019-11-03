@@ -5,6 +5,7 @@ import { AppState } from "."
 import { Garden, Planting, Entry, Plant, NetworkPlant } from "../types/user"
 import { selectUser } from "./user"
 import api from "../api"
+import { toast } from "react-toastify"
 
 /* Action Constants */
 const SET_GARDEN: 'SET_GARDEN' = 'SET_GARDEN'
@@ -81,6 +82,7 @@ export const addGardenToUser = ({ name, plants }: AddGardenInput) => async (disp
         }
         
     } catch (error) {
+        toast.error('Add garden failed')
         console.log({error})
     }
 }
@@ -96,6 +98,7 @@ export const removeGarden = (gardenId: string) => async (dispatch: any, getState
     
         }
     } catch (error) {
+        toast.error('Remove garden failed')
         console.log({error})
     }
 }

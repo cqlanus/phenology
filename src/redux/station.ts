@@ -8,6 +8,7 @@ import { selectUser } from './user'
 import { Garden } from '../types/user'
 import { setEntities } from './entities'
 import api from '../api'
+import { toast } from 'react-toastify'
 
 /* Action Types */
 const GET_STATIONS_START: 'GET_STATIONS_START' = 'GET_STATIONS_START'
@@ -87,6 +88,7 @@ export const getNearbyStations = () => async (dispatch: any, getState: any) => {
         }
     } catch (error) {
         console.log({ error })
+        toast.error('Get nearby stations failed')
         dispatch(getStationsFailed(error))
     }
 }
@@ -104,6 +106,7 @@ export const getStationsFromZip = (zip: string) => async (dispatch: any, getStat
         }
     } catch (error) {
         console.log({ error })
+        toast.error('Get stations from zip failed')
         dispatch(getStationsFailed(error))
     }
 }
@@ -127,6 +130,7 @@ export const markStationAsFavorite = (
 
         await Promise.all(gardens.map(favoriteGarden(station)))
     } catch (error) {
+        toast.error('Mark station as favorite failed')
         console.log({ error })
     }
 }

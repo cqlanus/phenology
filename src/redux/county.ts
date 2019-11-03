@@ -1,6 +1,7 @@
 import { County } from '../types/location'
 import { getCountyCode, getCountyCodeFromZip } from '../hooks/location'
 import { AppState } from '.'
+import { toast } from 'react-toastify'
 
 /* Action Types */
 const GET_COUNTY_START: 'GET_COUNTY_START' = 'GET_COUNTY_START'
@@ -39,6 +40,7 @@ export const getCounty = () => async (dispatch: any) => {
         const county = await getCountyCode()
         dispatch ({ type: GET_COUNTY_COMPLETE, response: county })
     } catch (error) {
+        toast.error('Get county failed')
         dispatch({ type: GET_COUNTY_FAILED, error })        
     }
 }
@@ -49,6 +51,7 @@ export const getCountyByZip = (zip: string) => async (dispatch: any) => {
         const county = await getCountyCodeFromZip(zip)
         dispatch ({ type: GET_COUNTY_COMPLETE, response: county })
     } catch (error) {
+        toast.error('Get county by zip failed')
         dispatch({ type: GET_COUNTY_FAILED, error })        
     }
 }

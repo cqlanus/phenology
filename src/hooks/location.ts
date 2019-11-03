@@ -63,7 +63,6 @@ const processPlace = (place: any) => {
 
 export const getCountyCodeFromZip = async (zip: string): Promise<County | undefined> => {
     const place = await getCountyFromZip(zip)
-    console.log({place})
     return processPlace(place)
 }
 

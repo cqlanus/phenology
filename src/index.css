@@ -15,3 +15,28 @@ code {
 .react-datepicker-wrapper, .react-datepicker__input-container {
     display: block;
 }
+
+:root {
+    --blue: rgb(125, 172, 237);
+    --green: rgb(157, 204, 171);
+    --yellow: rgb(237, 205, 125);
+    --red: rgb(224, 146, 141);
+}
+
+
+.Toastify__toast--default {
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+ }
+  .Toastify__toast--info {
+    background: var(--blue);
+ }
+  .Toastify__toast--success {
+    background: var(--green);
+ }
+  .Toastify__toast--warning {
+    background: var(--yellow);
+ }
+  .Toastify__toast--error {
+    background: var(--red);
+ }
