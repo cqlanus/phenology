@@ -9,7 +9,6 @@ const mapState = (state: AppState, ownProps: any) => {
         entries: selectOrderedEntries(state, ownProps),
         phenophases: state.phenophase,
         plantingId: ownProps.plantingId,
-        ytdWeather: state.weather.ytdWeather
     }
 }
  

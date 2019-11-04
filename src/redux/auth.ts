@@ -94,7 +94,6 @@ export const getSignedInUser = () => async (dispatch: any) => {
             dispatch(getUser())
         }
     } catch (error) {
-        toast.error('Get signed in user failed')
         console.log({error})
     }
 

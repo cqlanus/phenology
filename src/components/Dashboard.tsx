@@ -48,7 +48,7 @@ const Layout = styled.div`
         "garden"
         "station";
 
-    @media (min-width: ${BREAKPOINTS.TABLET}) {    
+    @media (min-width: ${BREAKPOINTS.TABLET}px) {    
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 1em;
         grid-template-areas: 

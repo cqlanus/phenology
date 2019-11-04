@@ -100,8 +100,9 @@ const PlantingsContainer = styled.div`
 
     display: grid;
     grid-template-columns: 1fr;
+    grid-gap: 1em;
 
-    @media (min-width: ${BREAKPOINTS.TABLET}) {
+    @media (min-width: ${BREAKPOINTS.TABLET}px) {
         grid-template-columns: 1fr 1fr;
     }
     
@@ -112,7 +113,7 @@ const PlantingCardContainer = styled.div`
     margin-bottom: 1em;
     margin-right: 1em;
 
-    @media (min-width: ${BREAKPOINTS.TABLET}) {
+    @media (min-width: ${BREAKPOINTS.TABLET}px) {
         flex-basis: calc(50% - 1em);
     } */
 `
