@@ -1,7 +1,7 @@
 import React from 'react'
 import { Responsive } from 'semantic-ui-react'
 
-import { Entry } from '../types/user'
+import { Entry, Planting } from '../types/user'
 import { PhenophaseEntity } from '../redux/entities'
 import EntryListAccordion from './EntryListAccordion'
 import EntryListModal from './EntryListModal'
@@ -12,7 +12,7 @@ interface Props {
     phenophases: PhenophaseEntity
     setEntry: (entryId?: string) => void
     setPlanting: (plantingId?: string) => void
-    plantingId: string | undefined
+    planting: Planting
 }
 
 const EntryList = (props: Props) => {

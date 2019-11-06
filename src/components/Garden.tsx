@@ -6,7 +6,14 @@ import CenterWrapper from './CenterWrapper'
 import StationModal from './StationModal'
 import AddPlantForm from '../containers/AddPlantForm'
 import { withNavBar } from '../containers/NavBar'
-import { Icon, Button, Modal, Segment, Input } from 'semantic-ui-react'
+import {
+    Icon,
+    Button,
+    Modal,
+    Segment,
+    Input,
+    Responsive,
+} from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 import PlantingCard from './PlantingCard'
 import { BREAKPOINTS } from '../data/breakpoints'
@@ -20,25 +27,38 @@ interface Props {
 }
 
 const Container = styled.div`
-    padding-bottom: .5em;
+    padding-bottom: 0.5em;
 `
 
+interface RowProps {
+    center?: boolean
+}
 const Row = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: ${(p: RowProps) => p.center ? 'center' : 'space-between'};
     align-items: center;
 `
 
 const AddPlantModal = ({ disabled }: any) => {
     const { isOpen, closeModal, openModal } = useModal()
     const style = { flexShrink: 1 }
+    const renderTrigger = () => {
+        return (
+            <Button
+                style={style}
+                disabled={disabled}
+                onClick={openModal}
+                primary>
+                    <Row center>
+                        <Icon name="leaf" />
+                        <Responsive minWidth={BREAKPOINTS.TABLET}>Add Plant</Responsive>
+                    </Row>
+            </Button>
+        )
+    }
+
     return (
-        <Modal
-            onClose={closeModal}
-            open={isOpen}
-            trigger={
-                <Button style={style} icon="leaf" disabled={disabled} onClick={openModal} primary />
-            }>
+        <Modal onClose={closeModal} open={isOpen} trigger={renderTrigger()}>
             <Modal.Content scrolling>
                 <AddPlantForm closeModal={closeModal} />
             </Modal.Content>
@@ -65,7 +85,7 @@ const GardenSettingsModal = withRouter(
             <Modal
                 open={isOpen}
                 onClose={closeModal}
-                trigger={<Icon onClick={openModal} name="setting" />}>
+                trigger={<Icon link onClick={openModal} name="setting" />}>
                 <Segment>
                     <Container>
                         <Button fluid onClick={handleEdit}>
@@ -105,7 +125,6 @@ const PlantingsContainer = styled.div`
     @media (min-width: ${BREAKPOINTS.TABLET}px) {
         grid-template-columns: 1fr 1fr;
     }
-    
 `
 
 const PlantingCardContainer = styled.div`
@@ -142,7 +161,7 @@ const Garden = ({
     removeGarden,
     removePlanting,
     getHistoricalWeather,
-    history
+    history,
 }: Props & RouteComponentProps) => {
     const [isEditing, setEditing] = useState(false)
     const { isOpen, openModal, closeModal } = useModal()
@@ -155,10 +174,10 @@ const Garden = ({
                 getHistoricalWeather(garden.station.stationId)
             } else {
                 openModal()
-                console.log("no station", { garden })
+                console.log('no station', { garden })
             }
         }
-    }, [])
+    }, [garden, getHistoricalWeather, openModal])
 
     if (!garden) {
         return <div />
@@ -170,10 +189,8 @@ const Garden = ({
         return (
             <PlantingsContainer>
                 {garden.plantings.map(p => (
-                    <PlantingCardContainer key={p.plantingId} >
-
+                    <PlantingCardContainer key={p.plantingId}>
                         <PlantingCard
-                            
                             planting={p}
                             isEditing={isEditing}
                             setPlanting={setPlanting}
@@ -182,6 +199,84 @@ const Garden = ({
                     </PlantingCardContainer>
                 ))}
             </PlantingsContainer>
+        )
+    }
+
+    const renderButtons = () => {
+        return (
+            <Button.Group fluid compact>
+                        <AddPlantModal disabled={isEditing} />
+                        <Button
+                            onClick={handleClick(
+                                `/garden/${garden.gardenId}/bulkadd`,
+                            )}
+                            primary
+                            icon="th list"
+                        >
+                            <Row center>
+                                <Icon name="th list" />
+                                <Responsive minWidth={BREAKPOINTS.TABLET}>
+                                    Bulk Add Entry
+                                </Responsive>
+                            </Row>
+                        </Button>
+                        <Button
+                            onClick={handleClick(
+                                `/garden/${garden.gardenId}/season`,
+                            )}
+                            icon="calendar alternate"
+                            primary
+                        >
+                            <Row center>
+                                <Icon name="calendar alternate" />
+                                <Responsive minWidth={BREAKPOINTS.TABLET}>
+                                    Review Season
+                                </Responsive>
+                            </Row>
+                        </Button>
+                    </Button.Group>
+            // <div>
+            //     <Responsive {...Responsive.onlyMobile}>
+            //         <Button.Group fluid compact>
+            //             <AddPlantModal disabled={isEditing} />
+            //             <Button
+            //                 onClick={handleClick(
+            //                     `/garden/${garden.gardenId}/bulkadd`,
+            //                 )}
+            //                 primary
+            //                 icon="th list"
+            //             />
+            //             <Button
+            //                 onClick={handleClick(
+            //                     `/garden/${garden.gardenId}/season`,
+            //                 )}
+            //                 icon="calendar alternate"
+            //                 primary
+            //             />
+            //         </Button.Group>
+            //     </Responsive>
+            //     <Responsive minWidth={BREAKPOINTS.TABLET}>
+            //         <Button.Group fluid compact>
+            //             <AddPlantModal disabled={isEditing} />
+            //             <Button
+            //                 onClick={handleClick(
+            //                     `/garden/${garden.gardenId}/bulkadd`,
+            //                 )}
+            //                 primary
+            //                 icon="th list">
+            //                 Bulk Add Entry
+            //             </Button>
+            //             <Button
+            //                 onClick={handleClick(
+            //                     `/garden/${garden.gardenId}/season`,
+            //                 )}
+            //                 icon="calendar alternate"
+            //                 primary>
+            //                 Review Season
+            //             </Button>
+            //         </Button.Group>
+            //     </Responsive>
+            // </div>
         )
     }
 
@@ -194,8 +289,8 @@ const Garden = ({
                         setEditing={setEditing}
                     />
                 ) : (
-                        <h2>{garden.name}</h2>
-                    )}
+                    <h2>{garden.name}</h2>
+                )}
                 {!isEditing && (
                     <GardenSettingsModal
                         setEditing={setEditing}
@@ -203,16 +298,13 @@ const Garden = ({
                     />
                 )}
             </Row>
-            <Container>
-                <Button.Group fluid compact>
-                    <AddPlantModal disabled={isEditing} />
-                    <Button onClick={handleClick(`/garden/${garden.gardenId}/bulkadd`)} primary icon="th list" />
-                    <Button onClick={handleClick(`/garden/${garden.gardenId}/season`)} icon="calendar alternate" primary />
-                </Button.Group>
-            </Container>
+            <Container>{renderButtons()}</Container>
             {renderPlantings()}
-            <StationModal isOpen={isOpen} openModal={openModal} closeModal={closeModal} />
-
+            <StationModal
+                isOpen={isOpen}
+                openModal={openModal}
+                closeModal={closeModal}
+            />
         </CenterWrapper>
     )
 }

@@ -2,17 +2,16 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Card, Icon, Feed, Accordion, Modal } from 'semantic-ui-react'
 import moment from 'moment'
-import { Entry } from '../types/user'
+import { Entry, Planting } from '../types/user'
 import { PhenophaseEntity } from '../redux/entities'
 import EditEntryForm from '../containers/EditEntryForm'
-import { YtdWeather } from '../types/weather'
 
 interface Props {
     entries: Entry[]
     phenophases: PhenophaseEntity
     setEntry: (entryId?: string) => void
     setPlanting: (plantingId?: string) => void
-    plantingId: string | undefined
+    planting: Planting
 }
 
 const Row = styled.div`
@@ -25,7 +24,7 @@ const Title = styled.h4`
     margin: 0;
 `
 
-const EntryListAccordion = ({ entries, phenophases, setEntry, plantingId, setPlanting }: Props) => {
+const EntryListAccordion = ({ entries, phenophases, setEntry, planting, setPlanting }: Props) => {
     const [isOpen, setOpen] = useState(false)
     const [isFormOpen, setFormOpen] = useState(false)
 
@@ -35,7 +34,7 @@ const EntryListAccordion = ({ entries, phenophases, setEntry, plantingId, setPla
         setFormOpen(false)
     }
     const handleOpen = (entryId: string) => () => {
-        plantingId && setPlanting(plantingId)
+        planting && setPlanting(planting.plantingId)
         setEntry(entryId)
         setFormOpen(true)
     }

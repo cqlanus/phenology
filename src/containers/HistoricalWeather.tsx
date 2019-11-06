@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AppState } from '../redux'
 import { selectWeather } from '../redux/weather';
 import { Planting } from '../types/user';
-const stripYear = (dateStr: string) => dateStr.split('-').slice(1).join('-')
+const stripYear = (dateStr: string) => dateStr.split('-').slice(1).join('-').split('T').slice(0,1).join('')
 const calculateEntries = (plantings: Planting[]) => {
     return plantings.reduce((acc: { [key: string ]: any }, planting, idx): { [key: string ]: any } => {
         const { entries } = planting
@@ -14,7 +14,7 @@ const calculateEntries = (plantings: Planting[]) => {
                 [stripYear(e.created)]: {
                     ...existing,
                     [`${idx+1}`]: {
-                        y: idx + 1,
+                        y: (idx + 1) * 3,
                         planting
                     }
                 }

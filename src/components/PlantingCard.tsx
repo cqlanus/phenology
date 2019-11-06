@@ -1,10 +1,10 @@
 import React from 'react'
-import { useModal } from "../hooks/mdoal"
-import { Planting } from "../types/user"
-import { Card, Label, Button, Confirm, Image, Modal } from "semantic-ui-react"
-import AddEntryForm from "../containers/AddEntryForm"
-import EntryList from "../containers/EntryList"
-import styled from "styled-components"
+import { useModal } from '../hooks/mdoal'
+import { Planting } from '../types/user'
+import { Card, Label, Button, Confirm, Image, Modal, Icon } from 'semantic-ui-react'
+import AddEntryForm from '../containers/AddEntryForm'
+import EntryList from '../containers/EntryList'
+import styled from 'styled-components'
 
 const LabelContainer = styled.div`
     padding-top: 1em;
@@ -12,6 +12,10 @@ const LabelContainer = styled.div`
 
 const ListContainer = styled.div`
     padding-left: 1rem;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
 `
 
 const AddEntryModal = ({ setPlanting, plantingId }: any) => {
@@ -27,13 +31,12 @@ const AddEntryModal = ({ setPlanting, plantingId }: any) => {
             open={isOpen}
             onClose={closeModal}
             trigger={
-                <Button
+                <Icon
                     onClick={handleOpen(plantingId)}
-                    floated="right"
-                    icon="plus"
-                    primary
-                    size="tiny"
-                    circular
+                    name="plus circle"
+                    link
+                    size={"large"}
+                    color={"blue"}
                 />
             }>
             <Modal.Content>
@@ -49,7 +52,12 @@ interface PlantingProps {
     setPlanting: (id: string) => void
     removePlanting: (id: string) => void
 }
-const PlantingCard = ({ planting, isEditing, setPlanting, removePlanting }: PlantingProps) => {
+const PlantingCard = ({
+    planting,
+    isEditing,
+    setPlanting,
+    removePlanting,
+}: PlantingProps) => {
     const { isOpen, openModal, closeModal } = useModal()
 
     const handleRemovePlanting = (planting: Planting) => () => {
@@ -61,12 +69,8 @@ const PlantingCard = ({ planting, isEditing, setPlanting, removePlanting }: Plan
     return (
         <Card fluid>
             <Card.Content>
-                <Image
-                    floated="left"
-                    size="tiny"
-                    src={planting.plant.image}
-                />
-                
+                <Image floated="left" size="tiny" src={planting.plant.image} />
+
                 <Card.Header>{planting.plant.commonName}</Card.Header>
                 <Card.Meta>{planting.plant.latinName}</Card.Meta>
                 <LabelContainer>
@@ -98,15 +102,11 @@ const PlantingCard = ({ planting, isEditing, setPlanting, removePlanting }: Plan
             )}
             <Card.Content>
                 <ListContainer>
-                <AddEntryModal
+                    <AddEntryModal
                         plantingId={planting.plantingId}
                         setPlanting={setPlanting}
                     />
-                    <EntryList
-                        entries={planting.entries}
-                        plantingId={planting.plantingId}
-                    />
-                    
+                    <EntryList entries={planting.entries} planting={planting} />
                 </ListContainer>
             </Card.Content>
         </Card>

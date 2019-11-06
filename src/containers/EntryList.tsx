@@ -8,7 +8,7 @@ const mapState = (state: AppState, ownProps: any) => {
     return {
         entries: selectOrderedEntries(state, ownProps),
         phenophases: state.phenophase,
-        plantingId: ownProps.plantingId,
+        planting: ownProps.planting,
     }
 }
  

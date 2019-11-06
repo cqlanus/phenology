@@ -25,7 +25,6 @@ interface Props {
 
 const Container = styled.div`
     height: 100%;
-    padding: 0 0.5em;
     min-height: 30vh;
     overflow: scroll;
 `
@@ -263,7 +262,7 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                         )}
                     }
                     <XAxis dataKey={formatDate} />
-                    <YAxis />
+                    <YAxis width={30} />
                 </ComposedChart>
             </ResponsiveContainer>
             <WeatherSettingsModal

@@ -14,6 +14,7 @@ import { NetworkPlant, PlantArgs } from '../types/user'
 import { usePlant } from '../hooks/plant'
 import { PlantSelection } from '../redux/planting'
 import NewPlantModal from './NewPlantModal'
+import { BREAKPOINTS } from '../data/breakpoints'
 
 const Row = styled.div`
     display: flex;
@@ -56,6 +57,21 @@ const Input = styled(Form.Input)`
     width: 60px;
 `
 
+const PlantContainer = styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 1em;
+
+    @media (min-width: ${BREAKPOINTS.TABLET}px) {
+        grid-template-columns: 1fr 1fr;
+    }
+`
+const StyledCard = styled(Card)`
+    &&&&&& {
+        margin: 1em 0;
+    }
+`
+
 const RED: 'red' = 'red'
 const BLUE: 'blue' = 'blue'
 const PURPLE: 'purple' = 'purple'
@@ -94,10 +110,10 @@ const AddPlantForm = ({
         }
     }
 
-    const renderPlant = (plant: NetworkPlant) => {
+    const renderPlant = (plant: NetworkPlant, idx: number) => {
         const hasChecked = !!checked[plant.commonName]
         return (
-            <Card key={plant.id} fluid>
+            <StyledCard key={plant.id} fluid>
                 <Card.Content>
                     {plant.image && (
                         <StyledImage floated="left" src={plant.image} />
@@ -129,11 +145,17 @@ const AddPlantForm = ({
                         )}
                     </Row>
                 </Card.Content>
-            </Card>
+            </StyledCard>
         )
     }
 
-    const renderPlants = () => plants.map(renderPlant)
+    const renderPlants = () => {
+        return (
+            <PlantContainer>
+                {plants.map(renderPlant)}
+            </PlantContainer>
+        )
+    }
 
     return (
         <StyledForm onSubmit={handleSubmit}>
