@@ -1,14 +1,33 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router'
-import { Card, Input, Form } from 'semantic-ui-react'
+import { Card, Input, Form, Image } from 'semantic-ui-react'
 
 import { StationArgs } from '../types/climate'
 import { County } from '../types/location'
 import { Garden } from '../types/user'
+import { BREAKPOINTS } from '../data/breakpoints'
+import stationImg from '../assets/images/wind-power.svg'
 
 const Container = styled.div`
     /* padding: 0.5em; */
+`
+const StationContainer = styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1em;
+
+    @media (min-width: ${BREAKPOINTS.TABLET}px) {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+`
+
+const ImageContainer = styled.div`
+    height: 3.2em;
+    width: 3.2em;
+    margin-right: 1em;
+    float: left;
 `
 
 interface Props {
@@ -51,12 +70,17 @@ const StationsList = ({
     const renderCard = (station: StationArgs) => {
         const name = station.name.split(',')[0]
         return (
-            <Card link onClick={handleClick(station)} fluid key={station.id}>
-                <Card.Content>
-                    <Card.Header>{name}</Card.Header>
-                    <Card.Meta>{station.id}</Card.Meta>
-                </Card.Content>
-            </Card>
+            <div key={station.id}>
+                <Card link onClick={handleClick(station)} fluid >
+                    <Card.Content>
+                        <ImageContainer>
+                            <Image src={stationImg} size="tiny" />
+                        </ImageContainer>
+                        <Card.Header>{name}</Card.Header>
+                        <Card.Meta>{station.id}</Card.Meta>
+                    </Card.Content>
+                </Card>
+            </div>
         )
     }
 
@@ -66,7 +90,9 @@ const StationsList = ({
                 <Input fluid onChange={(e, { value }) => setZip(value)} label={"Zip Code"} icon={{ name: 'search', circular: true, link: true, onClick: () => getStationsFromZip(zip) }} />
             </Form>
             {county && <h2>{`${county.name} County Stations`}</h2>}
-            {stations.map(renderCard)}
+            <StationContainer>
+                {stations.map(renderCard)}
+            </StationContainer>
         </Container>
     )
 }

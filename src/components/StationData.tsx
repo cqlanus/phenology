@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import DataDisplay from '../containers/DataDisplay'
 import { withNavBar } from '../containers/NavBar'
 import styled from 'styled-components'
-import { Menu, Button, Modal, Card, Checkbox } from 'semantic-ui-react'
+import { Menu, Button, Modal, Card, Checkbox, Icon, Header, Responsive } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
 import { Garden } from '../types/user'
+import { BREAKPOINTS } from '../data/breakpoints'
 
 const Container = styled.div`
     height: calc(100vh - 50px - 1rem);
@@ -14,9 +15,36 @@ const Container = styled.div`
     padding: 1em;
 `
 
+const TopContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1em;
+`
+
 const Row = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
+`
+
+const StyledHeader = styled(Header)`
+    &&& {
+        margin: 0;
+    }
+`
+const HeaderContainer = styled.div`
+    flex: 3;
+`
+
+const Flex = styled.div`
+    flex: 2;
+    margin-left: 1em;
+`
+
+const ButtonInnerContainer = styled.div`
+    display: flex;
+    justify-content: center;
     align-items: center;
 `
 
@@ -59,15 +87,24 @@ const FavoriteStationModal = ({ gardens, handleApply }: { gardens?: Garden[], ha
         closeModal()
     }
 
+    const renderTrigger = () => (
+        <Flex>
+            <Button fluid onClick={handleClick} color="teal" >
+                <ButtonInnerContainer>
+                    <Icon name="star outline" />
+                    <Responsive {...Responsive.onlyMobile}>Favorite</Responsive>
+                    <Responsive minWidth={BREAKPOINTS.TABLET}>Mark As Favorite</Responsive>
+                </ButtonInnerContainer>
+
+            </Button>
+        </Flex>
+    )
+
     return (
         <Modal
             open={isOpen}
             onClose={closeModal}
-            trigger={
-                <Button onClick={handleClick} fluid color="teal">
-                    Mark as Favorite
-                </Button>
-            }>
+            trigger={renderTrigger()}>
             <Modal.Header>Apply to which gardens?</Modal.Header>
             <Modal.Content>
                 {gardens &&
@@ -121,8 +158,15 @@ const StationData = ({
     )
     return (
         <Container>
-            {stationName && <h4>{stationName}</h4>}
-            <FavoriteStationModal gardens={gardens} handleApply={handleApply} />
+            <TopContainer>
+                {
+                    stationName &&
+                    <HeaderContainer>
+                        <StyledHeader>{stationName}</StyledHeader>
+                    </HeaderContainer>
+                }
+                <FavoriteStationModal gardens={gardens} handleApply={handleApply} />
+            </TopContainer>
             {renderButtons()}
             <DataDisplay />
         </Container>
