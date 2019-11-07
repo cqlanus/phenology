@@ -15,11 +15,11 @@ const Row = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-grow: 1;
+    margin: .5em 0;
 `
 
 const CheckboxContainer = styled.div`
-    flex-grow: 1;
-    margin-right: 0.5em;
+    margin-left: 0.5em;
 `
 
 const Input = styled(Form.Input)`
@@ -77,6 +77,7 @@ const CreateGardenForm = ({
                     <Row key={idx}>
                         <CheckboxContainer>
                             <Form.Checkbox
+                                toggle
                                 defaultChecked={hasChecked}
                                 onChange={_handleCheck(plant)}
                                 label={label}

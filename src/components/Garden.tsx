@@ -49,10 +49,10 @@ const AddPlantModal = ({ disabled }: any) => {
                 disabled={disabled}
                 onClick={openModal}
                 primary>
-                    <Row center>
-                        <Icon name="leaf" />
-                        <Responsive minWidth={BREAKPOINTS.TABLET}>Add Plant</Responsive>
-                    </Row>
+                <Row center>
+                    <Icon name="leaf" />
+                    <Responsive minWidth={BREAKPOINTS.TABLET}>Add Plant</Responsive>
+                </Row>
             </Button>
         )
     }
@@ -67,7 +67,7 @@ const AddPlantModal = ({ disabled }: any) => {
 }
 
 const GardenSettingsModal = withRouter(
-    ({ handleRemove, setEditing, history }: any & RouteComponentProps) => {
+    ({ handleRemove, setEditing, history, garden, openModal: open }: any & RouteComponentProps) => {
         const { isOpen, closeModal, openModal } = useModal()
 
         const handleEdit = () => {
@@ -86,10 +86,18 @@ const GardenSettingsModal = withRouter(
                 open={isOpen}
                 onClose={closeModal}
                 trigger={<Icon link onClick={openModal} name="setting" />}>
-                <Segment>
+                <Modal.Header>
+                    Settings
+                </Modal.Header>
+                <Modal.Content>
                     <Container>
                         <Button fluid onClick={handleEdit}>
                             Edit Garden
+                        </Button>
+                    </Container>
+                    <Container>
+                        <Button fluid secondary onClick={open}>
+                            Update Station
                         </Button>
                     </Container>
                     <Container>
@@ -97,7 +105,7 @@ const GardenSettingsModal = withRouter(
                             Delete Garden
                         </Button>
                     </Container>
-                </Segment>
+                </Modal.Content>
             </Modal>
         )
     },
@@ -199,78 +207,36 @@ const Garden = ({
     const renderButtons = () => {
         return (
             <Button.Group fluid compact>
-                        <AddPlantModal disabled={isEditing} />
-                        <Button
-                            onClick={handleClick(
-                                `/garden/${garden.gardenId}/bulkadd`,
-                            )}
-                            primary
-                            icon="th list"
-                        >
-                            <Row center>
-                                <Icon name="th list" />
-                                <Responsive minWidth={BREAKPOINTS.TABLET}>
-                                    Bulk Add Entry
+                <AddPlantModal disabled={isEditing} />
+                <Button
+                    onClick={handleClick(
+                        `/garden/${garden.gardenId}/bulkadd`,
+                    )}
+                    primary
+                    icon="th list"
+                >
+                    <Row center>
+                        <Icon name="th list" />
+                        <Responsive minWidth={BREAKPOINTS.TABLET}>
+                            Bulk Add Entry
                                 </Responsive>
-                            </Row>
-                        </Button>
-                        <Button
-                            onClick={handleClick(
-                                `/garden/${garden.gardenId}/season`,
-                            )}
-                            icon="calendar alternate"
-                            primary
-                        >
-                            <Row center>
-                                <Icon name="calendar alternate" />
-                                <Responsive minWidth={BREAKPOINTS.TABLET}>
-                                    Review Season
+                    </Row>
+                </Button>
+                <Button
+                    onClick={handleClick(
+                        `/garden/${garden.gardenId}/season`,
+                    )}
+                    icon="calendar alternate"
+                    primary
+                >
+                    <Row center>
+                        <Icon name="calendar alternate" />
+                        <Responsive minWidth={BREAKPOINTS.TABLET}>
+                            Review Season
                                 </Responsive>
-                            </Row>
-                        </Button>
-                    </Button.Group>
-            // <div>
-            //     <Responsive {...Responsive.onlyMobile}>
-            //         <Button.Group fluid compact>
-            //             <AddPlantModal disabled={isEditing} />
-            //             <Button
-            //                 onClick={handleClick(
-            //                     `/garden/${garden.gardenId}/bulkadd`,
-            //                 )}
-            //                 primary
-            //                 icon="th list"
-            //             />
-            //             <Button
-            //                 onClick={handleClick(
-            //                     `/garden/${garden.gardenId}/season`,
-            //                 )}
-            //                 icon="calendar alternate"
-            //                 primary
-            //             />
-            //         </Button.Group>
-            //     </Responsive>
-            //     <Responsive minWidth={BREAKPOINTS.TABLET}>
-            //         <Button.Group fluid compact>
-            //             <AddPlantModal disabled={isEditing} />
-            //             <Button
-            //                 onClick={handleClick(
-            //                     `/garden/${garden.gardenId}/bulkadd`,
-            //                 )}
-            //                 primary
-            //                 icon="th list">
-            //                 Bulk Add Entry
-            //             </Button>
-            //             <Button
-            //                 onClick={handleClick(
-            //                     `/garden/${garden.gardenId}/season`,
-            //                 )}
-            //                 icon="calendar alternate"
-            //                 primary>
-            //                 Review Season
-            //             </Button>
-            //         </Button.Group>
-            //     </Responsive>
-            // </div>
+                    </Row>
+                </Button>
+            </Button.Group>
         )
     }
 
@@ -283,10 +249,12 @@ const Garden = ({
                         setEditing={setEditing}
                     />
                 ) : (
-                    <h2>{garden.name}</h2>
-                )}
+                        <h2>{garden.name}</h2>
+                    )}
                 {!isEditing && (
                     <GardenSettingsModal
+                        openModal={openModal}
+                        garden={garden}
                         setEditing={setEditing}
                         handleRemove={handleRemove}
                     />

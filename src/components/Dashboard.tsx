@@ -10,6 +10,7 @@ import { withNavBar } from '../containers/NavBar'
 import { Station } from '../types/climate'
 import { Garden } from '../types/user'
 import { BREAKPOINTS } from '../data/breakpoints'
+import { StyledHeader } from './StyledHeader'
 import stationImg from '../assets/images/wind-power.svg'
 
 const Row = styled.div`
@@ -27,11 +28,15 @@ const Title = styled.h3`
 const GardensContainer = styled.div`
     padding-bottom: 2em;
 `
-const StyledCard = styled(Card)``
+const StyledCard = styled(Card)`
+    &&& {
+        padding: 1em;
+    }
+`
 
 const StyledLink = styled(L)`
     &&&& > ${StyledCard} {
-        margin-bottom: .5em;
+        margin-bottom: .75em;
     }
 `
 
@@ -39,7 +44,7 @@ interface Section {
     name: string
 }
 const Section = styled.div`
-    grid-area: ${({name}: Section) => name };
+    grid-area: ${({ name }: Section) => name};
 `
 
 const Layout = styled.div`
@@ -56,6 +61,10 @@ const Layout = styled.div`
     }
     
 `
+const Content = styled.div`
+    display: flex;
+    align-items: center;
+`
 
 const ImageContainer = styled.div`
     height: 3.2em;
@@ -65,7 +74,7 @@ const ImageContainer = styled.div`
 `
 
 interface StationProps {
-    station?: Station, 
+    station?: Station,
     selectStation: (id: string) => void
 }
 const StationCard = withRouter(({ station, selectStation, history }: StationProps & RouteComponentProps) => {
@@ -78,13 +87,18 @@ const StationCard = withRouter(({ station, selectStation, history }: StationProp
         return (
             <StyledLink to={`/station/${station.stationId}`} onClick={handleClick}>
                 <StyledCard fluid >
-                    <Card.Content>
-                        <ImageContainer>
-                            <Image src={stationImg} size="tiny" />
-                        </ImageContainer>
-                        <Card.Header>{name}</Card.Header>
-                        <Card.Meta>{station.stationId}</Card.Meta>
-                    </Card.Content>
+                    <Content>
+                        <Card.Content>
+                            <ImageContainer>
+                                <Image src={stationImg} size="tiny" />
+                            </ImageContainer>
+                        </Card.Content>
+                        <Card.Content>
+
+                            <StyledHeader>{name}</StyledHeader>
+                            <Card.Meta>{station.stationId}</Card.Meta>
+                        </Card.Content>
+                    </Content>
                 </StyledCard>
             </StyledLink>
         )
@@ -99,7 +113,7 @@ interface Props {
 }
 
 const Dashboard = ({ user, selectStation }: Props) => {
-    
+
     if (user === undefined) {
         return null
     }
@@ -133,7 +147,7 @@ const Dashboard = ({ user, selectStation }: Props) => {
                     [garden.station.stationId]: garden.station
                 } : acc
             }, {})
-            
+
             return Object.values(uniqueStationMap).map(
                 (station: Station) =>
                     station && (
