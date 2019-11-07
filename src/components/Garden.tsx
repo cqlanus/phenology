@@ -212,7 +212,6 @@ const Garden = ({
                         `/garden/${garden.gardenId}/bulkadd`,
                     )}
                     primary
-                    icon="th list"
                 >
                     <Row center>
                         <Icon name="th list" />
@@ -225,7 +224,6 @@ const Garden = ({
                     onClick={handleClick(
                         `/garden/${garden.gardenId}/season`,
                     )}
-                    icon="calendar alternate"
                     primary
                 >
                     <Row center>

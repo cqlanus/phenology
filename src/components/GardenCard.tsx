@@ -38,7 +38,7 @@ const ImageContainer = styled.div`
     /* float: left; */
 `
 
-const GardenCard = ({ garden, history, setGarden }: Props) => {
+const GardenCard = ({ garden,  setGarden }: Props) => {
     const { plantings } = garden
     
     const distinctPlants = plantings.length

@@ -19,7 +19,7 @@ const gardenSlice = createSlice({
     reducers: {
         setGarden: (state, action) => ({ 
             ...state,
-            selected: action.payload.gardenId
+            selected: action.payload
         })
     }
 })
