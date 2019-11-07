@@ -1,6 +1,5 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { combineReducers, configureStore, Action } from 'redux-starter-kit'
+import { ThunkAction } from 'redux-thunk'
 
 import climate from './climate'
 import station from './station'
@@ -17,12 +16,12 @@ import phenophase from './phenophase'
 import entry from './entry'
 
 const rootReducer = combineReducers({
+    entities,
     climate,
     station,
     weather,
     county,
     ui,
-    entities,
     auth,
     user,
     garden,
@@ -32,15 +31,11 @@ const rootReducer = combineReducers({
     entry
 })
 
+
+const store = configureStore({ reducer: rootReducer })
+
 export type AppState = ReturnType<typeof rootReducer>
+export type AppDispatch = typeof store.dispatch
+export type AppThunk = ThunkAction<void, AppState, null, Action<string>>
 
-const configureStore = () => {
-    const middlewares = [thunkMiddleware]
-    const middlewareEnhancer = applyMiddleware(...middlewares)
-
-    const store = createStore( rootReducer, composeWithDevTools(middlewareEnhancer) )
-
-    return store
-}
-
-export default configureStore
+export default store

@@ -1,17 +1,50 @@
+import { createSlice } from 'redux-starter-kit'
 import { Auth } from 'aws-amplify'
 import { getApiUser } from './entities'
 import { toast } from 'react-toastify'
+import { AppThunk } from '.'
 
-/* Action Types */
-const SIGN_IN_START: 'SIGN_IN_START' = 'SIGN_IN_START'
-const SIGN_IN_COMPLETE: 'SIGN_IN_COMPLETE' = 'SIGN_IN_COMPLETE'
-const SIGN_IN_FAILED: 'SIGN_IN_FAILED' = 'SIGN_IN_FAILED'
-const SIGN_OUT_START: 'SIGN_OUT_START' = 'SIGN_OUT_START'
-const SIGN_OUT_COMPLETE: 'SIGN_OUT_COMPLETE' = 'SIGN_OUT_COMPLETE'
-const SIGN_OUT_FAILED: 'SIGN_OUT_FAILED' = 'SIGN_OUT_FAILED'
-const GET_USER_START: 'GET_USER_START' = 'GET_USER_START'
-const GET_USER_COMPLETE: 'GET_USER_COMPLETE' = 'GET_USER_COMPLETE'
-const GET_USER_FAILED: 'GET_USER_FAILED' = 'GET_USER_FAILED'
+/* Initial State */
+const initialState: AuthState = {
+    loading: false,
+    error: undefined,
+    user: undefined
+}
+
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        authLoading: state => ({
+            ...state,
+            loading: true,
+            error: undefined
+        }),
+        authFailed: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload.error
+        }),
+        signInComplete: state => ({
+            ...state,
+            loading: false,
+        }),
+        signOutComplete: state => ({
+            ...state,
+            user: undefined,
+            loading: false,
+        }),
+        getUserComplete: (state, action) => ({
+            ...state,
+            user: action.payload.user,
+            loading: false,
+            
+        })
+    }
+})
+
+const { authLoading, authFailed, signInComplete, signOutComplete, getUserComplete } = authSlice.actions
+export default authSlice.reducer
 
 /* Interfaces */
 interface AuthAttributes {
@@ -32,139 +65,62 @@ export interface AuthState {
     error?: Error
 }
 
-interface AuthStartAction {
-    type: typeof SIGN_IN_START | typeof SIGN_OUT_START | typeof GET_USER_START
-}
-
-interface AuthFailedAction {
-    type: typeof SIGN_IN_FAILED | typeof SIGN_OUT_FAILED | typeof GET_USER_FAILED
-    error: Error
-}
-
-interface AuthCompleteAction {
-    type: typeof SIGN_IN_COMPLETE | typeof SIGN_OUT_COMPLETE
-}
-
-interface GetUserCompleteAction {
-    type: typeof GET_USER_COMPLETE
-    user: AuthUser
-}
-
-type AuthAction = AuthStartAction | AuthFailedAction | AuthCompleteAction | GetUserCompleteAction
-
 /* Async */
-export const signIn = () => async (dispatch: any) => {
+export const signIn = (): AppThunk => async dispatch => {
     try {
-        dispatch({ type: SIGN_IN_START })
+        dispatch(authLoading())
         await Auth.federatedSignIn()
-        dispatch({ type: SIGN_IN_COMPLETE })
+        dispatch(signInComplete())
     } catch (error) {
         toast.error('Sign in failed')
-        dispatch({ type: SIGN_IN_FAILED, error })
+        dispatch(authFailed({error}))
     }
 }
 
-export const signOut = () => async (dispatch: any) => {
+export const signOut = (): AppThunk => async dispatch => {
     try {
-        dispatch({ type: SIGN_OUT_START })
+        dispatch(authLoading())
         await Auth.signOut()
-        dispatch({ type: SIGN_OUT_COMPLETE })
+        dispatch(signOutComplete())
     } catch (error) {
         toast.error('Sign out failed')
-        dispatch({ type: SIGN_OUT_FAILED, error })
+        dispatch(authFailed({error}))
     }
 }
 
-export const getUser = () => async (dispatch: any, getState: any) => {
+export const getUser = (): AppThunk => async (dispatch,  getState) => {
     try {
-        dispatch({ type: GET_USER_START })
+        dispatch(authLoading())
         let user
         const authUser = getState().auth.user
         if (authUser) {
             user = authUser
         } else {
-            user = await Auth.currentAuthenticatedUser()
+            const { username, attributes } = await Auth.currentAuthenticatedUser()
+            user =  { username, attributes }
+            
         }
         await dispatch(getApiUser(user))
-        dispatch({ type: GET_USER_COMPLETE, user })
+        dispatch(getUserComplete({user}))
     } catch (error) {
         toast.error('Get user failed')
-        dispatch({ type: GET_USER_FAILED, error })
+        dispatch(authFailed({error}))
     }
 }
 
-export const getSignedInUser = () => async (dispatch: any) => {
+export const getSignedInUser = (): AppThunk => async dispatch => {
     try {
-        const user = await Auth.currentAuthenticatedUser()
+        const { username, attributes } = await Auth.currentAuthenticatedUser()
+        const user = { username, attributes }
         if (user) {
-            dispatch({ type: GET_USER_COMPLETE, user })
-            dispatch(getUser())
+            dispatch(getUserComplete({user}))
+            await dispatch(getUser())
         }
     } catch (error) {
         console.log({error})
+        dispatch(authFailed({error}))
     }
 
-}
-
-/* Initial State */
-const initialState: AuthState = {
-    loading: false,
-    error: undefined,
-    user: undefined
-}
-
-/* Reducer */
-export default (state = initialState, action: AuthAction): AuthState => {
-
-    switch (action.type) {
-
-        case SIGN_IN_START:
-        case SIGN_OUT_START: 
-        case GET_USER_START: {
-            return {
-                ...state,
-                loading: true,
-                error: undefined
-            }
-        }
-        
-        case SIGN_IN_FAILED: 
-        case SIGN_OUT_FAILED: 
-        case GET_USER_FAILED: {
-            return {
-                ...state,
-                loading: false,
-                error: action.error
-            }
-        }
-        
-        case SIGN_IN_COMPLETE: {
-            return {
-                ...state,
-                loading: false,
-            }
-        }
-
-        case SIGN_OUT_COMPLETE: {
-            return {
-                ...state,
-                user: undefined,
-                loading: false,
-            }
-        }
-
-        case GET_USER_COMPLETE: {
-            return {
-                ...state,
-                user: action.user,
-                loading: false,
-            }
-        }
-
-        default:
-            return state
-    }
-    
 }
 
 /* Selectors */

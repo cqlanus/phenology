@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import styled from 'styled-components'
-import { Card, Image, Feed, Header } from 'semantic-ui-react'
+import { Card, Image } from 'semantic-ui-react'
 import { Link as L } from 'react-router-dom'
 
 import { Garden, Planting, Entry } from '../types/user'

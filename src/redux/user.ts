@@ -1,29 +1,29 @@
 import { createSelector } from 'reselect'
-import { ADD_ENTITY, AddEntityAction, /* selectGardenEntity, selectPlantingEntity, selectEntryEntity */ } from './entities'
+import { setEntities } from './entities'
 import { AppState } from '.';
 import { buildGarden } from './garden';
-
-/* Interfaces */
-interface UserState {
-    selected?: string
-}
-
-type UserAction = AddEntityAction
 
 /* Initial State */
 const initialState: UserState = {
     selected: undefined
 }
 
+/* Interfaces */
+interface UserState {
+    selected?: string
+}
+
+type UserAction = any
+
 /* Reducer */
 export default (state = initialState, action: UserAction): UserState => {
 
     switch (action.type) {
 
-        case ADD_ENTITY: {
+        case setEntities.type: {
             return {
                 ...state,
-                selected: action.result
+                selected: action.payload.result
             }
         }
         

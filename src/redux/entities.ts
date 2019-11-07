@@ -1,25 +1,55 @@
+import { createSlice } from 'redux-starter-kit'
 import { User, Garden, Planting, Entry } from '../types/entities'
 
 import api from '../api/index'
-import { AppState } from '.'
+import { AppState, AppThunk } from '.'
 import { AuthUser } from './auth'
 import { getPlants } from './plants';
 import { toast } from 'react-toastify';
 
-/* Action Constants */
-const ENTITY_START: 'ENTITY_START' = 'ENTITY_START'
-const ENTITY_FAILED: 'ENTITY_FAILED' = 'ENTITY_FAILED'
-export const ADD_ENTITY: 'ADD_ENTITY' = 'ADD_ENTITY'
-const FLUSH_ENTITY: 'FLUSH_ENTITY' = 'FLUSH_ENTITY' 
-
-/* Action Creators */
-export const setEntities = ({ entities, result}: NormalizedEntities): AddEntityAction => {
-    return {
-        type: ADD_ENTITY,
-        entities,
-        result
-    }
+/* Initial State */
+const initialState: EntitiesState = {
+    users: {},
+    gardens: {},
+    plantings: {},
+    entries: {},
+    loading: false,
+    error: undefined
 }
+
+const entitiesSlice = createSlice({
+    name: 'entities',
+    initialState,
+    reducers: {
+        entityLoading: state => ({
+            ...state,
+            loading: true,
+            error: undefined
+        }),
+        entityFailed: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload.error
+        }),
+        flushEntity: () => initialState,
+        setEntities: (state, {payload}) => {
+            const { entities } = payload
+            return (
+                {
+                    ...state,
+                    loading: false,
+                    users: { ...state.users, ...entities.users },
+                    gardens: { ...state.gardens, ...entities.gardens },
+                    plantings: { ...state.plantings, ...entities.plantings },
+                    entries: { ...state.entries, ...entities.entries },
+                }
+            )
+        }
+    }
+})
+
+export const { entityFailed, entityLoading, flushEntity, setEntities } = entitiesSlice.actions
+export default entitiesSlice.reducer
 
 /* Interfaces */
 interface Phenophase {
@@ -42,124 +72,31 @@ export interface Entities {
     entries: EntryEntity
 }
 
-interface NormalizedEntities {
-    entities: Entities
-    result: string
-}
-
 interface EntitiesState extends Entities {
     loading: boolean
     error?: Error
 }
 
-interface EntityStartAction {
-    type: typeof ENTITY_START
-}
-
-export interface AddEntityAction {
-    type: typeof ADD_ENTITY
-    entities: Entities
-    result: string
-}
-
-interface FlushEntityAction {
-    type: typeof FLUSH_ENTITY
-}
-
-interface EntityFailedAction {
-    type: typeof ENTITY_FAILED
-    error: Error
-}
-
-type EntityAction = EntityStartAction | AddEntityAction | FlushEntityAction | EntityFailedAction
-
 /* Async */
-export const getEntities = () => async (dispatch: any) => {
+export const getEntities = (): AppThunk => async dispatch => {
     try {
-        dispatch({ type: ENTITY_START })
-
+        dispatch(entityLoading())
         const { entities } = await api.getEntities()
-        dispatch({ type: ADD_ENTITY, entities })
-        
-
+        dispatch(setEntities(entities))
     } catch (error) {
-        dispatch({ type: ENTITY_FAILED, error })
+        dispatch(entityFailed({error}))
     }
 }
 
-// export const addUser = async () => {
-//     try {
-//         const [ input ] = entities
-//         const response = await API.graphql(graphqlOperation(createUser, {input}))
-        
-//     } catch (error) {
-//         console.log({error})
-//     }
-// }
-
-export const getApiUser = (authUser: AuthUser) => async (dispatch: any) => {
+export const getApiUser = (authUser: AuthUser): AppThunk => async dispatch => {
     try {
-        const normalizedEntities = await api.getApiUser(authUser)
-        console.log({normalizedEntities})
+        const entities = await api.getApiUser(authUser)
         await dispatch(getPlants())
-        dispatch(setEntities(normalizedEntities))
+        dispatch(setEntities(entities))
     } catch (error) {
         toast.error('Get user failed')
         console.log({error1: error})
     }
-}
-
-/* Initial State */
-const initialState: EntitiesState = {
-    users: {},
-    gardens: {},
-    plantings: {},
-    entries: {},
-    loading: false,
-    error: undefined
-}
-
-/* Reducer */
-export default (state = initialState, action: EntityAction): EntitiesState => {
-
-    
-    switch (action.type) {
-        case ENTITY_START: {
-            return {
-                ...state,
-                loading: true,
-                error: undefined
-            }
-        }
-        
-        case ADD_ENTITY: {
-            const { entities } = action
-            return {
-                ...state,
-                loading: false,
-                users: { ...state.users, ...entities.users },
-                gardens: { ...state.gardens, ...entities.gardens },
-                plantings: { ...state.plantings, ...entities.plantings },
-                entries: { ...state.entries, ...entities.entries },
-            }
-        }
-        
-        case FLUSH_ENTITY: {
-            return initialState
-        }
-
-        case ENTITY_FAILED: {
-            return {
-                ...state,
-                loading: false,
-                error: action.error
-            }
-        }
-        
-        default:
-            return state
-    }
-    
 }
 
 /* Selectors */

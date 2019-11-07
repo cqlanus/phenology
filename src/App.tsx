@@ -8,7 +8,7 @@ import Amplify from 'aws-amplify'
 
 import config from './aws-exports'
 
-import configureStore from './redux'
+import store from './redux'
 import { getNearbyStations, getSelectedStation } from './redux/station'
 import { getSignedInUser } from './redux/auth'
 import { selectGardenId } from './redux/garden'
@@ -47,7 +47,6 @@ configUpdate.oauth = oauth;
 Amplify.configure(configUpdate);
 
 const App: React.FC = () => {
-    const store = configureStore()
   useEffect(() => {
     store.dispatch<any>(getNearbyStations())
     store.dispatch<any>(getSignedInUser())

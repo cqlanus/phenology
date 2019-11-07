@@ -7,7 +7,7 @@ export const fToC = (f: number) => (f - 32) / 1.8
 
 export const calculateGdd = (baseTemp: number = 40) => (d: any) => {
     const value = d.avgTemp
-    const convertedTemp = fToC(baseTemp)
+    // const convertedTemp = fToC(baseTemp)
     // const decimalValue = value
     const gdd = (value > baseTemp) ? value - baseTemp : 0
     // console.log({value}, {gdd})

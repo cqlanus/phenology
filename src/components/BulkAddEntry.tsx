@@ -7,7 +7,6 @@ import {
     Accordion,
     Input,
     InputOnChangeData,
-    Transition,
 } from 'semantic-ui-react'
 import phenophaseCategories from '../data/phenophase.json'
 import CenterWrapper from './CenterWrapper'

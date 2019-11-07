@@ -1,31 +1,44 @@
+import { createSlice } from 'redux-starter-kit'
 import { getHistoricalWeather as getWeather } from '../hooks/climate'
 import { YtdWeather } from '../types/weather'
 import { AppState } from '.';
-import { SELECT_STATION, SelectStationAction } from './station';
+import { selectStation } from './station';
 import { toast } from 'react-toastify';
 
-/* Action Types */
-const GET_HISTORICAL_WEATHER_START: 'GET_HISTORICAL_WEATHER_START' = 'GET_HISTORICAL_WEATHER_START'
-export const GET_HISTORICAL_WEATHER_COMPLETE: 'GET_HISTORICAL_WEATHER_COMPLETE' = 'GET_HISTORICAL_WEATHER_COMPLETE'
-const GET_HISTORICAL_WEATHER_FAILED: 'GET_HISTORICAL_WEATHER_FAILED' = 'GET_HISTORICAL_WEATHER_FAILED'
+/* Initial State */
+const initialState: HistoricalWeatherState = {
+    loading: false,
+    ytdWeather: [],
+    error: undefined
+}
 
-/* Action Creators */
+const weatherSlice = createSlice({
+    name: 'weather',
+    initialState,
+    reducers: {
+        weatherLoading: state => ({
+            ...state,
+            loading: true,
+            error: undefined
+        }),
+        weatherFailed: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload.error
+        }),
+        getWeatherComplete: (state, action) => ({
+            ...state,
+            loading: false,
+            ytdWeather: action.payload.ytdWeather
+        }),
+        [selectStation.type]: () => initialState
+    }
+})
 
+export const { weatherLoading, weatherFailed, getWeatherComplete } = weatherSlice.actions
+export default weatherSlice.reducer
 
 /* Interfaces */
-interface GetWeatherStartAction {
-    type: typeof GET_HISTORICAL_WEATHER_START,
-}
-interface GetWeatherCompleteAction {
-    type: typeof GET_HISTORICAL_WEATHER_COMPLETE,
-    response: YtdWeather
-}
-interface GetWeatherFailedAction {
-    type: typeof GET_HISTORICAL_WEATHER_FAILED,
-    error: Error
-}
-
-export type HistoricalWeatherAction = GetWeatherStartAction | GetWeatherCompleteAction | GetWeatherFailedAction | SelectStationAction
 
 export interface HistoricalWeatherState {
     loading: boolean
@@ -36,68 +49,16 @@ export interface HistoricalWeatherState {
 /* Async */
 export const getHistoricalWeather = (stationId: string) => async (dispatch: any) => {
     try {
-        dispatch({ type: GET_HISTORICAL_WEATHER_START })
+        dispatch(weatherLoading())
         const ytdWeather = await getWeather(stationId)
-        console.log({ytdWeather})
-        dispatch({ type: GET_HISTORICAL_WEATHER_COMPLETE, response: ytdWeather })
+        dispatch(getWeatherComplete({ytdWeather}))
         
     } catch (error) {
         console.log({error})
         toast.error('Get weather failed')
-        dispatch({ type: GET_HISTORICAL_WEATHER_FAILED, error })
+        dispatch(weatherFailed({error}))
         
     }
-    // return {
-    //     types: [ GET_HISTORICAL_WEATHER_START, GET_HISTORICAL_WEATHER_COMPLETE, GET_HISTORICAL_WEATHER_FAILED ],
-    //     callAPI: () => getWeather(stationId),
-    //     payload: { stationId }
-    // }
-}
-
-/* Initial State */
-const initialState: HistoricalWeatherState = {
-    loading: false,
-    ytdWeather: [],
-    error: undefined
-}
-
-/* Reducer */
-export default (state = initialState, action: HistoricalWeatherAction): HistoricalWeatherState => {
-
-    switch (action.type) {
-        case GET_HISTORICAL_WEATHER_START: {
-            return {
-                ...state,
-                loading: true,
-                error: undefined
-            }
-        }
-
-        case GET_HISTORICAL_WEATHER_COMPLETE: {
-            return {
-                ...state,
-                loading: false,
-                ytdWeather: action.response
-            }
-        }
-
-        case GET_HISTORICAL_WEATHER_FAILED: {
-            return {
-                ...state,
-                loading: false,
-                error: action.error
-            }
-        }
-
-        case SELECT_STATION: {
-            return initialState
-        }
-        
-        default:
-            return state
-    }
-
-    
 }
 
 /* Selectors */

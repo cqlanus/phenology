@@ -1,26 +1,36 @@
+import { createSlice } from 'redux-starter-kit'
 import { createSelector } from "reselect"
 import uuid from 'uuid'
 import { selectGardenEntity, GardenEntity, PlantingEntity, selectPlantingEntity, EntryEntity, selectEntryEntity, setEntities } from "./entities"
-import { AppState } from "."
+import { AppState, AppThunk } from "."
 import { Garden, Planting, Entry, Plant, NetworkPlant } from "../types/user"
 import { selectUser } from "./user"
 import api from "../api"
 import { toast } from "react-toastify"
 
-/* Action Constants */
-const SET_GARDEN: 'SET_GARDEN' = 'SET_GARDEN'
+/* Initial State */
+const initialState: GardenState = {
+    selected: undefined
+}
+
+const gardenSlice = createSlice({
+    name: 'garden',
+    initialState,
+    reducers: {
+        setGarden: (state, action) => ({ 
+            ...state,
+            selected: action.payload.gardenId
+        })
+    }
+})
+
+export const { setGarden } = gardenSlice.actions
+export default gardenSlice.reducer
 
 /* Interfaces */
 interface GardenState { 
     selected?: string 
 }
-
-interface SelectGardenAction {
-    type: typeof SET_GARDEN
-    gardenId: string
-}
-
-type GardenAction = SelectGardenAction
 
 interface BuildGardenArgs {
     gardenId: string | undefined,
@@ -36,14 +46,6 @@ export interface AddGardenInput {
     plants: Plants
 }
 
-/* Action Creators */
-export const setGarden = (gardenId: string): SelectGardenAction => {
-    return {
-        type: SET_GARDEN,
-        gardenId
-    }
-}
-
 /* Thunks */
 export const editUserGardens = (user: any, garden: Garden) => {
     const updatedGardens = user.gardens.map((g: Garden) => 
@@ -56,7 +58,7 @@ const addUserGarden = (user: any, garden: Garden) => {
     return { ...user, gardens: updatedGardens}
 }
 
-export const addGardenToUser = ({ name, plants }: AddGardenInput) => async (dispatch: any, getState: any) => {
+export const addGardenToUser = ({ name, plants }: AddGardenInput): AppThunk => async (dispatch, getState) => {
     try {
         const plantings = Object.values(plants).map(({ qty, ...plant}) => {
             const quant = qty || 0
@@ -77,8 +79,8 @@ export const addGardenToUser = ({ name, plants }: AddGardenInput) => async (disp
 
         if (builtUser) {
             const user = addUserGarden(builtUser, Garden.of(garden))
-            const response = await api.updateUser(user)
-            dispatch(setEntities(response))
+            const entities = await api.updateUser(user)
+            dispatch(setEntities(entities))
         }
         
     } catch (error) {
@@ -87,14 +89,14 @@ export const addGardenToUser = ({ name, plants }: AddGardenInput) => async (disp
     }
 }
 
-export const removeGarden = (gardenId: string) => async (dispatch: any, getState: any) => {
+export const removeGarden = (gardenId: string): AppThunk => async (dispatch, getState) => {
     try {
         const builtUser = selectUser(getState())
         if (builtUser) {
             const updatedGardens = builtUser.gardens.filter(g => g && g.gardenId !== gardenId)
             const updatedUser = { ...builtUser, gardens: updatedGardens }
-            const response = await api.updateUser(updatedUser)
-            dispatch(setEntities(response))
+            const entities = await api.updateUser(updatedUser)
+            dispatch(setEntities(entities))
     
         }
     } catch (error) {
@@ -103,27 +105,6 @@ export const removeGarden = (gardenId: string) => async (dispatch: any, getState
     }
 }
 
-/* Initial State */
-const initialState: GardenState = {
-    selected: undefined
-}
-
-export default (state = initialState, action: GardenAction): GardenState => {
-
-    switch (action.type) {
-     
-        case SET_GARDEN: {
-            return { 
-                ...state,
-                selected: action.gardenId
-            }
-        }
-        
-        default:
-            return state
-    }
-    
-}
 
 /* Selectors */
 export const selectGardenId = (state: AppState) => state.garden.selected

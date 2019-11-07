@@ -7,7 +7,7 @@ const stripYear = (dateStr: string) => dateStr.split('-').slice(1).join('-').spl
 const calculateEntries = (plantings: Planting[]) => {
     return plantings.reduce((acc: { [key: string ]: any }, planting, idx): { [key: string ]: any } => {
         const { entries } = planting
-        entries.map(e => {
+        entries.forEach(e => {
             const existing = acc[stripYear(e.created)]
             acc = {
                 ...acc,

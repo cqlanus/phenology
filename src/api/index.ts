@@ -131,7 +131,6 @@ class API {
         const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels, { limit }))
 
         const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(plantModels.items, plantSchema)
-        console.log({normalizedPlants})
         return normalizedPlants.entities.plants
     }
 
@@ -219,7 +218,6 @@ class API {
     }
     
     getApiUser = async (authUser: AuthUser) => {
-        console.log({authUser})
         const { username: userName } = authUser
         const { data: { getUserByUserName: { items } } } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 

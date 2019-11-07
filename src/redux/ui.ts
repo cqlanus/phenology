@@ -1,10 +1,15 @@
 import { AppState } from ".";
-import { GET_CLIMATE_NORMS_COMPLETE } from "./climate";
-import { GET_HISTORICAL_WEATHER_COMPLETE } from "./weather";
-import { SELECT_STATION } from './station';
+import { getClimateComplete } from "./climate";
+import { getWeatherComplete } from "./weather";
+import { selectStation } from './station';
 
 export const CLIMATE_NORMS = 'CLIMATE_NORMS'
 export const HISTORICAL_WEATHER = 'HISTORICAL_WEATHER'
+
+/* Initial State */
+const initialState: UiState = {
+    dataDisplay: undefined
+}
 
 /* Interfaces */
 export interface DataDisplayType {
@@ -16,30 +21,25 @@ interface UiState {
     dataDisplay: keyof DataDisplayType | undefined
 }
 
-/* Initial State */
-const initialState: UiState = {
-    dataDisplay: undefined
-}
-
 /* Reducer */
 export default (state = initialState, action: any): UiState => {
 
     switch (action.type) {
-        case GET_CLIMATE_NORMS_COMPLETE: {
+        case getClimateComplete.type: {
             return {
                 ...state,
                 dataDisplay: CLIMATE_NORMS
             }
         }
 
-        case GET_HISTORICAL_WEATHER_COMPLETE: {
+        case getWeatherComplete.type: {
             return {
                 ...state,
                 dataDisplay: HISTORICAL_WEATHER
             }
         }
 
-        case SELECT_STATION: {
+        case selectStation.type: {
             return initialState
         }
 

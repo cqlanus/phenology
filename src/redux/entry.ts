@@ -1,4 +1,5 @@
-import { AppState } from "."
+import { createSlice } from 'redux-starter-kit'
+import { AppState, AppThunk } from "."
 import { createSelector } from "reselect"
 import { selectEntryEntity, setEntities } from "./entities"
 import { Entry, Planting, AddEntryInput, Garden } from "../types/user"
@@ -12,29 +13,32 @@ import { YtdWeather } from "../types/weather"
 import moment from "moment"
 import { toast } from "react-toastify"
 
-/* Action constants */
-const SET_ENTRY: 'SET_ENTRY' = 'SET_ENTRY'
+
+/* Initial State */
+const initialState: EntryState = {
+    selected: undefined
+}
+
+const entrySlice = createSlice({
+    name: 'entry',
+    initialState,
+    reducers: {
+        setEntry: (state, action) => ({
+            ...state,
+            selected: action.payload.entryId
+        })
+    }
+})
+
+export const { setEntry } = entrySlice.actions
+export default entrySlice.reducer
 
 /* Interfaces */
 interface EntryState {
     selected?: string
 }
 
-interface SetEntryAction {
-    type: typeof SET_ENTRY
-    entryId?: string
-}
-
-type EntryAction = SetEntryAction
-
 /* Action Creators */
-export const setEntry = (entryId: string | undefined) => {
-    return {
-        type: SET_ENTRY,
-        entryId
-    }
-}
-
 const removeFalsyValuesFromObject = (object: any): any => {
     return Object.entries(object).reduce((acc, entry) => {
         const [key, value] = entry
@@ -50,7 +54,6 @@ const removeFalsyValuesFromObject = (object: any): any => {
 const getEntryFromInput = (addEntryInput: AddEntryInput, ytdWeather: YtdWeather) => {
     const { gdd, ytdGdd } = getGddForEntry(addEntryInput, ytdWeather)
     const truthyEntryInput: AddEntryInput = removeFalsyValuesFromObject(addEntryInput)
-    console.log({truthyEntryInput})
     return Entry.of({
         ...truthyEntryInput,
         gdd, 
@@ -63,12 +66,10 @@ const getEntryFromInput = (addEntryInput: AddEntryInput, ytdWeather: YtdWeather)
 export const addEntryToPlanting = (
     addEntryInput: AddEntryInput,
     plantingId: string,
-) => async (dispatch: any, getState: () => AppState) => {
+): AppThunk => async (dispatch, getState) => {
     try {
         const { ytdWeather } = getState().weather
         const entry = getEntryFromInput(addEntryInput, ytdWeather)
-
-        console.log({entry}, {plantingId})
 
         await dispatch(changeEntries(entry, plantingId, appendEntry))
     } catch (error) {
@@ -83,7 +84,7 @@ const appendEntry = (planting: Planting, entry: Entry) => [
 ]
 
 type PlantingCallback = (garden: Garden, plantingId: string) => Planting[]
-const changeGardenPlantings = (plantingId: string, cb: PlantingCallback) => async (dispatch: any, getState: any) => {
+const changeGardenPlantings = (plantingId: string, cb: PlantingCallback): AppThunk => async (dispatch, getState) => {
     const builtGarden = selectGarden(getState())
     const builtUser = selectUser(getState())
     if (builtGarden) {
@@ -94,9 +95,8 @@ const changeGardenPlantings = (plantingId: string, cb: PlantingCallback) => asyn
         })
         if (builtUser) {
             const updatedUser = editUserGardens(builtUser, updatedGarden)
-            console.log({updatedUser})
-            const response = await api.updateUser(updatedUser)
-            dispatch(setEntities(response))
+            const entities = await api.updateUser(updatedUser)
+            dispatch(setEntities(entities))
         }
     }
 }
@@ -106,7 +106,7 @@ export const changeEntries = (
     entry: Entry,
     plantingId: string,
     cb: EntryCallback,
-) => async (dispatch: any) => {
+): AppThunk => async dispatch => {
     try {
         const amendPlantingEntries = (garden: Garden, plantingId: string) => {
             const { plantings } = garden
@@ -135,7 +135,7 @@ export interface BulkEntries {
     [plantingId: string]: Observation
 }
 
-export const bulkAddEntry = (bulkEntries: BulkEntries) => async (dispatch: any, getState: any) => {
+export const bulkAddEntry = (bulkEntries: BulkEntries): AppThunk => async (dispatch, getState) => {
     try {
         const builtGarden = selectGarden(getState())
         const builtUser = selectUser(getState())
@@ -160,8 +160,8 @@ export const bulkAddEntry = (bulkEntries: BulkEntries) => async (dispatch: any, 
             })
             if (builtUser) {
                 const updatedUser = editUserGardens(builtUser, updatedGarden)
-                const response = await api.updateUser(updatedUser)
-                dispatch(setEntities(response))
+                const entities = await api.updateUser(updatedUser)
+                dispatch(setEntities(entities))
             }
         }
     } catch (error) {
@@ -171,7 +171,7 @@ export const bulkAddEntry = (bulkEntries: BulkEntries) => async (dispatch: any, 
 }
 
 const filterEntry = (planting: Planting, entry: Entry) => planting.entries.filter(e => entry.entryId !== e.entryId)
-export const removeEntry = () => async (dispatch: any, getState: any) => {
+export const removeEntry = (): AppThunk => async (dispatch, getState) => {
     try {
         const entry = selectEntry(getState())
         const plantingId = selectPlanting(getState())
@@ -185,7 +185,7 @@ export const removeEntry = () => async (dispatch: any, getState: any) => {
 }
 
 const replaceEntry = (planting: Planting, entry: Entry) => planting.entries.map(e => entry.entryId === e.entryId ? entry : e)
-export const editEntry = (editEntryInput: AddEntryInput, plantingId: string) => async (dispatch: any, getState: any) => {
+export const editEntry = (editEntryInput: AddEntryInput, plantingId: string): AppThunk => async (dispatch, getState) => {
     try {
         const { ytdWeather } = getState().weather
         const { gdd, ytdGdd } = getGddForEntry(editEntryInput, ytdWeather)
@@ -200,29 +200,6 @@ export const editEntry = (editEntryInput: AddEntryInput, plantingId: string) => 
     } catch (error) {
         toast.error('Replace entry failed')
         console.log({error})
-    }
-}
-
-
-/* Initial State */
-const initialState: EntryState = {
-    selected: undefined
-}
-
-/* Reducer */
-export default (state = initialState, action: EntryAction): EntryState => {
-
-    switch (action.type) {
-
-        case SET_ENTRY: {
-            return {
-                ...state,
-                selected: action.entryId
-            }
-        }
-
-        default:
-            return state
     }
 }
 

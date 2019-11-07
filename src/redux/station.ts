@@ -1,7 +1,8 @@
+import { createSlice } from 'redux-starter-kit'
 import API from '../api'
 import { Station, StationArgs } from '../types/climate'
 import { getCounty, selectCounty, getCountyByZip } from './county'
-import { AppState } from '.'
+import { AppState, AppThunk } from '.'
 import { createSelector } from 'reselect'
 import { editUserGardens } from './garden'
 import { selectUser } from './user'
@@ -9,131 +10,6 @@ import { Garden } from '../types/user'
 import { setEntities } from './entities'
 import api from '../api'
 import { toast } from 'react-toastify'
-
-/* Action Types */
-const GET_STATIONS_START: 'GET_STATIONS_START' = 'GET_STATIONS_START'
-const GET_STATIONS_COMPLETE: 'GET_STATIONS_COMPLETE' = 'GET_STATIONS_COMPLETE'
-const GET_STATIONS_FAILED: 'GET_STATIONS_FAILED' = 'GET_STATIONS_FAILED'
-export const SELECT_STATION: 'SELECT_STATION' = 'SELECT_STATION'
-
-/* Action Creators */
-const getStationStart = () => {
-    return {
-        type: GET_STATIONS_START,
-    }
-}
-
-const getStationsComplete = (stations: StationArgs[]) => {
-    return {
-        type: GET_STATIONS_COMPLETE,
-        response: stations,
-    }
-}
-
-const getStationsFailed = (error: Error) => {
-    return {
-        type: GET_STATIONS_FAILED,
-        error,
-    }
-}
-
-export const selectStation = (station: string) => {
-    return {
-        type: SELECT_STATION,
-        station: station,
-    }
-}
-
-/* Interfaces */
-interface GetStationStartAction {
-    type: typeof GET_STATIONS_START
-}
-interface GetStationCompleteAction {
-    type: typeof GET_STATIONS_COMPLETE
-    response: StationArgs[]
-}
-interface GetStationFailedAction {
-    type: typeof GET_STATIONS_FAILED
-    error: Error
-}
-export interface SelectStationAction {
-    type: typeof SELECT_STATION
-    station: string
-}
-
-export type StationActions =
-    | GetStationStartAction
-    | GetStationCompleteAction
-    | GetStationFailedAction
-    | SelectStationAction
-
-export interface StationState {
-    loading: boolean
-    stations: StationArgs[]
-    selectedStation: string | undefined
-    error?: Error
-}
-
-/* Async  */
-export const getNearbyStations = () => async (dispatch: any, getState: any) => {
-    try {
-        dispatch(getStationStart())
-        await dispatch(getCounty())
-        const county = selectCounty(getState())
-        if (county) {
-            const stations = await API.getNearbyStations(county.countyId)
-            dispatch(getStationsComplete(stations))
-        } else {
-            throw Error('No county id')
-        }
-    } catch (error) {
-        console.log({ error })
-        toast.error('Get nearby stations failed')
-        dispatch(getStationsFailed(error))
-    }
-}
-
-export const getStationsFromZip = (zip: string) => async (dispatch: any, getState: any) => {
-    try {
-        dispatch(getStationStart())
-        await dispatch(getCountyByZip(zip))
-        const county = selectCounty(getState())
-        if (county) {
-            const stations = await API.getNearbyStations(county.countyId)
-            dispatch(getStationsComplete(stations))
-        } else {
-            throw Error('No county id')
-        }
-    } catch (error) {
-        console.log({ error })
-        toast.error('Get stations from zip failed')
-        dispatch(getStationsFailed(error))
-    }
-}
-
-export const markStationAsFavorite = (
-    station: StationArgs,
-    gardens: Garden[],
-) => async (dispatch: any, getState: any) => {
-    try {
-        const builtUser = selectUser(getState())
-
-        const favoriteGarden = (station: StationArgs) => async (garden: Garden) => {
-            const newStation = Station.of(station)
-            const updatedGarden = Garden.of({ ...garden, station: newStation })
-            if (builtUser) {
-                const updatedUser = editUserGardens(builtUser, updatedGarden)
-                const response = await api.updateUser(updatedUser)
-                dispatch(setEntities(response))
-            }
-        }
-
-        await Promise.all(gardens.map(favoriteGarden(station)))
-    } catch (error) {
-        toast.error('Mark station as favorite failed')
-        console.log({ error })
-    }
-}
 
 /* Initial State */
 const initialState: StationState = {
@@ -143,42 +19,100 @@ const initialState: StationState = {
     error: undefined,
 }
 
-/* Reducer */
-export default (state = initialState, action: StationActions): StationState => {
-    switch (action.type) {
-        case GET_STATIONS_START: {
-            return {
-                ...state,
-                loading: true,
-                error: undefined,
+const stationSlice = createSlice({
+    name: 'station',
+    initialState,
+    reducers: {
+        stationLoading: state => ({
+            ...state,
+            loading: true,
+            error: undefined,
+        }),
+        stationFailed: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload.error,
+        }),
+        getStationsComplete: (state, action) => ({
+            ...state,
+            loading: false,
+            stations: action.payload.stations,
+        }),
+        selectStation: (state, action) => ({
+            ...state,
+            selectedStation: action.payload,
+        })
+    }
+})
+
+export const { stationLoading, stationFailed, getStationsComplete, selectStation } = stationSlice.actions
+export default stationSlice.reducer
+
+export interface StationState {
+    loading: boolean
+    stations: StationArgs[]
+    selectedStation: string | undefined
+    error?: Error
+}
+
+/* Async  */
+export const getNearbyStations = (): AppThunk => async (dispatch, getState) => {
+    try {
+        dispatch(stationLoading())
+        await dispatch(getCounty())
+        const county = selectCounty(getState())
+        if (county) {
+            const stations = await API.getNearbyStations(county.countyId)
+            dispatch(getStationsComplete({stations}))
+        } else {
+            throw Error('No county id')
+        }
+    } catch (error) {
+        console.log({ error })
+        toast.error('Get nearby stations failed')
+        dispatch(stationFailed({error}))
+    }
+}
+
+export const getStationsFromZip = (zip: string): AppThunk => async (dispatch, getState) => {
+    try {
+        dispatch(stationLoading())
+        await dispatch(getCountyByZip(zip))
+        const county = selectCounty(getState())
+        if (county) {
+            const stations = await API.getNearbyStations(county.countyId)
+            dispatch(getStationsComplete({stations}))
+        } else {
+            throw Error('No county id')
+        }
+    } catch (error) {
+        console.log({ error })
+        toast.error('Get stations from zip failed')
+        dispatch(stationFailed({error}))
+    }
+}
+
+export const markStationAsFavorite = (
+    station: StationArgs,
+    gardens: Garden[],
+): AppThunk => async (dispatch, getState) => {
+    try {
+        const builtUser = selectUser(getState())
+
+        const favoriteGarden = (station: StationArgs) => async (garden: Garden) => {
+            const newStation = Station.of(station)
+            const updatedGarden = Garden.of({ ...garden, station: newStation })
+            if (builtUser) {
+                const updatedUser = editUserGardens(builtUser, updatedGarden)
+                const entities = await api.updateUser(updatedUser)
+                dispatch(setEntities(entities))
             }
         }
 
-        case GET_STATIONS_COMPLETE: {
-            return {
-                ...state,
-                loading: false,
-                stations: action.response,
-            }
-        }
-
-        case GET_STATIONS_FAILED: {
-            return {
-                ...state,
-                loading: false,
-                error: action.error,
-            }
-        }
-
-        case SELECT_STATION: {
-            return {
-                ...state,
-                selectedStation: action.station,
-            }
-        }
-
-        default:
-            return state
+        await Promise.all(gardens.map(favoriteGarden(station)))
+    } catch (error) {
+        toast.error('Mark station as favorite failed')
+        console.log({ error })
     }
 }
 

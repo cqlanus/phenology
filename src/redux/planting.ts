@@ -1,4 +1,5 @@
-import { AppState } from '.'
+import { createSlice } from 'redux-starter-kit'
+import { AppState, AppThunk } from '.'
 import { Planting, Garden, Plant, NetworkPlant } from '../types/user'
 import uuid from 'uuid'
 import { selectGarden, editUserGardens } from './garden'
@@ -7,29 +8,28 @@ import api from '../api'
 import { setEntities } from './entities'
 import { toast } from 'react-toastify'
 
-/* Action creators */
-const SET_PLANTING: 'SET_PLANTING' = 'SET_PLANTING'
+/* Initial State */
+const initialState: PlantingState = {
+    selected: undefined,
+}
+
+const plantingSlice = createSlice({
+    name: 'planting',
+    initialState,
+    reducers: {
+        setPlanting: (state, action) => ({
+            ...state,
+            selected: action.payload.plantingId,
+        })
+    }
+})
+
+export const { setPlanting } = plantingSlice.actions
+export default plantingSlice.reducer
 
 /* Interfaces */
 interface PlantingState {
     selected?: string
-}
-
-interface SetPlantingAction {
-    type: typeof SET_PLANTING
-    plantingId: string | undefined
-}
-
-type PlantingAction = SetPlantingAction
-
-/* Action Creators */
-export const setPlanting = (
-    plantingId: string | undefined,
-): SetPlantingAction => {
-    return {
-        type: SET_PLANTING,
-        plantingId,
-    }
 }
 
 /* Thunks */
@@ -48,9 +48,7 @@ const structurePlantings = (plantings: Planting[]): Structure => {
 export interface PlantSelection {
     [key: string]: NetworkPlant & { qty: number }
 }
-export const addPlantings = (selection: PlantSelection) => async (
-    dispatch: any,
-) => {
+export const addPlantings = (selection: PlantSelection): AppThunk => async dispatch => {
     try {
         const addSelection = (plantings: Planting[]) => {
             const structuredPlantings = structurePlantings(plantings)
@@ -89,7 +87,7 @@ export const addPlantings = (selection: PlantSelection) => async (
     }
 }
 
-export const removePlanting = (plantingId: string) => async (dispatch: any, getState: any) => {
+export const removePlanting = (plantingId: string): AppThunk => async dispatch => {
     try {
         const filterPlanting = (plantings : Planting[]) => plantings.filter(p => p.plantingId !== plantingId)
         await dispatch(changePlanting(filterPlanting))
@@ -98,7 +96,7 @@ export const removePlanting = (plantingId: string) => async (dispatch: any, getS
     }
 }
 
-const changePlanting = (cb: (t: any) => any) => async (dispatch: any, getState: any) => {
+const changePlanting = (cb: (t: any) => any): AppThunk => async (dispatch, getState) => {
     const builtGarden = selectGarden(getState())
     const builtUser = selectUser(getState())
     if (builtGarden) {
@@ -110,33 +108,9 @@ const changePlanting = (cb: (t: any) => any) => async (dispatch: any, getState: 
         })
         if (builtUser) {
             const updatedUser = editUserGardens(builtUser, updatedGarden)
-            const response = await api.updateUser(updatedUser)
-            dispatch(setEntities(response))
+            const entities = await api.updateUser(updatedUser)
+            dispatch(setEntities(entities))
         }
-    }
-}
-
-
-/* Initial State */
-const initialState: PlantingState = {
-    selected: undefined,
-}
-
-/* Reducer */
-export default (
-    state = initialState,
-    action: PlantingAction,
-): PlantingState => {
-    switch (action.type) {
-        case SET_PLANTING: {
-            return {
-                ...state,
-                selected: action.plantingId,
-            }
-        }
-
-        default:
-            return state
     }
 }
 

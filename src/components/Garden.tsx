@@ -10,7 +10,6 @@ import {
     Icon,
     Button,
     Modal,
-    Segment,
     Input,
     Responsive,
 } from 'semantic-ui-react'
