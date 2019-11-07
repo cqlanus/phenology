@@ -75,10 +75,9 @@ export const signOut = () => async (dispatch: any) => {
     }
 }
 
-export const getUser = () => async (dispatch: any) => {
+export const getUser = (user: any) => async (dispatch: any) => {
     try {
         dispatch({ type: GET_USER_START })
-        const user = await Auth.currentAuthenticatedUser()
         await dispatch(getApiUser(user))
         dispatch({ type: GET_USER_COMPLETE, user })
     } catch (error) {
@@ -91,7 +90,7 @@ export const getSignedInUser = () => async (dispatch: any) => {
     try {
         const user = await Auth.currentAuthenticatedUser()
         if (user) {
-            dispatch(getUser())
+            dispatch(getUser(user))
         }
     } catch (error) {
         console.log({error})
