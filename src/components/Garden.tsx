@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { RouteComponentProps, withRouter, Link } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
 import StationModal from './StationModal'
@@ -115,8 +115,6 @@ const StyledInput = styled(Input)`
 `
 
 const PlantingsContainer = styled.div`
-    /* display: flex;
-    flex-wrap: wrap; */
 
     display: grid;
     grid-template-columns: 1fr;
@@ -125,17 +123,13 @@ const PlantingsContainer = styled.div`
     @media (min-width: ${BREAKPOINTS.TABLET}px) {
         grid-template-columns: 1fr 1fr;
     }
+
+    @media (min-width: ${BREAKPOINTS.DESKTOP}px) {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 `
 
-const PlantingCardContainer = styled.div`
-    /* flex-basis: 100%;
-    margin-bottom: 1em;
-    margin-right: 1em;
-
-    @media (min-width: ${BREAKPOINTS.TABLET}px) {
-        flex-basis: calc(50% - 1em);
-    } */
-`
+const PlantingCardContainer = styled.div``
 
 const EditGardenNameInput = ({ garden, setEditing }: any) => {
     const [name, setName] = useState(garden.name)

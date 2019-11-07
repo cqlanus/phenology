@@ -1,11 +1,11 @@
 import React from 'react'
 import moment from 'moment'
-import { Card } from 'semantic-ui-react'
+import styled from 'styled-components'
+import { Card, Image } from 'semantic-ui-react'
 import { Link as L } from 'react-router-dom'
 
 import { Garden, Planting, Entry } from '../types/user'
-import styled from 'styled-components'
-
+import leaf from '../assets/images/leaf.svg'
 
 export interface Props {
     garden: Garden
@@ -19,6 +19,13 @@ const StyledLink = styled(L)`
     &&&& > ${StyledCard} {
         margin-bottom: .5em;
     }
+`
+
+const ImageContainer = styled.div`
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    float: left;
 `
 
 const GardenCard = ({ garden, history, setGarden }: Props) => {
@@ -47,6 +54,9 @@ const GardenCard = ({ garden, history, setGarden }: Props) => {
         <StyledLink to={`/garden/${garden.gardenId}`} onClick={handleClick}>
             <StyledCard fluid >
                 <Card.Content>
+                    <ImageContainer>
+                        <Image src={leaf} size="tiny" />
+                    </ImageContainer>
                     <Card.Header>{garden.name}</Card.Header>
                     <Card.Meta>{meta1}</Card.Meta>
                     <Card.Meta>{meta2}</Card.Meta>

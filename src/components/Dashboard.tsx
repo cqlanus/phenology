@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Card } from 'semantic-ui-react'
+import { Button, Card, Image } from 'semantic-ui-react'
 import { Link as L, withRouter, RouteComponentProps } from 'react-router-dom'
 
 import GardenCard from '../containers/GardenCard'
@@ -10,7 +10,7 @@ import { withNavBar } from '../containers/NavBar'
 import { Station } from '../types/climate'
 import { Garden } from '../types/user'
 import { BREAKPOINTS } from '../data/breakpoints'
-
+import stationImg from '../assets/images/wind-power.svg'
 
 const Row = styled.div`
     display: flex;
@@ -57,6 +57,13 @@ const Layout = styled.div`
     
 `
 
+const ImageContainer = styled.div`
+    height: 3.2em;
+    width: 3.2em;
+    margin-right: 1em;
+    float: left;
+`
+
 interface StationProps {
     station?: Station, 
     selectStation: (id: string) => void
@@ -72,6 +79,9 @@ const StationCard = withRouter(({ station, selectStation, history }: StationProp
             <StyledLink to={`/station/${station.stationId}`} onClick={handleClick}>
                 <StyledCard fluid >
                     <Card.Content>
+                        <ImageContainer>
+                            <Image src={stationImg} size="tiny" />
+                        </ImageContainer>
                         <Card.Header>{name}</Card.Header>
                         <Card.Meta>{station.stationId}</Card.Meta>
                     </Card.Content>
