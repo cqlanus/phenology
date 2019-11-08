@@ -33,6 +33,9 @@ const EntryListModal = ({ entries, phenophases, setEntry, planting, setPlanting 
 
     const [isFormOpen, setFormOpen] = useState(false)
 
+    const [ column, setColumn ] = useState()
+    const [ isAscending, setDirection ] = useState(true)
+
     const closeForm = () => {
         setEntry(undefined)
         setFormOpen(false)
@@ -43,6 +46,15 @@ const EntryListModal = ({ entries, phenophases, setEntry, planting, setPlanting 
         setFormOpen(true)
     }
 
+    const handleSort = (clicked: string) => () => {
+        if (column === clicked) {
+            setColumn(clicked)
+            setDirection(true)
+        } else {
+            setDirection(!isAscending)
+        }
+    }
+    
     const renderEditEntry = (entryId: string) => (
         <Modal open={isFormOpen} onClose={closeForm} closeIcon trigger={
                 <StyledIcon name="edit" onClick={handleOpen(entryId)} />
@@ -56,15 +68,17 @@ const EntryListModal = ({ entries, phenophases, setEntry, planting, setPlanting 
 
     const renderTrigger = () => {
         return (
-            <StyledButton fluid onClick={openModal} basic primary>
+            <Button fluid onClick={openModal} basic primary>
                 Show Entries
-            </StyledButton>
+            </Button>
         )
     }
 
+    // const getDirection = (colName: string) => colName === column ? isAscending
+
     const renderTable = () => {
         return (
-            <Table>
+            <Table striped>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Phenophase</Table.HeaderCell>

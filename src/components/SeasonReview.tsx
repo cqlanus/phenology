@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Header } from 'semantic-ui-react'
 
 import { Planting } from '../types/user'
-import { withNavBar } from '../containers/NavBar'
 import HistoricalWeather from '../containers/HistoricalWeather'
 
 const Container = styled.div`
@@ -26,4 +25,4 @@ const SeasonReview = ({ plantings }: Props) => {
     )
 }
 
-export default withNavBar(SeasonReview)
+export default SeasonReview

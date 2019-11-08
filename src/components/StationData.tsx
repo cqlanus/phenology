@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import DataDisplay from '../containers/DataDisplay'
-import { withNavBar } from '../containers/NavBar'
 import styled from 'styled-components'
 import { Menu, Button, Modal, Card, Checkbox, Icon, Header, Responsive } from 'semantic-ui-react'
 import { useModal } from '../hooks/mdoal'
@@ -173,4 +172,4 @@ const StationData = ({
     )
 }
 
-export default withNavBar(StationData)
+export default StationData

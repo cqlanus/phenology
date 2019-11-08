@@ -5,7 +5,6 @@ import { Garden as GardenType } from '../types/user'
 import CenterWrapper from './CenterWrapper'
 import StationModal from './StationModal'
 import AddPlantForm from '../containers/AddPlantForm'
-import { withNavBar } from '../containers/NavBar'
 import {
     Icon,
     Button,
@@ -268,4 +267,4 @@ const Garden = ({
     )
 }
 
-export default withNavBar(Garden)
+export default Garden

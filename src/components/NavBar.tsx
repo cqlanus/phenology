@@ -12,7 +12,8 @@ interface Props {
     signOut: () => void
 }
 
-const NavBar = ({ history, signOut }: Props & RouteComponentProps) => {
+const NavBar = ({ history, signOut, location, ...rest }: Props & RouteComponentProps) => {
+    if (location.pathname === "/") { return null }
     return (
         <Menu icon borderless>
             <Menu.Item

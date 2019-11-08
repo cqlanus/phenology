@@ -21,6 +21,7 @@ import Dashboard from './containers/Dashboard';
 import StationData from './containers/StationData'
 import SeasonReview from './containers/SeasonReview';
 import BulkAddEntry from './containers/BulkAddEntry';
+import NavBar from './containers/NavBar';
 
 const urlsIn = config.oauth.redirectSignIn.split(",");
 const urlsOut = config.oauth.redirectSignOut.split(",");
@@ -56,6 +57,7 @@ const App: React.FC = () => {
   return (
       <Provider store={store} >
           <Router>
+            <NavBar/>
             <Route path="/" exact component={MainPage} />
             <Route path="/location" component={LocationPage} />
             <Route path="/home" component={Dashboard} />

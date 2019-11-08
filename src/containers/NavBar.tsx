@@ -18,7 +18,7 @@ export const withNavBar = <P extends object>(
         render() {
             return (
                 <div>
-                    <RoutingNavBar />
+                    {/* <RoutingNavBar /> */}
                     <Component {...(this.props as P)} />
                 </div>
             )

@@ -1,8 +1,6 @@
 import React from 'react'
 
 import StationsList from '../containers/StationsList'
-// import DataDisplay from '../containers/DataDisplay'
-import { withNavBar } from '../containers/NavBar'
 import CenterWrapper from '../components/CenterWrapper'
 
 const LocationPage = () => {
@@ -13,4 +11,4 @@ const LocationPage = () => {
     )
 }
 
-export default withNavBar(LocationPage)
+export default LocationPage

@@ -10,7 +10,6 @@ import {
 } from 'semantic-ui-react'
 import phenophaseCategories from '../data/phenophase.json'
 import CenterWrapper from './CenterWrapper'
-import { withNavBar } from '../containers/NavBar'
 import { Garden, Planting } from '../types/user.js'
 import { BulkEntries } from '../redux/entry'
 import { BREAKPOINTS } from '../data/breakpoints'
@@ -209,4 +208,4 @@ const BulkAddEntry = ({
     )
 }
 
-export default withNavBar(BulkAddEntry)
+export default BulkAddEntry

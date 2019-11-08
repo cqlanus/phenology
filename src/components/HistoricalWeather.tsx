@@ -169,7 +169,7 @@ const HistoricalWeather = ({ ytdWeather, data, numberPlantings }: Props) => {
                     onChange={(e, { value }) => handleBase(value)}
                     placeholder="Select base value"
                     options={bases}
-                    defaultValue={bases[0].value}
+                    value={base}
                 />
             </div>
         )

@@ -6,7 +6,6 @@ import { Link as L, withRouter, RouteComponentProps } from 'react-router-dom'
 import GardenCard from '../containers/GardenCard'
 import Link from './Link'
 import CenterWrapper from './CenterWrapper'
-import { withNavBar } from '../containers/NavBar'
 import { Station } from '../types/climate'
 import { Garden } from '../types/user'
 import { BREAKPOINTS } from '../data/breakpoints'
@@ -201,4 +200,4 @@ const Dashboard = ({ user, selectStation }: Props) => {
     )
 }
 
-export default withNavBar(Dashboard)
+export default Dashboard
