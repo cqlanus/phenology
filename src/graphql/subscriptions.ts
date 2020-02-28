@@ -1,120 +1,126 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const onCreatePlantModel = `subscription OnCreatePlantModel {
-  onCreatePlantModel {
-    id
-    commonName
-    latinName
-    type
-    isNative
-    hasNeedles
-    isDeciduous
-    isPerennial
-    image
+export const onCreatePlantModel = /* GraphQL */ `
+  subscription OnCreatePlantModel {
+    onCreatePlantModel {
+      id
+      commonName
+      latinName
+      type
+      isNative
+      hasNeedles
+      isDeciduous
+      isPerennial
+      image
+    }
   }
-}
 `;
-export const onUpdatePlantModel = `subscription OnUpdatePlantModel {
-  onUpdatePlantModel {
-    id
-    commonName
-    latinName
-    type
-    isNative
-    hasNeedles
-    isDeciduous
-    isPerennial
-    image
+export const onUpdatePlantModel = /* GraphQL */ `
+  subscription OnUpdatePlantModel {
+    onUpdatePlantModel {
+      id
+      commonName
+      latinName
+      type
+      isNative
+      hasNeedles
+      isDeciduous
+      isPerennial
+      image
+    }
   }
-}
 `;
-export const onDeletePlantModel = `subscription OnDeletePlantModel {
-  onDeletePlantModel {
-    id
-    commonName
-    latinName
-    type
-    isNative
-    hasNeedles
-    isDeciduous
-    isPerennial
-    image
+export const onDeletePlantModel = /* GraphQL */ `
+  subscription OnDeletePlantModel {
+    onDeletePlantModel {
+      id
+      commonName
+      latinName
+      type
+      isNative
+      hasNeedles
+      isDeciduous
+      isPerennial
+      image
+    }
   }
-}
 `;
-export const onCreateUser = `subscription OnCreateUser {
-  onCreateUser {
-    id
-    userName
-    firstName
-    lastName
-    gardens {
-      gardenId
-      name
-      plantings {
-        plantingId
-        qty
-      }
-      station {
-        stationId
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      id
+      userName
+      firstName
+      lastName
+      gardens {
+        gardenId
         name
-        longitude
-        latitude
-        elevation
-        elevationUnit
+        plantings {
+          plantingId
+          qty
+        }
+        station {
+          stationId
+          name
+          longitude
+          latitude
+          elevation
+          elevationUnit
+        }
       }
     }
   }
-}
 `;
-export const onUpdateUser = `subscription OnUpdateUser {
-  onUpdateUser {
-    id
-    userName
-    firstName
-    lastName
-    gardens {
-      gardenId
-      name
-      plantings {
-        plantingId
-        qty
-      }
-      station {
-        stationId
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
+      id
+      userName
+      firstName
+      lastName
+      gardens {
+        gardenId
         name
-        longitude
-        latitude
-        elevation
-        elevationUnit
+        plantings {
+          plantingId
+          qty
+        }
+        station {
+          stationId
+          name
+          longitude
+          latitude
+          elevation
+          elevationUnit
+        }
       }
     }
   }
-}
 `;
-export const onDeleteUser = `subscription OnDeleteUser {
-  onDeleteUser {
-    id
-    userName
-    firstName
-    lastName
-    gardens {
-      gardenId
-      name
-      plantings {
-        plantingId
-        qty
-      }
-      station {
-        stationId
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
+      id
+      userName
+      firstName
+      lastName
+      gardens {
+        gardenId
         name
-        longitude
-        latitude
-        elevation
-        elevationUnit
+        plantings {
+          plantingId
+          qty
+        }
+        station {
+          stationId
+          name
+          longitude
+          latitude
+          elevation
+          elevationUnit
+        }
       }
     }
   }
-}
 `;

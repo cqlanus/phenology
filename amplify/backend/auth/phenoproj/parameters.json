@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "phenology0af4a6ce_identitypool_0af4a6ce",
+    "identityPoolName": "phenoidpool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "phenol0af4a6ce",
-    "userPoolName": "phenology0af4a6ce_userpool_0af4a6ce",
+    "resourceNameTruncated": "phenop24ccaafe",
+    "userPoolName": "phenouserpool",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -30,10 +30,13 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "phenol0af4a6ce_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "phenop24ccaafe_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "resourceName": "phenology0af4a6ce",
+    "useDefault": "defaultSocial",
     "authSelections": "identityPoolAndUserPool",
+    "resourceName": "phenoproj",
+    "triggers": "{}",
+    "hostedUI": true,
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -46,16 +49,14 @@
             "Arn"
         ]
     },
-    "useDefault": "defaultSocial",
-    "hostedUI": true,
-    "triggers": "{}",
-    "hostedUIDomainName": "phenology0af4a6ce-0af4a6ce",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:3000/\",\"https://phenology.chrislanus.com/\"],\"LogoutURLs\":[\"https://localhost:3000/\",\"https://phenology.chrislanus.com/\"]}",
     "parentStack": {
         "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "dependsOn": []
+    "dependsOn": [],
+    "userPoolGroupList": [],
+    "hostedUIDomainName": "phenology046a6337-046a6337",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:3000/\"],\"LogoutURLs\":[\"https://localhost:3000/\"]}"
 }
