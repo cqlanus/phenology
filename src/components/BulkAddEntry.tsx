@@ -39,7 +39,7 @@ interface BulkEntryCardProps {
     plantings: Planting[]
     handleBulkEntry: (categoory: string, phase: Phenophase) => (planting: Planting) => void
     bulkEntries: any
-    date: string
+    date: string | undefined
     category: string
 }
 const BulkEntryCard = ({ phase, plantings, handleBulkEntry, bulkEntries, date, category }: BulkEntryCardProps) => {
@@ -85,7 +85,7 @@ interface Props {
 const initialBulkEntries: { [key: string]: any } = {}
 
 const BulkAddEntry = ({ garden, bulkAddEntry, history }: Props & RouteComponentProps) => {
-    const [ date, setDate ] = useState()
+    const [ date, setDate ] = useState<string>()
     const [ bulkEntries, setBulkEntries ] = useState(initialBulkEntries)
     
     if (!garden) {

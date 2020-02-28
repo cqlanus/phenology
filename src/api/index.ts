@@ -128,7 +128,7 @@ class API {
 
         const limit = 500
 
-        const { data: { listPlantModels: plantModels }}: { data: { listPlantModels: any }} = await A.graphql(graphqlOperation(listPlantModels, { limit }))
+        const { data: { listPlantModels: plantModels }}: any = await A.graphql(graphqlOperation(listPlantModels, { limit }))
 
         const normalizedPlants: { entities: { plants: PlantEntity} } = normalize(plantModels.items, plantSchema)
         console.log({normalizedPlants})
@@ -162,13 +162,13 @@ class API {
             image,
             id: uuid()
         }
-        const { data: { createPlantModel: plantModel } } = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
+        const { data: { createPlantModel: plantModel } }: any = await A.graphql(graphqlOperation(createPlantModel, { input: plant }))
         return plantModel
     }
     
     getEntities = async (userName = "cqlanus"): Promise<{ entities: Entities }> => {
 
-        const { data } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
+        const { data }: any = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 
         const entry = new schema.Entity('entries', {}, {idAttribute: 'entryId'})
         const plant = new schema.Entity('plant', {}, {idAttribute: 'plantId'})
@@ -214,14 +214,14 @@ class API {
         const { given_name: firstName, family_name: lastName } = attributes
         const apiUserInput = { firstName, lastName, userName, id: userName, gardens: [] }
         console.log({apiUserInput})
-        const { data: { createUser: user }} = await A.graphql(graphqlOperation(createUser, {input: apiUserInput}))
+        const { data: { createUser: user }}: any = await A.graphql(graphqlOperation(createUser, {input: apiUserInput}))
         return user
     }
     
     getApiUser = async (authUser: AuthUser) => {
         console.log({authUser})
         const { username: userName } = authUser
-        const { data: { getUserByUserName: { items } } } = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
+        const { data: { getUserByUserName: { items } } }: any = await A.graphql(graphqlOperation(getUserByUserName, { userName }))
 
         const [ user ] = items
         if (user) {
@@ -234,7 +234,7 @@ class API {
 
     updateUser = async (updatedUser: any) => {
         // console.log({updatedUser})
-        const { data }: { data: { updateUser: any }} = await A.graphql(graphqlOperation(updateUser, {input: updatedUser}))
+        const { data }: any = await A.graphql(graphqlOperation(updateUser, {input: updatedUser}))
         const { updateUser: user } = data
         return this.normalizeUser(user)
     }
