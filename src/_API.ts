@@ -1,4 +1,5 @@
 /* tslint:disable */
+/* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
 export type CreatePlantModelInput = {
@@ -22,6 +23,72 @@ export enum PlantType {
   VINE = "VINE",
 }
 
+
+export type ModelPlantModelConditionInput = {
+  commonName?: ModelStringInput | null,
+  latinName?: ModelStringInput | null,
+  type?: ModelPlantTypeInput | null,
+  isNative?: ModelBooleanInput | null,
+  hasNeedles?: ModelBooleanInput | null,
+  isDeciduous?: ModelBooleanInput | null,
+  isPerennial?: ModelBooleanInput | null,
+  image?: ModelStringInput | null,
+  and?: Array< ModelPlantModelConditionInput | null > | null,
+  or?: Array< ModelPlantModelConditionInput | null > | null,
+  not?: ModelPlantModelConditionInput | null,
+};
+
+export type ModelStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export enum ModelAttributeTypes {
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+  _null = "_null",
+}
+
+
+export type ModelSizeInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type ModelPlantTypeInput = {
+  eq?: PlantType | null,
+  ne?: PlantType | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
 
 export type UpdatePlantModelInput = {
   id: string,
@@ -136,6 +203,15 @@ export type StationInput = {
   elevationUnit?: string | null,
 };
 
+export type ModelUserConditionInput = {
+  userName?: ModelStringInput | null,
+  firstName?: ModelStringInput | null,
+  lastName?: ModelStringInput | null,
+  and?: Array< ModelUserConditionInput | null > | null,
+  or?: Array< ModelUserConditionInput | null > | null,
+  not?: ModelUserConditionInput | null,
+};
+
 export type UpdateUserInput = {
   id: string,
   userName?: string | null,
@@ -149,21 +225,21 @@ export type DeleteUserInput = {
 };
 
 export type ModelPlantModelFilterInput = {
-  id?: ModelIDFilterInput | null,
-  commonName?: ModelStringFilterInput | null,
-  latinName?: ModelStringFilterInput | null,
-  type?: ModelPlantTypeFilterInput | null,
-  isNative?: ModelBooleanFilterInput | null,
-  hasNeedles?: ModelBooleanFilterInput | null,
-  isDeciduous?: ModelBooleanFilterInput | null,
-  isPerennial?: ModelBooleanFilterInput | null,
-  image?: ModelStringFilterInput | null,
+  id?: ModelIDInput | null,
+  commonName?: ModelStringInput | null,
+  latinName?: ModelStringInput | null,
+  type?: ModelPlantTypeInput | null,
+  isNative?: ModelBooleanInput | null,
+  hasNeedles?: ModelBooleanInput | null,
+  isDeciduous?: ModelBooleanInput | null,
+  isPerennial?: ModelBooleanInput | null,
+  image?: ModelStringInput | null,
   and?: Array< ModelPlantModelFilterInput | null > | null,
   or?: Array< ModelPlantModelFilterInput | null > | null,
   not?: ModelPlantModelFilterInput | null,
 };
 
-export type ModelIDFilterInput = {
+export type ModelIDInput = {
   ne?: string | null,
   eq?: string | null,
   le?: string | null,
@@ -174,43 +250,30 @@ export type ModelIDFilterInput = {
   notContains?: string | null,
   between?: Array< string | null > | null,
   beginsWith?: string | null,
-};
-
-export type ModelStringFilterInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-};
-
-export type ModelPlantTypeFilterInput = {
-  eq?: PlantType | null,
-  ne?: PlantType | null,
-};
-
-export type ModelBooleanFilterInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
 };
 
 export type ModelUserFilterInput = {
-  id?: ModelIDFilterInput | null,
-  userName?: ModelStringFilterInput | null,
-  firstName?: ModelStringFilterInput | null,
-  lastName?: ModelStringFilterInput | null,
+  id?: ModelIDInput | null,
+  userName?: ModelStringInput | null,
+  firstName?: ModelStringInput | null,
+  lastName?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
   or?: Array< ModelUserFilterInput | null > | null,
   not?: ModelUserFilterInput | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type CreatePlantModelMutationVariables = {
   input: CreatePlantModelInput,
+  condition?: ModelPlantModelConditionInput | null,
 };
 
 export type CreatePlantModelMutation = {
@@ -230,6 +293,7 @@ export type CreatePlantModelMutation = {
 
 export type UpdatePlantModelMutationVariables = {
   input: UpdatePlantModelInput,
+  condition?: ModelPlantModelConditionInput | null,
 };
 
 export type UpdatePlantModelMutation = {
@@ -249,6 +313,7 @@ export type UpdatePlantModelMutation = {
 
 export type DeletePlantModelMutationVariables = {
   input: DeletePlantModelInput,
+  condition?: ModelPlantModelConditionInput | null,
 };
 
 export type DeletePlantModelMutation = {
@@ -268,6 +333,7 @@ export type DeletePlantModelMutation = {
 
 export type CreateUserMutationVariables = {
   input: CreateUserInput,
+  condition?: ModelUserConditionInput | null,
 };
 
 export type CreateUserMutation = {
@@ -301,6 +367,7 @@ export type CreateUserMutation = {
 
 export type UpdateUserMutationVariables = {
   input: UpdateUserInput,
+  condition?: ModelUserConditionInput | null,
 };
 
 export type UpdateUserMutation = {
@@ -334,6 +401,7 @@ export type UpdateUserMutation = {
 
 export type DeleteUserMutationVariables = {
   input: DeleteUserInput,
+  condition?: ModelUserConditionInput | null,
 };
 
 export type DeleteUserMutation = {
@@ -469,6 +537,7 @@ export type ListUsersQuery = {
 
 export type GetUserByUserNameQueryVariables = {
   userName?: string | null,
+  sortDirection?: ModelSortDirection | null,
   filter?: ModelUserFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
